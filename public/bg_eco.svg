@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.48" gradientTransform="translate(0.015 -0.015) rotate(1.714)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#4198d8"/>
+      <stop offset="0.301" stop-color="#3d8cc6" stop-opacity="0.863"/>
+      <stop offset="1" stop-color="#234258" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#45a1e4"/>
+      <stop offset="0.328" stop-color="#3680b6" stop-opacity="0.651"/>
+      <stop offset="1" stop-color="#234258" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="0.533" cy="0.477" r="0.507" gradientTransform="translate(0.853 -0.163) rotate(74.722)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#feffd5" stop-opacity="0.612"/>
+      <stop offset="1" stop-color="#fbffc7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-4" cx="0.5" cy="0.5" r="0.465" gradientTransform="matrix(0.997, -0.075, 0.075, 0.997, -0.036, 0.039)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff8af7" stop-opacity="0.678"/>
+      <stop offset="1" stop-color="#ff9fff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="clip-Instagram_Story_1">
+      <rect width="1920" height="1080"/>
+    </clipPath>
+  </defs>
+  <g id="Instagram_Story_1" data-name="Instagram Story – 1" clip-path="url(#clip-Instagram_Story_1)">
+    <rect width="1920" height="1080" fill="#fff"/>
+    <g id="Rectangle_1" data-name="Rectangle 1" fill="#070a0f" stroke="#707070" stroke-width="1">
+      <rect width="1920" height="1080" stroke="none"/>
+      <rect x="0.5" y="0.5" width="1919" height="1079" fill="none"/>
+    </g>
+    <circle id="Ellipse_1" data-name="Ellipse 1" cx="865" cy="865" r="865" transform="translate(-1262 -448)" fill="url(#radial-gradient)"/>
+    <circle id="Ellipse_4" data-name="Ellipse 4" cx="865" cy="865" r="865" transform="translate(761 626)" fill="url(#radial-gradient-2)"/>
+    <circle id="Ellipse_2" data-name="Ellipse 2" cx="865" cy="865" r="865" transform="translate(190 -1462)" fill="url(#radial-gradient-3)"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" cx="865" cy="865" r="865" transform="translate(1478 -48)" fill="url(#radial-gradient-4)"/>
+  </g>
+</svg>

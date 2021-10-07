@@ -20,12 +20,12 @@ const Menu = (props) => {
   const { pathname } = useLocation()
 
   const activeMenuItem = getActiveMenuItem({ menuConfig: config(t), pathname })
-  const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
+  const activeSubMenuItem = activeMenuItem?.items && getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
 
   return (
     <UikitMenu
       userMenu={<UserMenu />}
-      globalMenu={<GlobalSettings />}
+      // globalMenu={<GlobalSettings />}
       isDark={isDark}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}

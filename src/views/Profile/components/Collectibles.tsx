@@ -36,9 +36,7 @@ const Collectibles = () => {
       <Heading as="h4" scale="md" mb="8px">
         {t('Pancake Collectibles')}
       </Heading>
-      <Text as="p">
-        {t('Pancake Collectibles are special ERC-721 NFTs that can be used on the EcoSwap platform.')}
-      </Text>
+      <Text as="p">{t('Pancake Collectibles are special ERC-721 NFTs that can be used on the EcoSwap platform.')}</Text>
       <Text as="p">
         {t('NFTs in this user’s wallet that aren’t approved Pancake Collectibles won’t be shown here.')}
       </Text>

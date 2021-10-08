@@ -40,7 +40,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   },
   {
     label: t('Pools'),
-    href: '/pools',
+    href: '/liquidity',
     // icon: 'Pool',
     hideSubNav: true,
   },

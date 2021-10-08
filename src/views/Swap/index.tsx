@@ -306,7 +306,7 @@ export default function Swap({ history }: RouteComponentProps) {
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/swap" />
       <AppBody>
-        <AppHeader title={t('Exchange')} subtitle={t('Trade tokens in an instant')} />
+        <AppHeader title={t('Swap')} subtitle={t('Trade tokens in an instant')} />
         <Wrapper id="swap-page">
           <AutoColumn gap="md">
             <CurrencyInputPanel

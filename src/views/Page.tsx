@@ -13,7 +13,7 @@ const StyledPage = styled.div`
   padding-bottom: 0;
   min-height: calc(100vh - 64px);
   // background: ${({ theme }) => theme.colors.gradients.bubblegum};
-  background: url('/bg_eco.svg') no-repeat center center;
+  //background: url('/bg_eco.svg') no-repeat center center;
   background-size: cover;
   ${({ theme }) => theme.mediaQueries.xs} {
     background-size: auto;

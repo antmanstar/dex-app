@@ -289,13 +289,13 @@ export default function Swap({ history }: RouteComponentProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [importTokensNotInDefault.length])
-  const [tokenAddress, setTokenAddress] = useState(undefined);
+  const [tokenAddress, setTokenAddress] = useState(undefined)
   const [tokenA, tokenB] = useMemo(
     () => [wrappedCurrency(currencies.INPUT, chainId), wrappedCurrency(currencies.OUTPUT, chainId)],
     [currencies.INPUT, currencies.OUTPUT, chainId],
   )
   useEffect(() => {
-    if(tokenA && tokenB) {
+    if (tokenA && tokenB) {
       const pair = Pair.getAddress(tokenA, tokenB)
       setTokenAddress(pair)
     }
@@ -307,9 +307,7 @@ export default function Swap({ history }: RouteComponentProps) {
   const adjustedPriceData = useMemo(() => {
     // Include latest available price
     if (priceData && tokenData && priceData.length > 0) {
-      const data = [
-        ...priceData,
-      ];
+      const data = [...priceData]
       // if(data[data.length-1]?.close !== tokenData?.priceUSD) {
       //   data.push({
       //     time: new Date().getTime() / 1000,
@@ -319,7 +317,7 @@ export default function Swap({ history }: RouteComponentProps) {
       //     low: priceData[priceData.length - 1].close,
       //   },)
       // }
-      return data;
+      return data
     }
     return undefined
   }, [priceData, tokenData])
@@ -347,7 +345,14 @@ export default function Swap({ history }: RouteComponentProps) {
       <PoolUpdater />
       <TokenUpdater />
       <Grid gridTemplateColumns="50% 50%" width="90%" gridColumnGap="8px" alignContent="center">
-        <ChartCard variant="token" tokenData={tokenData} tokenPriceData={adjustedPriceData} chartData={chartData} hideTabs defaultTab={ChartView.PRICE} />
+        <ChartCard
+          variant="token"
+          tokenData={tokenData}
+          tokenPriceData={adjustedPriceData}
+          chartData={chartData}
+          hideTabs
+          defaultTab={ChartView.PRICE}
+        />
         <>
           <AppBody>
             <AppHeader title={t('Swap')} subtitle={t('Trade tokens in an instant')} />
@@ -441,7 +446,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 ) : showWrap ? (
                   <Button width="100%" disabled={Boolean(wrapInputError)} onClick={onWrap}>
                     {wrapInputError ??
-                    (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
+                      (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
                   </Button>
                 ) : noRoute && userHasSpecifiedInputOutput ? (
                   <GreyCard style={{ textAlign: 'center' }}>
@@ -496,8 +501,8 @@ export default function Swap({ history }: RouteComponentProps) {
                       {priceImpactSeverity > 3 && !isExpertMode
                         ? t('Price Impact High')
                         : priceImpactSeverity > 2
-                          ? t('Swap Anyway')
-                          : t('Swap')}
+                        ? t('Swap Anyway')
+                        : t('Swap')}
                     </Button>
                   </RowBetween>
                 ) : (
@@ -521,9 +526,9 @@ export default function Swap({ history }: RouteComponentProps) {
                     disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
                   >
                     {swapInputError ||
-                    (priceImpactSeverity > 3 && !isExpertMode
-                      ? t('Price Impact Too High')
-                      : priceImpactSeverity > 2
+                      (priceImpactSeverity > 3 && !isExpertMode
+                        ? t('Price Impact Too High')
+                        : priceImpactSeverity > 2
                         ? t('Swap Anyway')
                         : t('Swap'))}
                   </Button>
@@ -537,11 +542,11 @@ export default function Swap({ history }: RouteComponentProps) {
               </Box>
             </Wrapper>
           </AppBody>
-          {!swapIsUnsupported ? (
-            <AdvancedSwapDetailsDropdown trade={trade} />
-          ) : (
-            <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} />
-          )}
+          {/* {!swapIsUnsupported ? ( */}
+          {/*  <AdvancedSwapDetailsDropdown trade={trade} /> */}
+          {/* ) : ( */}
+          {/*   <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} /> */}
+          {/* )} */}
         </>
       </Grid>
     </Page>

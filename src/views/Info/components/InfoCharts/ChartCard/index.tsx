@@ -9,7 +9,7 @@ import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import { ChartEntry, TokenData, PriceChartEntry } from 'state/info/types'
 import { format, fromUnixTime } from 'date-fns'
 
-enum ChartView {
+export enum ChartView {
   LIQUIDITY,
   VOLUME,
   PRICE,
@@ -20,10 +20,12 @@ interface ChartCardProps {
   chartData: ChartEntry[]
   tokenData?: TokenData
   tokenPriceData?: PriceChartEntry[]
+  hideTabs?: boolean
+  defaultTab?: any
 }
 
-const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, tokenPriceData }) => {
-  const [view, setView] = useState(ChartView.VOLUME)
+const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, tokenPriceData, hideTabs, defaultTab = ChartView.LIQUIDITY}) => {
+  const [view, setView] = useState(defaultTab)
   const [hoverValue, setHoverValue] = useState<number | undefined>()
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { t } = useTranslation()
@@ -75,8 +77,8 @@ const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, to
   }
 
   return (
-    <Card>
-      <TabToggleGroup>
+    <Card background="#FFFFFF">
+      {!hideTabs && <TabToggleGroup>
         <TabToggle isActive={view === ChartView.VOLUME} onClick={() => setView(ChartView.VOLUME)}>
           <Text>{t('Volume')}</Text>
         </TabToggle>
@@ -88,7 +90,7 @@ const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, to
             <Text>{t('Price')}</Text>
           </TabToggle>
         )}
-      </TabToggleGroup>
+      </TabToggleGroup>}
 
       <Flex flexDirection="column" px="24px" pt="24px">
         {getLatestValueDisplay()}

@@ -11,7 +11,7 @@ import UserMenu from './UserMenu'
 import GlobalSettings from './GlobalSettings'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { footerLinks } from './config/footerConfig'
-import { NetworkSelectDropdown } from "../NetworkSelectDropdown";
+import { NetworkSelectDropdown } from '../NetworkSelectDropdown'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()

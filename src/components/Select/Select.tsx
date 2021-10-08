@@ -39,7 +39,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
   cursor: pointer;
   width: 100%;
   position: relative;
-  background: ${({ theme}) => theme.colors.tertiary};
+  background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 8px;
   height: 40px;
   min-width: 136px;

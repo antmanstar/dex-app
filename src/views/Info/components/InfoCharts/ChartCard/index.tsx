@@ -8,6 +8,7 @@ import { useTranslation } from 'contexts/Localization'
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import { ChartEntry, TokenData, PriceChartEntry } from 'state/info/types'
 import { format, fromUnixTime } from 'date-fns'
+import useTheme from '../../../../../hooks/useTheme'
 
 export enum ChartView {
   LIQUIDITY,
@@ -24,11 +25,19 @@ interface ChartCardProps {
   defaultTab?: any
 }
 
-const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, tokenPriceData, hideTabs, defaultTab = ChartView.LIQUIDITY}) => {
+const ChartCard: React.FC<ChartCardProps> = ({
+  variant,
+  chartData,
+  tokenData,
+  tokenPriceData,
+  hideTabs,
+  defaultTab = ChartView.LIQUIDITY,
+}) => {
   const [view, setView] = useState(defaultTab)
   const [hoverValue, setHoverValue] = useState<number | undefined>()
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const currentDate = format(new Date(), 'MMM d, yyyy')
 
@@ -77,20 +86,22 @@ const ChartCard: React.FC<ChartCardProps> = ({ variant, chartData, tokenData, to
   }
 
   return (
-    <Card background="#FFFFFF">
-      {!hideTabs && <TabToggleGroup>
-        <TabToggle isActive={view === ChartView.VOLUME} onClick={() => setView(ChartView.VOLUME)}>
-          <Text>{t('Volume')}</Text>
-        </TabToggle>
-        <TabToggle isActive={view === ChartView.LIQUIDITY} onClick={() => setView(ChartView.LIQUIDITY)}>
-          <Text>{t('Liquidity')}</Text>
-        </TabToggle>
-        {variant === 'token' && (
-          <TabToggle isActive={view === ChartView.PRICE} onClick={() => setView(ChartView.PRICE)}>
-            <Text>{t('Price')}</Text>
+    <Card background={theme.colors.background}>
+      {!hideTabs && (
+        <TabToggleGroup>
+          <TabToggle isActive={view === ChartView.VOLUME} onClick={() => setView(ChartView.VOLUME)}>
+            <Text>{t('Volume')}</Text>
           </TabToggle>
-        )}
-      </TabToggleGroup>}
+          <TabToggle isActive={view === ChartView.LIQUIDITY} onClick={() => setView(ChartView.LIQUIDITY)}>
+            <Text>{t('Liquidity')}</Text>
+          </TabToggle>
+          {variant === 'token' && (
+            <TabToggle isActive={view === ChartView.PRICE} onClick={() => setView(ChartView.PRICE)}>
+              <Text>{t('Price')}</Text>
+            </TabToggle>
+          )}
+        </TabToggleGroup>
+      )}
 
       <Flex flexDirection="column" px="24px" pt="24px">
         {getLatestValueDisplay()}

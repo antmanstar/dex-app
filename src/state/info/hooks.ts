@@ -112,7 +112,7 @@ export const usePoolChartData = (address: string): ChartEntry[] | undefined => {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    if(address && address.length > 0) {
+    if (address && address.length > 0) {
       const fetch = async () => {
         const { error: fetchError, data } = await fetchPoolChartData(address)
         if (!fetchError && data) {

@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import usePrevious from 'hooks/usePreviousValue'
 import { TokenList } from '@uniswap/token-lists'
 import { useTranslation } from 'contexts/Localization'
+import useTheme from 'hooks/useTheme'
 import CurrencySearch from './CurrencySearch'
 import ImportToken from './ImportToken'
 import Manage from './Manage'
@@ -25,6 +26,8 @@ const Footer = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   text-align: center;
+  border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  padding: 12px 0;
 `
 
 const StyledModalContainer = styled(ModalContainer)`
@@ -72,6 +75,8 @@ export default function CurrencySearchModal({
 
   const { t } = useTranslation()
 
+  const { theme } = useTheme()
+
   const config = {
     [CurrencyModalView.search]: { title: t('Select a Token'), onBack: undefined },
     [CurrencyModalView.manage]: { title: t('Manage'), onBack: () => setModalView(CurrencyModalView.search) },
@@ -85,7 +90,7 @@ export default function CurrencySearchModal({
 
   return (
     <StyledModalContainer minWidth="320px">
-      <ModalHeader>
+      <ModalHeader background={theme.colors.tertiary}>
         <ModalTitle>
           {config[modalView].onBack && <ModalBackButton onBack={config[modalView].onBack} />}
           <Heading>{config[modalView].title}</Heading>
@@ -116,19 +121,19 @@ export default function CurrencySearchModal({
         ) : (
           ''
         )}
-        {modalView === CurrencyModalView.search && (
-          <Footer>
-            <Button
-              scale="sm"
-              variant="text"
-              onClick={() => setModalView(CurrencyModalView.manage)}
-              className="list-token-manage-button"
-            >
-              {t('Manage Tokens')}
-            </Button>
-          </Footer>
-        )}
       </StyledModalBody>
+      {modalView === CurrencyModalView.search && (
+        <Footer>
+          <Button
+            scale="sm"
+            variant="text"
+            onClick={() => setModalView(CurrencyModalView.manage)}
+            className="list-token-manage-button"
+          >
+            {t('Manage Tokens')}
+          </Button>
+        </Footer>
+      )}
     </StyledModalContainer>
   )
 }

@@ -77,7 +77,7 @@ const SlippageTabs = () => {
     <Flex flexDirection="column">
       <Flex flexDirection="column" mb="24px" fontSize="14px">
         <Flex mb="12px">
-          <Text>{t('Slippage Tolerance')}</Text>
+          <Text small>{t('Slippage Tolerance')}</Text>
           <QuestionHelper
             text={t(
               'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
@@ -88,7 +88,7 @@ const SlippageTabs = () => {
         </Flex>
         <Flex
           flexWrap="wrap"
-          border={`2px solid ${theme.colors.inputSecondary}`}
+          border={`1px solid ${theme.colors.inputSecondary}`}
           borderRadius="8px"
           alignItems="center"
           justifyContent="space-between"
@@ -96,7 +96,8 @@ const SlippageTabs = () => {
           <Flex>
             <Button
               m="4px"
-              scale="sm"
+              scale="xs"
+              ml="16px"
               onClick={() => {
                 setSlippageInput('')
                 setUserSlippageTolerance(10)
@@ -107,8 +108,7 @@ const SlippageTabs = () => {
             </Button>
             <Button
               m="4px"
-              ml="0"
-              scale="sm"
+              scale="xs"
               onClick={() => {
                 setSlippageInput('')
                 setUserSlippageTolerance(50)
@@ -119,8 +119,7 @@ const SlippageTabs = () => {
             </Button>
             <Button
               m="4px"
-              ml="0"
-              scale="sm"
+              scale="xs"
               onClick={() => {
                 setSlippageInput('')
                 setUserSlippageTolerance(100)
@@ -133,6 +132,7 @@ const SlippageTabs = () => {
           <Flex alignItems="center">
             <Box width="76px" m="4px" ml="0">
               <Input
+                fontSize="14px"
                 scale="md"
                 placeholder={(userSlippageTolerance / 100).toFixed(2)}
                 value={slippageInput}
@@ -145,13 +145,13 @@ const SlippageTabs = () => {
                 noBorder
               />
             </Box>
-            <Text color="primary" bold ml="2px" mr="8px">
+            <Text color="primary" bold ml="2px" mr="8px" small>
               %
             </Text>
           </Flex>
         </Flex>
         {!!slippageError && (
-          <Text fontSize="14px" color={slippageError === SlippageError.InvalidInput ? 'red' : '#F3841E'} mt="8px">
+          <Text small color={slippageError === SlippageError.InvalidInput ? 'red' : '#F3841E'} mt="8px">
             {slippageError === SlippageError.InvalidInput
               ? t('Enter a valid slippage percentage')
               : slippageError === SlippageError.RiskyLow
@@ -162,7 +162,7 @@ const SlippageTabs = () => {
       </Flex>
       <Flex alignItems="start" mb="24px" flexDirection="column">
         <Flex alignItems="center" mb="12px">
-          <Text>{t('Tx deadline (mins)')}</Text>
+          <Text small>{t('Tx deadline (mins)')}</Text>
           <QuestionHelper
             text={t('Your transaction will revert if it is left confirming for longer than this time.')}
             placement="top-start"
@@ -173,13 +173,14 @@ const SlippageTabs = () => {
           justifyContent="space-between"
           alignItems="center"
           width="100%"
-          border={`2px solid ${theme.colors.inputSecondary}`}
+          border={`1px solid ${theme.colors.inputSecondary}`}
           borderRadius="8px"
         >
-          <Box py="4px">
+          <Box py="4px" fontSize="14px">
             <Input
               scale="md"
               height="100%"
+              fontSize="14px"
               color={deadlineError ? 'red' : undefined}
               onBlur={() => {
                 parseCustomDeadline((ttl / 60).toString())
@@ -190,7 +191,7 @@ const SlippageTabs = () => {
               noBorder
             />
           </Box>
-          <Text color="primary" bold ml="2px" mr="8px">
+          <Text color="primary" bold ml="2px" mr="8px" small>
             minutes
           </Text>
         </Flex>

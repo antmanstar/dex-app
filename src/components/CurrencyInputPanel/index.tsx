@@ -15,8 +15,10 @@ const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  background: ${({ theme }) => theme.colors.input};
+  border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 10px;
+  margin: 0 0.5rem;
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
 `
 const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
@@ -43,7 +45,7 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
 `
 const Container = styled.div<{ hideInput: boolean }>`
   border-radius: 16px;
-  background-color: ${({ theme }) => theme.colors.input};
+  //background-color: ${({ theme }) => theme.colors.input};
   // box-shadow: ${({ theme }) => theme.shadows.inset};
 `
 interface CurrencyInputPanelProps {
@@ -97,9 +99,9 @@ export default function CurrencyInputPanel({
         {!hideInput && (
           <LabelRow>
             <RowBetween>
-              <Text fontSize="14px">{translatedLabel}</Text>
+              <Text small>{translatedLabel}</Text>
               {account && (
-                <Text onClick={onMax} fontSize="14px" style={{ display: 'inline', cursor: 'pointer' }}>
+                <Text onClick={onMax} style={{ display: 'inline', cursor: 'pointer' }} small>
                   {!hideBalance && !!currency
                     ? t('Balance: %balance%', { balance: selectedCurrencyBalance?.toSignificant(6) ?? t('Loading') })
                     : ' -'}

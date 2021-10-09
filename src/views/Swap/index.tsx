@@ -436,7 +436,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   </AutoColumn>
                 )}
               </AutoColumn>
-              <Box mt="1rem">
+              <Box mt="1rem" mx="0.5rem">
                 {swapIsUnsupported ? (
                   <Button width="100%" disabled mb="4px">
                     {t('Unsupported Asset')}

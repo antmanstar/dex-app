@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, ErrorIcon } from '@pancakeswap/uikit'
+import { Text, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import styled, { css } from 'styled-components'
 import { AutoColumn } from 'components/Layout/Column'
 
@@ -108,4 +108,10 @@ export const SwapShowAcceptChanges = styled(AutoColumn)`
   padding: 0.5rem;
   border-radius: 12px;
   margin-top: 8px;
+`
+
+export const StyledSwapPageGrid = styled(Grid)`
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    width: 1200px;
+  }
 `

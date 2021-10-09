@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { CurrencyAmount, JSBI, Pair, Token, Trade } from '@pancakeswap/sdk'
-import { Button, Text, ArrowDownIcon, Box, useModal, SubMenuItems, Grid } from '@pancakeswap/uikit'
+import { Button, Text, ArrowDownIcon, Box, useModal, SubMenuItems, Grid, ArrowUpDownIcon } from '@pancakeswap/uikit'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import { RouteComponentProps } from 'react-router-dom'
@@ -16,7 +16,7 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { AutoRow, RowBetween } from '../../components/Layout/Row'
 import AdvancedSwapDetailsDropdown from './components/AdvancedSwapDetailsDropdown'
 import confirmPriceImpactWithoutFee from './components/confirmPriceImpactWithoutFee'
-import { ArrowWrapper, SwapCallbackError, Wrapper } from './components/styleds'
+import { ArrowWrapper, SwapCallbackError, Wrapper, StyledSwapPageGrid } from './components/styleds'
 import TradePrice from './components/TradePrice'
 import ImportTokenWarningModal from './components/ImportTokenWarningModal'
 import ProgressSteps from './components/ProgressSteps'
@@ -344,7 +344,16 @@ export default function Swap({ history }: RouteComponentProps) {
       <ProtocolUpdater />
       <PoolUpdater />
       <TokenUpdater />
-      <Grid gridTemplateColumns="50% 50%" width="90%" gridColumnGap="8px" alignContent="center">
+      <StyledSwapPageGrid
+        gridTemplateColumns="60% 40%"
+        width="100%"
+        gridColumnGap="8px"
+        alignContent="center"
+        alignItems="center"
+        justifyContent="center"
+        height="calc(100vh - 300px)"
+        minHeight="600px"
+      >
         <ChartCard
           variant="token"
           tokenData={tokenData}
@@ -370,10 +379,13 @@ export default function Swap({ history }: RouteComponentProps) {
                   id="swap-currency-input"
                 />
                 <AutoColumn justify="space-between">
-                  <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
+                  <AutoRow
+                    justify={isExpertMode ? 'space-between' : 'center'}
+                    style={{ padding: '0 1rem', marginTop: '16px' }}
+                  >
                     <ArrowWrapper clickable>
-                      <ArrowDownIcon
-                        width="16px"
+                      <ArrowUpDownIcon
+                        width="25px"
                         onClick={() => {
                           setApprovalSubmitted(false) // reset 2 step UI for approvals
                           onSwitchTokens()
@@ -548,7 +560,7 @@ export default function Swap({ history }: RouteComponentProps) {
           {/*   <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} /> */}
           {/* )} */}
         </>
-      </Grid>
+      </StyledSwapPageGrid>
     </Page>
   )
 }

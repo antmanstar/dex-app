@@ -86,7 +86,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
   }
 
   return (
-    <Card background={theme.colors.background}>
+    <Card background={theme.colors.background} borderBackground="transparent">
       {!hideTabs && (
         <TabToggleGroup>
           <TabToggle isActive={view === ChartView.VOLUME} onClick={() => setView(ChartView.VOLUME)}>
@@ -110,7 +110,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
         </Text>
       </Flex>
 
-      <Box px="24px" height={variant === 'token' ? '250px' : '335px'}>
+      <Box px="24px" height={variant === 'token' ? '370px' : '335px'}>
         {view === ChartView.LIQUIDITY ? (
           <LineChart data={formattedTvlData} setHoverValue={setHoverValue} setHoverDate={setHoverDate} />
         ) : view === ChartView.VOLUME ? (

@@ -12,7 +12,7 @@ const GasSettings = () => {
   return (
     <Flex flexDirection="column">
       <Flex mb="12px" alignItems="center">
-        <Text>{t('Default Transaction Speed (GWEI)')}</Text>
+        <Text small>{t('Default Transaction Speed (GWEI)')}</Text>
         <QuestionHelper
           text={t(
             'Adjusts the gas price (transaction fee) for your transaction. Higher GWEI = higher speed = higher fees',
@@ -24,8 +24,8 @@ const GasSettings = () => {
       <Flex flexWrap="wrap">
         <Button
           mt="4px"
-          mr="4px"
-          scale="sm"
+          mr="8px"
+          scale="xs"
           onClick={() => {
             setGasPrice(GAS_PRICE_GWEI.default)
           }}
@@ -35,8 +35,8 @@ const GasSettings = () => {
         </Button>
         <Button
           mt="4px"
-          mr="4px"
-          scale="sm"
+          mr="8px"
+          scale="xs"
           onClick={() => {
             setGasPrice(GAS_PRICE_GWEI.fast)
           }}
@@ -47,7 +47,7 @@ const GasSettings = () => {
         <Button
           mr="4px"
           mt="4px"
-          scale="sm"
+          scale="xs"
           onClick={() => {
             setGasPrice(GAS_PRICE_GWEI.instant)
           }}

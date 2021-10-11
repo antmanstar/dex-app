@@ -112,17 +112,21 @@ export const usePoolChartData = (address: string): ChartEntry[] | undefined => {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    const fetch = async () => {
-      const { error: fetchError, data } = await fetchPoolChartData(address)
-      if (!fetchError && data) {
-        dispatch(updatePoolChartData({ poolAddress: address, chartData: data }))
+    if (address && address.length > 0) {
+      const fetch = async () => {
+        const { error: fetchError, data } = await fetchPoolChartData(address)
+        if (!fetchError && data) {
+          dispatch(updatePoolChartData({ poolAddress: address, chartData: data }))
+        }
+        if (fetchError) {
+          setError(fetchError)
+        }
       }
-      if (fetchError) {
-        setError(fetchError)
+      if (!chartData && !error) {
+        fetch()
       }
-    }
-    if (!chartData && !error) {
-      fetch()
+    } else {
+      console.log('address', address)
     }
   }, [address, dispatch, error, chartData])
 
@@ -271,11 +275,11 @@ export const useTokenPriceData = (
 ): PriceChartEntry[] | undefined => {
   const dispatch = useDispatch<AppDispatch>()
   const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
-  const priceData = token.priceData[interval]
+  const priceData = token?.priceData[interval]
   const [error, setError] = useState(false)
 
   // construct timestamps and check if we need to fetch more data
-  const oldestTimestampFetched = token.priceData.oldestFetchedTimestamp
+  const oldestTimestampFetched = token?.priceData?.oldestFetchedTimestamp
   const utcCurrentTime = getUnixTime(new Date()) * 1000
   const startTimestamp = getUnixTime(startOfHour(sub(utcCurrentTime, timeWindow)))
 

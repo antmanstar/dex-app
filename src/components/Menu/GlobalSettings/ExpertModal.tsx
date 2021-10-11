@@ -19,17 +19,19 @@ const ExpertModal: React.FC<ExpertModalProps> = ({ setShowConfirmExpertModal, se
       title={t('Expert Mode')}
       onBack={() => setShowConfirmExpertModal(false)}
       onDismiss={() => setShowConfirmExpertModal(false)}
-      headerBackground="gradients.cardHeader"
+      // headerBackground="gradients.cardHeader"
       style={{ maxWidth: '360px' }}
     >
       <Message variant="warning" mb="24px">
-        <Text>
+        <Text small>
           {t(
             "Expert mode turns off the 'Confirm' transaction prompt, and allows high slippage trades that often result in bad rates and lost funds.",
           )}
         </Text>
       </Message>
-      <Text mb="24px">{t('Only use this mode if you know what you’re doing.')}</Text>
+      <Text mb="24px" small>
+        {t('Only use this mode if you know what you’re doing.')}
+      </Text>
       <Flex alignItems="center" mb="24px">
         <Checkbox
           name="confirmed"
@@ -38,7 +40,7 @@ const ExpertModal: React.FC<ExpertModalProps> = ({ setShowConfirmExpertModal, se
           onChange={() => setIsRememberChecked(!isRememberChecked)}
           scale="sm"
         />
-        <Text ml="10px" color="textSubtle" style={{ userSelect: 'none' }}>
+        <Text ml="10px" color="textSubtle" style={{ userSelect: 'none' }} small>
           {t('Don’t show this again')}
         </Text>
       </Flex>

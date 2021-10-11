@@ -10,9 +10,9 @@ const DropDownHeader = styled.div`
   justify-content: space-between;
   padding: 0px 16px;
   box-shadow: ${({ theme }) => theme.shadows.inset};
-  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-  border-radius: 16px;
-  background: ${({ theme }) => theme.colors.input};
+  // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.backgroundAlt};
   transition: border-radius 0.15s;
 `
 
@@ -21,13 +21,14 @@ const DropDownListContainer = styled.div`
   height: 0;
   position: absolute;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.input};
+  background: ${({ theme }) => theme.colors.tertiary};
   z-index: ${({ theme }) => theme.zIndices.dropdown};
   transition: transform 0.15s, opacity 0.15s;
   transform: scaleY(0);
   transform-origin: top;
   opacity: 0;
   width: 100%;
+  box-shadow: 0 0 4px 6px rgba(134, 134, 134, 0.09);
 
   ${({ theme }) => theme.mediaQueries.sm} {
     min-width: 168px;
@@ -38,8 +39,8 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
   cursor: pointer;
   width: 100%;
   position: relative;
-  background: ${({ theme }) => theme.colors.input};
-  border-radius: 16px;
+  background: ${({ theme }) => theme.colors.tertiary};
+  border-radius: 8px;
   height: 40px;
   min-width: 136px;
   user-select: none;
@@ -53,18 +54,20 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
     props.isOpen &&
     css`
       ${DropDownHeader} {
-        border-bottom: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+        //border-bottom: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
-        border-radius: 16px 16px 0 0;
+        border-radius: 8px 8px 0 0;
       }
+
+      border-radius: 8px 8px 0 0;
 
       ${DropDownListContainer} {
         height: auto;
         transform: scaleY(1);
         opacity: 1;
-        border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+        // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         border-top-width: 0;
-        border-radius: 0 0 16px 16px;
+        border-radius: 0 0 8px 8px;
         box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
       }
     `}

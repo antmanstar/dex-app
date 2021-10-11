@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import useTheme from 'hooks/useTheme'
 import { CandleChartLoader } from 'views/Info/components/ChartLoaders'
 
-const CANDLE_CHART_HEIGHT = 250
+const CANDLE_CHART_HEIGHT = 350
 
 export type LineChartProps = {
   data: any[]
@@ -58,7 +58,7 @@ const CandleChart = ({ data, setValue, setLabel, ...rest }: LineChartProps) => {
           borderVisible: false,
           secondsVisible: true,
           tickMarkFormatter: (unixTime: number) => {
-            return format(unixTime * 1000, 'MM/dd h:mm a')
+            return format(unixTime * 1000, 'MM/dd H:mm')
           },
         },
         watermark: {

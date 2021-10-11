@@ -64,49 +64,34 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   }
 
   return (
-    <Modal
-      title={t('Settings')}
-      headerBackground="gradients.cardHeader"
-      onDismiss={onDismiss}
-      style={{ maxWidth: '420px' }}
-    >
+    <Modal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }}>
       <ScrollableContainer>
         <Flex pb="24px" flexDirection="column">
-          <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
-            {t('Global')}
-          </Text>
-          {/* <Flex justifyContent="space-between"> */}
-          {/*  <Text mb="24px">{t('Dark mode')}</Text> */}
-          {/*  <ThemeSwitcher isDark={isDark} toggleTheme={toggleTheme} /> */}
-          {/* </Flex> */}
           <GasSettings />
         </Flex>
-        <Flex pt="24px" flexDirection="column" borderTop={`1px ${theme.colors.cardBorder} solid`}>
-          <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
-            {t('Swaps & Liquidity')}
-          </Text>
+        <Flex flexDirection="column">
           <TransactionSettings />
         </Flex>
         <Flex justifyContent="space-between" alignItems="center" mb="24px">
           <Flex alignItems="center">
-            <Text>{t('Expert Mode')}</Text>
+            <Text small>{t('Expert Mode')}</Text>
             <QuestionHelper
               text={t('Bypasses confirmation modals and allows high slippage trades. Use at your own risk.')}
               placement="top-start"
               ml="4px"
             />
           </Flex>
-          <Toggle id="toggle-expert-mode-button" scale="md" checked={expertMode} onChange={handleExpertModeToggle} />
+          <Toggle id="toggle-expert-mode-button" scale="sm" checked={expertMode} onChange={handleExpertModeToggle} />
         </Flex>
         <Flex justifyContent="space-between" alignItems="center" mb="24px">
           <Flex alignItems="center">
-            <Text>{t('Disable Multihops')}</Text>
+            <Text small>{t('Disable Multihops')}</Text>
             <QuestionHelper text={t('Restricts swaps to direct pairs only.')} placement="top-start" ml="4px" />
           </Flex>
           <Toggle
             id="toggle-disable-multihop-button"
             checked={singleHopOnly}
-            scale="md"
+            scale="sm"
             onChange={() => {
               setSingleHopOnly(!singleHopOnly)
             }}
@@ -114,7 +99,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
-            <Text>{t('Flippy sounds')}</Text>
+            <Text small>{t('Flippy sounds')}</Text>
             <QuestionHelper
               text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')}
               placement="top-start"
@@ -124,7 +109,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
           <Toggle
             id="toggle-disable-multihop-button"
             checked={audioPlay}
-            scale="md"
+            scale="sm"
             onChange={() => {
               toggleSetAudioMode()
             }}

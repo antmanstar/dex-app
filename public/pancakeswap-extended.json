@@ -1,0 +1,15 @@
+{
+  "name": "EcoSwap Default List",
+  "timestamp": "2021-05-06T00:00:00Z",
+  "version": {
+    "major": 3,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "/logo.png",
+  "keywords": ["pancake", "default"],
+  "tokens": [
+
+  ]
+}

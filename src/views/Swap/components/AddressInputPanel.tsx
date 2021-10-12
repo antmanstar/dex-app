@@ -23,15 +23,16 @@ const ContainerRow = styled.div<{ error: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 1.25rem;
-  border: 1px solid ${({ error, theme }) => (error ? theme.colors.failure : theme.colors.background)};
-  transition: border-color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')},
-    color 500ms ${({ error }) => (error ? 'step-end' : 'step-start')};
+  // border: 1px solid ${({ error, theme }) => (error ? theme.colors.failure : theme.colors.background)};
+  //transition: border-color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')},
+  //  color 500ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const InputContainer = styled.div`
   flex: 1;
-  padding: 1rem;
+  padding: 0;
+  margin: 0 0.5rem;
 `
 
 const Input = styled.input<{ error?: boolean }>`
@@ -39,6 +40,9 @@ const Input = styled.input<{ error?: boolean }>`
   outline: none;
   border: none;
   flex: 1 1 auto;
+  border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
+  border-radius: 10px;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   transition: color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   color: ${({ error, theme }) => (error ? theme.colors.failure : theme.colors.primary)};
@@ -47,9 +51,8 @@ const Input = styled.input<{ error?: boolean }>`
   font-weight: 500;
   width: 100%;
   ::placeholder {
-    color: ${({ theme }) => theme.colors.textDisabled};
+    color: ${({ theme }) => theme.colors.textSubtle};
   }
-  padding: 0px;
   -webkit-appearance: textfield;
 
   ::-webkit-search-decoration {
@@ -103,7 +106,7 @@ export default function AddressInputPanel({
               <Text>{t('Recipient')}</Text>
               {address && chainId && (
                 <Link external small href={getBscScanLink(name ?? address, 'address', chainId)}>
-                  ({t('View on BscScan')})
+                  ({t('View on PolygonScan')})
                 </Link>
               )}
             </RowBetween>

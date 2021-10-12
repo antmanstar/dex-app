@@ -23,7 +23,7 @@ describe('Swap', () => {
   })
 
   // This test requires account with some amount of BNB on it
-  // Now with random private key it shows Insufficient BNB Balance button
+  // Now with random private key it shows Insufficient MATIC Balance button
   it.skip('can swap BNB for BUSD', () => {
     cy.get('#swap-currency-output .open-currency-select-button').click()
     cy.get('.token-item-0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56').should('be.visible')

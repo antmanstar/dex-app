@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import styled, { ThemeProviderProps, withTheme } from 'styled-components'
 import { CurrencyAmount, JSBI, Pair, Token, Trade } from '@pancakeswap/sdk'
-import { Button, Text, ArrowDownIcon, Box, useModal, SubMenuItems, Grid, ArrowUpDownIcon } from '@pancakeswap/uikit'
+import { Button, Text, ArrowDownIcon, Box, useModal, SubMenuItems, Grid, ArrowUpDownIcon, PancakeTheme } from '@pancakeswap/uikit'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import { RouteComponentProps } from 'react-router-dom'
@@ -16,7 +16,13 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { AutoRow, RowBetween } from '../../components/Layout/Row'
 import AdvancedSwapDetailsDropdown from './components/AdvancedSwapDetailsDropdown'
 import confirmPriceImpactWithoutFee from './components/confirmPriceImpactWithoutFee'
-import { ArrowWrapper, SwapCallbackError, Wrapper, StyledSwapPageGrid } from './components/styleds'
+import {
+  ArrowWrapper,
+  SwapCallbackError,
+  Wrapper,
+  StyledSwapPageGrid,
+  StyledSwapPageChartCard,
+} from './components/styleds'
 import TradePrice from './components/TradePrice'
 import ImportTokenWarningModal from './components/ImportTokenWarningModal'
 import ProgressSteps from './components/ProgressSteps'
@@ -49,14 +55,17 @@ import { usePoolChartData, usePoolDatas, useTokenData, useTokenPriceData } from 
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import ChartCard, { ChartView } from '../Info/components/InfoCharts/ChartCard'
 import { ONE_HOUR_SECONDS } from '../../config/constants/info'
+import { useWidth } from '../../hooks/useWidth'
 
 const Label = styled(Text)`
   font-size: 12px;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.secondary};
 `
-
-export default function Swap({ history }: RouteComponentProps) {
+interface SwapPageInterface extends RouteComponentProps {
+  theme: PancakeTheme
+}
+function SwapPage({ history, theme }: SwapPageInterface) {
   const loadedUrlParams = useDefaultsFromURLSearch()
 
   const { t } = useTranslation()
@@ -229,8 +238,10 @@ export default function Swap({ history }: RouteComponentProps) {
   const [onPresentSwapWarningModal] = useModal(<SwapWarningModal swapCurrency={swapWarningCurrency} />)
 
   const shouldShowSwapWarning = (swapCurrency) => {
+    if(!swapCurrency) return false;
     const isWarningToken = Object.entries(SwapWarningTokens).find((warningTokenConfig) => {
       const warningTokenData = warningTokenConfig[1]
+      if(!warningTokenData) return false;
       return swapCurrency.address === warningTokenData.address
     })
     return Boolean(isWarningToken)
@@ -338,14 +349,13 @@ export default function Swap({ history }: RouteComponentProps) {
     true,
     'confirmSwapModal',
   )
-
+  const width = useWidth();
   return (
     <Page>
       <ProtocolUpdater />
       <PoolUpdater />
       <TokenUpdater />
       <StyledSwapPageGrid
-        gridTemplateColumns="60% 40%"
         width="100%"
         gridColumnGap="8px"
         alignContent="center"
@@ -353,15 +363,16 @@ export default function Swap({ history }: RouteComponentProps) {
         justifyContent="center"
         height="calc(100vh - 300px)"
         minHeight="600px"
+        maxWidth="1024px"
       >
-        <ChartCard
+        {width >= 852 ? <StyledSwapPageChartCard
           variant="token"
           tokenData={tokenData}
           tokenPriceData={adjustedPriceData}
           chartData={chartData}
           hideTabs
           defaultTab={ChartView.PRICE}
-        />
+        /> : <></>}
         <>
           <AppBody>
             <AppHeader title={t('Swap')} subtitle={t('Trade tokens in an instant')} />
@@ -564,3 +575,6 @@ export default function Swap({ history }: RouteComponentProps) {
     </Page>
   )
 }
+
+// @ts-ignore
+export default withTheme(SwapPage);

@@ -5,7 +5,8 @@ export const DEFAULT_META: PageMeta = {
   title: 'EcoSwap',
   description:
     'The most popular AMM on BSC by user count! Earn CAKE through yield farming or win it in the Lottery, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings (new token launch model pioneered by EcoSwap), NFTs, and more, on a platform you can trust.',
-  image: 'https://pancakeswap.finance/images/hero.png',
+  // TODO: remove https://EcoSwap.finance
+  image: '/images/hero.png',
 }
 
 export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
@@ -112,17 +113,17 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
     case '/info':
       return {
         title: `${t('Overview')} | ${t('EcoSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for EcoSwap exchanges.',
       }
     case '/info/pools':
       return {
         title: `${t('Pools')} | ${t('EcoSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for EcoSwap exchanges.',
       }
     case '/info/tokens':
       return {
         title: `${t('Pools')} | ${t('EcoSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for EcoSwap exchanges.',
       }
     default:
       return null

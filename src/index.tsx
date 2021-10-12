@@ -11,9 +11,9 @@ import Providers from './Providers'
 function Updaters() {
   return (
     <>
-      <ListsUpdater />
-      <TransactionUpdater />
-      <MulticallUpdater />
+       <ListsUpdater />
+       <TransactionUpdater />
+       <MulticallUpdater />
     </>
   )
 }

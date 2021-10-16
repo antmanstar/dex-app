@@ -3,9 +3,9 @@ import { Text, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import styled, { css } from 'styled-components'
 import { AutoColumn } from 'components/Layout/Column'
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ padding?: string }>`
   position: relative;
-  padding: 1rem;
+  padding: ${({ padding }) => padding || '1rem'};
 `
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`

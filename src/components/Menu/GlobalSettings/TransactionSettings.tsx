@@ -88,10 +88,10 @@ const SlippageTabs = () => {
         </Flex>
         <Flex
           flexWrap="wrap"
-          border={`1px solid ${theme.colors.inputSecondary}`}
           borderRadius="8px"
           alignItems="center"
           justifyContent="space-between"
+          background={theme.colors.input}
         >
           <Flex>
             <Button
@@ -145,7 +145,7 @@ const SlippageTabs = () => {
                 noBorder
               />
             </Box>
-            <Text color="primary" bold ml="2px" mr="8px" small>
+            <Text color="text" bold ml="2px" mr="8px" small>
               %
             </Text>
           </Flex>
@@ -173,7 +173,7 @@ const SlippageTabs = () => {
           justifyContent="space-between"
           alignItems="center"
           width="100%"
-          border={`1px solid ${theme.colors.inputSecondary}`}
+          background={theme.colors.input}
           borderRadius="8px"
         >
           <Box py="4px" fontSize="14px">
@@ -191,7 +191,7 @@ const SlippageTabs = () => {
               noBorder
             />
           </Box>
-          <Text color="primary" bold ml="2px" mr="8px" small>
+          <Text color="text" bold ml="2px" mr="8px" small>
             minutes
           </Text>
         </Flex>

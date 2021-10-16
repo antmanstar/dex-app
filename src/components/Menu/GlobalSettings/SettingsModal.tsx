@@ -47,6 +47,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => 
         setShowConfirmExpertModal={setShowConfirmExpertModal}
         onDismiss={onDismiss}
         setShowExpertModeAcknowledgement={setShowExpertModeAcknowledgement}
+        noModal={noModal}
       />
     )
   }

@@ -422,7 +422,15 @@ function SwapPage({ history, theme }: SwapPageInterface) {
               <Wrapper id="swap-page">{renderSettings()}</Wrapper>
             ) : (
               <>
-                <AppHeader title={t('Swap')} subtitle={t('Trade tokens in an instant')} onSwapPage />
+                <AppHeader
+                  title={t('Swap')}
+                  subtitle={t('Trade tokens in an instant')}
+                  refreshFunction={() => {
+                    console.log('clicked on refresh button')
+                  }}
+                  refreshButton
+                  onSwapPage
+                />
                 <Wrapper id="swap-page">
                   <AutoColumn gap="md">
                     <CurrencyInputPanel

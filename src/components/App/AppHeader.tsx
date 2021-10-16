@@ -1,6 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Heading, IconButton, ArrowBackIcon, NotificationDot, Button } from '@pancakeswap/uikit'
+import {
+  Text,
+  Flex,
+  Heading,
+  IconButton,
+  ArrowBackIcon,
+  NotificationDot,
+  Button,
+  RefreshIcon,
+} from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useExpertModeManager } from 'state/user/hooks'
 import GlobalSettings from 'components/Menu/GlobalSettings'
@@ -21,8 +30,11 @@ interface Props {
 }
 
 type BackFuncInterface = { isBackFunc?: false; backFunction?: never } | { isBackFunc?: true; backFunction: () => void }
+type RefreshButtonInterface =
+  | { refreshButton?: false; refreshFunction?: never }
+  | { refreshButton?: true; refreshFunction: () => void }
 
-type AppHeaderInterface = Props & BackFuncInterface
+type AppHeaderInterface = Props & BackFuncInterface & RefreshButtonInterface
 
 const AppHeaderContainer = styled(Flex)<{ padding?: string }>`
   align-items: center;
@@ -44,6 +56,8 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   padding,
   hideSettingsIcon,
   hideTransactionIcon,
+  refreshButton = false,
+  refreshFunction,
 }) => {
   const [expertMode] = useExpertModeManager()
 
@@ -74,6 +88,11 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
       </Flex>
       {!noConfig && (
         <Flex alignItems="center">
+          {refreshButton && refreshFunction && (
+            <IconButton onClick={refreshFunction} variant="text">
+              <RefreshIcon width="32px" />
+            </IconButton>
+          )}
           <NotificationDot show={expertMode}>
             {!hideSettingsIcon ? onSwapPage ? <SwapPageSettingsButton /> : <GlobalSettings /> : null}
           </NotificationDot>

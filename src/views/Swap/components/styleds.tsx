@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import styled, { css } from 'styled-components'
 import { AutoColumn } from 'components/Layout/Column'
+import ChartCard from '../../Info/components/InfoCharts/ChartCard'
 
 export const Wrapper = styled.div<{ padding?: string }>`
   position: relative;
@@ -111,7 +112,18 @@ export const SwapShowAcceptChanges = styled(AutoColumn)`
 `
 
 export const StyledSwapPageGrid = styled(Grid)`
-  ${({ theme }) => theme.mediaQueries.xxl} {
-    width: 1200px;
+  grid-template-columns: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: 50% 50%;
+  }
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-template-columns: 60% 40%;
+  }
+`
+
+export const StyledSwapPageChartCard = styled(ChartCard)`
+  display: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: block;
   }
 `

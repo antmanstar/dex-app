@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@pancakeswap/sdk'
 import { Button, Text, Flex, AddIcon, CardBody, Message, useModal, Card } from '@pancakeswap/uikit'
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, Link } from 'react-router-dom'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useTranslation } from 'contexts/Localization'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
@@ -375,6 +375,14 @@ export default function AddLiquidity({
           {/* /> */}
           <div>
             <CardBody>
+              <Flex>
+                <Button variant="text" as={Link} to="/add" px="16px">
+                  {t('Add')}
+                </Button>
+                <Button variant="text" as={Link} to="/remove" px="16px">
+                  {t('Remove')}
+                </Button>
+              </Flex>
               <AutoColumn gap="20px">
                 <CurrencyInputPanel
                   value={formattedAmounts[Field.CURRENCY_A]}

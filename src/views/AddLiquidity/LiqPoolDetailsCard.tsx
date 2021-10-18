@@ -24,7 +24,9 @@ const StyledRow = styled.div`
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
 
-  
+  ${({ theme }) => theme.mediaQueries.xs} {
+    grid-template-columns: 1fr 1fr;
+  }
   
   ${({ theme }) => theme.mediaQueries.lg} {
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -41,7 +43,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
     return (
       <>
         <Text
-          color="textSubtle"
+          color="textSubtle2"
           textTransform="capitalize"
           mb="12px"
         >
@@ -65,7 +67,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
           <Text fontSize="20px" mb="24px">
             {currencies[Field.CURRENCY_A]?.symbol ?? '-'}/{currencies[Field.CURRENCY_B]?.symbol ?? '-'}
           </Text>
-          <Text fontSize="12px" color="subtle" mb="24px">
+          <Text fontSize="12px" color="textSubtle2" mb="24px">
             (0x0000000000000000000000000000000000000000)
           </Text>
           <StyledRow>

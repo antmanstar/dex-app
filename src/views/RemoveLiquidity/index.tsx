@@ -53,11 +53,13 @@ import Page from '../Page'
 import { PairState } from '../../hooks/usePairs'
 import PoolPriceBar from '../AddLiquidity/PoolPriceBar'
 import LiqPoolDetailsCard from '../AddLiquidity/LiqPoolDetailsCard'
+import useTheme from '../../hooks/useTheme'
+import SwapPageSettingsButton from '../../components/SwapPageSettingButton'
 
 const BorderCard = styled.div`
-  border: solid 1px ${({ theme }) => theme.colors.cardBorder};
-  border-radius: 16px;
-  padding: 16px;
+  //border: solid 1px ${({ theme }) => theme.colors.cardBorder};
+  //border-radius: 16px;
+  //padding: 16px;
 `
 
 const Container = styled.div`
@@ -75,6 +77,26 @@ const Container = styled.div`
   }
 `
 
+const AmountPercentage = [
+  {
+    id: 1,
+    value: '25'
+  },
+  {
+    id: 2,
+    value: '50'
+  },
+  {
+    id: 3,
+    value: '75'
+  },
+  {
+    id: 1,
+    value: '100',
+    title: "Max"
+  },
+]
+
 export default function RemoveLiquidity({
   history,
   match: {
@@ -90,6 +112,7 @@ export default function RemoveLiquidity({
 
   const { t } = useTranslation()
   const gasPrice = useGasPrice()
+  const { theme } = useTheme()
 
   // burn state
   const { independentField, typedValue } = useBurnState()
@@ -491,8 +514,8 @@ export default function RemoveLiquidity({
   return (
     <Page>
       <Container>
-        <Card>
-          <CardBody>
+        <Card p="4px">
+          <CardBody p="0">
              <ColumnCenter>
                {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
@@ -517,47 +540,47 @@ export default function RemoveLiquidity({
         <AppBody>
 
           <CardBody>
-            <Flex>
-              <Button variant="text" as={Link} to="/add" px="16px">
-                {t('Add')}
-              </Button>
-              <Button variant="text" as={Link} to="/remove" px="16px">
-                {t('Remove')}
-              </Button>
+            <Flex justifyContent="space-between">
+              <Flex>
+                <Button variant="text" as={Link} to="/add" pl="0px" pr="16px">
+                  {t('Add')}
+                </Button>
+                <Button variant="active-text" as={Link} to="/remove" px="16px">
+                  {t('Remove')}
+                </Button>
+              </Flex>
+              {/* <SwapPageSettingsButton /> */}
             </Flex>
             <AutoColumn gap="20px">
               <RowBetween>
                 <Text>{t('Amount')}</Text>
-                <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
-                  {showDetailed ? t('Simple') : t('Detailed')}
-                </Button>
+                {/* <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}> */}
+                {/*  {showDetailed ? t('Simple') : t('Detailed')} */}
+                {/* </Button> */}
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
-                  <Text fontSize="40px" bold mb="16px" style={{ lineHeight: 1 }}>
-                    {formattedAmounts[Field.LIQUIDITY_PERCENT]}%
-                  </Text>
-                  <Slider
-                    name="lp-amount"
-                    min={0}
-                    max={100}
-                    value={innerLiquidityPercentage}
-                    onValueChanged={(value) => setInnerLiquidityPercentage(Math.ceil(value))}
-                    mb="16px"
-                  />
-                  <Flex flexWrap="wrap" justifyContent="space-evenly">
-                    <Button variant="tertiary" scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '25')}>
-                      25%
-                    </Button>
-                    <Button variant="tertiary" scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '50')}>
-                      50%
-                    </Button>
-                    <Button variant="tertiary" scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '75')}>
-                      75%
-                    </Button>
-                    <Button variant="tertiary" scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '100')}>
-                      Max
-                    </Button>
+                  <LightGreyCard mb="16px">
+                    <Text fontSize="24px" bold style={{ lineHeight: 1 }}>
+                      {formattedAmounts[Field.LIQUIDITY_PERCENT]}%
+                    </Text>
+                  </LightGreyCard>
+                  {/* <Slider */}
+                  {/*  name="lp-amount" */}
+                  {/*  min={0} */}
+                  {/*  max={100} */}
+                  {/*  value={innerLiquidityPercentage} */}
+                  {/*  onValueChanged={(value) => setInnerLiquidityPercentage(Math.ceil(value))} */}
+                  {/*  mb="16px" */}
+                  {/* /> */}
+                  <Flex flexWrap="wrap" justifyContent="space-between">
+                    {AmountPercentage.map(percent => {
+                      return (
+                        <Button variant={percent?.value === formattedAmounts[Field.LIQUIDITY_PERCENT] ? 'primary' : 'background'} scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, percent.value)}>
+                          {`${percent?.title || percent?.value} %`}
+                        </Button>
+                      )
+                    })}
                   </Flex>
                 </BorderCard>
               )}
@@ -688,7 +711,7 @@ export default function RemoveLiquidity({
             )}
             <Box position="relative" mt="16px">
               {!account ? (
-                <ConnectWalletButton />
+                <ConnectWalletButton width="100%" />
               ) : (
                 <RowBetween>
                   <Button

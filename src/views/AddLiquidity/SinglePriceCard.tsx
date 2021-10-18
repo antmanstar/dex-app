@@ -31,7 +31,7 @@ export const SinglePriceCard = (props: ISinglePriceCard) => {
       <Card padding="16px" background={theme.colors.background}>
         <CardBody>
           <Text
-            color="textSubtle"
+            color="textSubtle2"
             textTransform="capitalize"
             mb="12px"
           >

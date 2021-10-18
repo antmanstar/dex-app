@@ -373,7 +373,7 @@ export default function AddLiquidity({
           <div>
             <CardBody>
               <Flex>
-                <Button variant="text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
+                <Button variant="active-text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
                   {t('Add')}
                 </Button>
                 <Button variant="text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">

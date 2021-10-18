@@ -12,7 +12,10 @@ import {
   Heading,
   Table,
   Th,
-  Td, Tab, TabMenu, Input,
+  Td,
+  Tab,
+  TabMenu,
+  Input,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -36,8 +39,8 @@ const pairs = [
   {
     token1: 'matic',
     token2: '0x3222818d06F63eCa9502e18e40000807893C3a46',
-  }
-];
+  },
+]
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -100,7 +103,6 @@ export default function Pool() {
     [trackedTokenPairs],
   )
   const filteredPairs: any = useMemo(() => {
-
     const lowerSearchParts = debouncedQuery
       .toLowerCase()
       .split(/\s+/)
@@ -115,7 +117,7 @@ export default function Pool() {
       return lowerSearchParts.every((p) => p.length === 0 || sParts.some((sp) => sp.startsWith(p) || sp.endsWith(p)))
     }
     return trackedTokenPairs.filter((pairss) => {
-      const [pair1, pair2] = pairss;
+      const [pair1, pair2] = pairss
       return (pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))
     })
   }, [trackedTokenPairs, debouncedQuery])
@@ -195,12 +197,8 @@ export default function Pool() {
           {/* {renderBody()} */}
           <TabContainer>
             <TabMenu activeIndex={0}>
-              <Tab color='primary'>
-                All
-              </Tab>
-              <Tab>
-                My Pools
-              </Tab>
+              <Tab color="primary">All</Tab>
+              <Tab>My Pools</Tab>
             </TabMenu>
             <InputWrapper>
               <Input
@@ -220,9 +218,7 @@ export default function Pool() {
               <Th>Volume</Th>
               <Th>Fees</Th>
             </thead>
-            <tbody>
-            {filteredPairs.map(TokenList)}
-            </tbody>
+            <tbody>{filteredPairs.map(TokenList)}</tbody>
           </Table>
         </Body>
       </AppBody>
@@ -230,21 +226,20 @@ export default function Pool() {
   )
 }
 
-
 const TokenList = (tokens: [Token, Token]) => {
-  const [token1, token2] = tokens;
-  let currency1: Token | Currency = token1;
-  let currency2: Token | Currency = token2;
+  const [token1, token2] = tokens
+  let currency1: Token | Currency = token1
+  let currency2: Token | Currency = token2
   const matic = useCurrency('matic')
 
-  let address1 = token1.address;
-  let address2 = token2.address;
+  let address1 = token1.address
+  let address2 = token2.address
 
-  if(currency1.symbol.toLowerCase() === 'wmatic') {
+  if (currency1.symbol.toLowerCase() === 'wmatic') {
     address1 = 'MATIC'
     currency1 = matic
   }
-  if(currency2.symbol.toLowerCase() === 'wmatic') {
+  if (currency2.symbol.toLowerCase() === 'wmatic') {
     address2 = address1
     currency2 = currency1
     address1 = 'MATIC'
@@ -258,14 +253,22 @@ const TokenList = (tokens: [Token, Token]) => {
         <Button id={`pool-${address1}-${address2}`} as={Link} variant="text" to={`/add/${address1}/${address2}`}>
           <div>
             <CurrencyLogo currency={currency1} />
-            <CurrencyLogo currency={currency2} style={{marginLeft: '-10px'}} />
+            <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
           </div>
-          <Text ml='10px'>{currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}</Text>
+          <Text ml="10px">
+            {currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}
+          </Text>
         </Button>
       </Td>
-      <Td><Text>0</Text></Td>
-      <Td><Text>0</Text></Td>
-      <Td><Text>0</Text></Td>
+      <Td>
+        <Text>0</Text>
+      </Td>
+      <Td>
+        <Text>0</Text>
+      </Td>
+      <Td>
+        <Text>0</Text>
+      </Td>
     </>
-  );
+  )
 }

@@ -22,7 +22,14 @@ export const mainnetTokens = {
     'https://www.binance.com/',
   ),
   // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
-  bnb: new Token(MAINNET, '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889', 18, 'MATIC', 'MATIC', 'https://www.binance.com/'),
+  bnb: new Token(
+    MAINNET,
+    '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+    18,
+    'MATIC',
+    'MATIC',
+    'https://www.binance.com/',
+  ),
   busd: new Token(
     MAINNET,
     '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',

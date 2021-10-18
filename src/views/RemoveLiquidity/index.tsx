@@ -80,20 +80,20 @@ const Container = styled.div`
 const AmountPercentage = [
   {
     id: 1,
-    value: '25'
+    value: '25',
   },
   {
     id: 2,
-    value: '50'
+    value: '50',
   },
   {
     id: 3,
-    value: '75'
+    value: '75',
   },
   {
     id: 1,
     value: '100',
-    title: "Max"
+    title: 'Max',
   },
 ]
 
@@ -508,7 +508,7 @@ export default function RemoveLiquidity({
 
   const currencies = {
     CURRENCY_A: currencyA,
-    CURRENCY_B: currencyB
+    CURRENCY_B: currencyB,
   }
 
   return (
@@ -516,13 +516,11 @@ export default function RemoveLiquidity({
       <Container>
         <Card p="4px">
           <CardBody p="0">
-             <ColumnCenter>
-               {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
+            <ColumnCenter>
+              {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
-                  <LightCard padding="0px"border="none !important">
-                    <LiqPoolDetailsCard
-                      currencies={currencies}
-                    />
+                  <LightCard padding="0px" border="none !important">
+                    <LiqPoolDetailsCard currencies={currencies} />
                     <LightCard padding="0" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
@@ -533,12 +531,11 @@ export default function RemoveLiquidity({
                     </LightCard>
                   </LightCard>
                 </>
-               )}
-             </ColumnCenter>
+              )}
+            </ColumnCenter>
           </CardBody>
         </Card>
         <AppBody>
-
           <CardBody>
             <Flex justifyContent="space-between">
               <Flex>
@@ -574,9 +571,15 @@ export default function RemoveLiquidity({
                   {/*  mb="16px" */}
                   {/* /> */}
                   <Flex flexWrap="wrap" justifyContent="space-between">
-                    {AmountPercentage.map(percent => {
+                    {AmountPercentage.map((percent) => {
                       return (
-                        <Button variant={percent?.value === formattedAmounts[Field.LIQUIDITY_PERCENT] ? 'primary' : 'background'} scale="sm" onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, percent.value)}>
+                        <Button
+                          variant={
+                            percent?.value === formattedAmounts[Field.LIQUIDITY_PERCENT] ? 'primary' : 'background'
+                          }
+                          scale="sm"
+                          onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, percent.value)}
+                        >
                           {`${percent?.title || percent?.value} %`}
                         </Button>
                       )
@@ -625,9 +628,9 @@ export default function RemoveLiquidity({
                           </StyledInternalLink>
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
-                            to={`/remove/${currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'MATIC' : currencyIdA}/${
-                              currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'MATIC' : currencyIdB
-                            }`}
+                            to={`/remove/${
+                              currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'MATIC' : currencyIdA
+                            }/${currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'MATIC' : currencyIdB}`}
                           >
                             {t('Receive MATIC')}
                           </StyledInternalLink>

@@ -12,7 +12,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
   }
   body {
-    background: ${({ theme }) => theme.isDark ? "url('/bg-dark.jpg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
+    background: ${({ theme }) =>
+      theme.isDark ? "url('/bg-dark.jpg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
     background-size: cover;
 
     img {

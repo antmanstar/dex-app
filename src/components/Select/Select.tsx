@@ -136,7 +136,14 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange,
     <DropDownContainer isOpen={isOpen} {...props}>
       <DropDownHeader onClick={toggling}>
         <>
-          {options[selectedOptionIndex]?.icon && <img width='24px' height='24px' src={options[selectedOptionIndex]?.icon}  alt={options[selectedOptionIndex].value}/> }
+          {options[selectedOptionIndex]?.icon && (
+            <img
+              width="24px"
+              height="24px"
+              src={options[selectedOptionIndex]?.icon}
+              alt={options[selectedOptionIndex].value}
+            />
+          )}
         </>
         <Text>{options[selectedOptionIndex].label}</Text>
         <ArrowDropDownIcon color="text" onClick={toggling} />

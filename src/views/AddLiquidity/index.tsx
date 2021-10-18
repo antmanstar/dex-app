@@ -42,7 +42,6 @@ import LiqPoolDetailsCard from './LiqPoolDetailsCard'
 import Page from '../Page'
 import useTheme from '../../hooks/useTheme'
 
-
 const Container = styled.div`
   display: grid;
   width: 100%;
@@ -169,7 +168,7 @@ export default function AddLiquidity({
     if (currencyA === ETHER || currencyB === ETHER) {
       const tokenBIsETH = currencyB === ETHER
       // estimate = router.estimateGas.addLiquidityETH
-      estimate = (d,e) => new Promise((resolve) => resolve(BigNumber.from('710000')))
+      estimate = (d, e) => new Promise((resolve) => resolve(BigNumber.from('710000')))
       method = router.addLiquidityETH
       args = [
         wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)?.address ?? '', // token
@@ -433,36 +432,36 @@ export default function AddLiquidity({
                       approvalA === ApprovalState.PENDING ||
                       approvalB === ApprovalState.NOT_APPROVED ||
                       approvalB === ApprovalState.PENDING) &&
-                    isValid && (
-                      <RowBetween>
-                        {approvalA !== ApprovalState.APPROVED && (
-                          <Button
-                            onClick={approveACallback}
-                            disabled={approvalA === ApprovalState.PENDING}
-                            width={approvalB !== ApprovalState.APPROVED ? '48%' : '100%'}
-                          >
-                            {approvalA === ApprovalState.PENDING ? (
-                              <Dots>{t('Enabling %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}</Dots>
-                            ) : (
-                              t('Enable %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })
-                            )}
-                          </Button>
-                        )}
-                        {approvalB !== ApprovalState.APPROVED && (
-                          <Button
-                            onClick={approveBCallback}
-                            disabled={approvalB === ApprovalState.PENDING}
-                            width={approvalA !== ApprovalState.APPROVED ? '48%' : '100%'}
-                          >
-                            {approvalB === ApprovalState.PENDING ? (
-                              <Dots>{t('Enabling %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}</Dots>
-                            ) : (
-                              t('Enable %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })
-                            )}
-                          </Button>
-                        )}
-                      </RowBetween>
-                    )}
+                      isValid && (
+                        <RowBetween>
+                          {approvalA !== ApprovalState.APPROVED && (
+                            <Button
+                              onClick={approveACallback}
+                              disabled={approvalA === ApprovalState.PENDING}
+                              width={approvalB !== ApprovalState.APPROVED ? '48%' : '100%'}
+                            >
+                              {approvalA === ApprovalState.PENDING ? (
+                                <Dots>{t('Enabling %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })}</Dots>
+                              ) : (
+                                t('Enable %asset%', { asset: currencies[Field.CURRENCY_A]?.symbol })
+                              )}
+                            </Button>
+                          )}
+                          {approvalB !== ApprovalState.APPROVED && (
+                            <Button
+                              onClick={approveBCallback}
+                              disabled={approvalB === ApprovalState.PENDING}
+                              width={approvalA !== ApprovalState.APPROVED ? '48%' : '100%'}
+                            >
+                              {approvalB === ApprovalState.PENDING ? (
+                                <Dots>{t('Enabling %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })}</Dots>
+                              ) : (
+                                t('Enable %asset%', { asset: currencies[Field.CURRENCY_B]?.symbol })
+                              )}
+                            </Button>
+                          )}
+                        </RowBetween>
+                      )}
                     <Button
                       variant={
                         !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]
@@ -476,7 +475,9 @@ export default function AddLiquidity({
                           onPresentAddLiquidityModal()
                         }
                       }}
-                      disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
+                      disabled={
+                        !isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED
+                      }
                     >
                       {error ?? t('Supply')}
                     </Button>

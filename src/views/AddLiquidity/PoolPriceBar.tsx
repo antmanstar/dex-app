@@ -9,11 +9,11 @@ import { Field } from '../../state/mint/actions'
 import { SinglePriceCard } from './SinglePriceCard'
 
 function PoolPriceWrapper({
-    currencies,
-    noLiquidity,
-    poolTokenPercentage,
-    price,
-  }: {
+  currencies,
+  noLiquidity,
+  poolTokenPercentage,
+  price,
+}: {
   currencies: { [field in Field]?: Currency }
   noLiquidity?: boolean
   poolTokenPercentage?: Percent
@@ -26,16 +26,20 @@ function PoolPriceWrapper({
         <AutoRow justify="space-around" gap="4px">
           <AutoColumn justify="center">
             <SinglePriceCard
-              data={`${noLiquidity && price
-                ? '100'
-                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+              data={`${
+                noLiquidity && price
+                  ? '100'
+                  : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'
+              }
               %`}
               title={t('Your Pool Share')}
             />
             <SinglePriceCard
-              data={`${noLiquidity && price
-                ? '100'
-                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+              data={`${
+                noLiquidity && price
+                  ? '100'
+                  : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'
+              }
               %`}
               title={t('Your Pool Tokens')}
             />

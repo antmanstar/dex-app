@@ -5,6 +5,14 @@ import useTheme from '../../hooks/useTheme'
 
 const StyledCardWrapper = styled.div`
   min-width: 350px;
+  
+  @media screen and (max-width: 470px) {
+    min-width: 300px;
+  }
+  
+  @media screen and (max-width: 360px) {
+    min-width: 260px;
+  }
 `
 
 interface ISinglePriceCard {

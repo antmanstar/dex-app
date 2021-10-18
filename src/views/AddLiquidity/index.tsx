@@ -38,7 +38,9 @@ import Dots from '../../components/Loader/Dots'
 import ConfirmAddModalBottom from './ConfirmAddModalBottom'
 import { currencyId } from '../../utils/currencyId'
 import PoolPriceBar from './PoolPriceBar'
+import LiqPoolDetailsCard from './LiqPoolDetailsCard'
 import Page from '../Page'
+import useTheme from '../../hooks/useTheme'
 
 
 const Container = styled.div`
@@ -66,6 +68,7 @@ export default function AddLiquidity({
   const dispatch = useDispatch<AppDispatch>()
   const { t } = useTranslation()
   const gasPrice = useGasPrice()
+  const { theme } = useTheme()
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
@@ -336,21 +339,25 @@ export default function AddLiquidity({
   return (
     <Page>
       <Container>
-        <Card>
-          <CardBody>
+        <Card p="4px">
+          <CardBody p="0">
             <ColumnCenter>
-              <>
-                <LightCard padding="0px"border="none !important">
-                  <LightCard padding="0" border="none !important">
-                    <PoolPriceBar
-                      currencies={currencies}
-                      poolTokenPercentage={poolTokenPercentage}
-                      noLiquidity={noLiquidity}
-                      price={price}
-                    />
-                  </LightCard>
+              <LightCard padding="0px" border="none !important">
+                <LiqPoolDetailsCard
+                  currencies={currencies}
+                  poolTokenPercentage={poolTokenPercentage}
+                  noLiquidity={noLiquidity}
+                  price={price}
+                />
+                <LightCard padding="0 8px" border="none !important">
+                  <PoolPriceBar
+                    currencies={currencies}
+                    poolTokenPercentage={poolTokenPercentage}
+                    noLiquidity={noLiquidity}
+                    price={price}
+                  />
                 </LightCard>
-              </>
+              </LightCard>
             </ColumnCenter>
           </CardBody>
         </Card>

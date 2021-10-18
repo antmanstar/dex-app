@@ -30,7 +30,7 @@ const ScrollableContainer = styled(Flex)`
   }
 `
 
-const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
+const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => {
   const [showConfirmExpertModal, setShowConfirmExpertModal] = useState(false)
   const [showExpertModeAcknowledgement, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgementShow()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
@@ -47,6 +47,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
         setShowConfirmExpertModal={setShowConfirmExpertModal}
         onDismiss={onDismiss}
         setShowExpertModeAcknowledgement={setShowExpertModeAcknowledgement}
+        noModal={noModal}
       />
     )
   }
@@ -63,8 +64,8 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
     }
   }
 
-  return (
-    <Modal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }}>
+  const renderModalBody = () => {
+    return (
       <ScrollableContainer>
         <Flex pb="24px" flexDirection="column">
           <GasSettings />
@@ -119,6 +120,16 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
           {/* </PancakeToggleWrapper> */}
         </Flex>
       </ScrollableContainer>
+    )
+  }
+
+  if (noModal) {
+    return renderModalBody()
+  }
+
+  return (
+    <Modal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }}>
+      {renderModalBody()}
     </Modal>
   )
 }

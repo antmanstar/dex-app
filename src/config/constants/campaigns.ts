@@ -9,9 +9,7 @@ import { Campaign } from './types'
  * badge: Achievement avatar
  */
 
-const campaigns: Campaign[] = [
-
-]
+const campaigns: Campaign[] = []
 
 /**
  * Transform the campaign config into a map. Keeps the config the same

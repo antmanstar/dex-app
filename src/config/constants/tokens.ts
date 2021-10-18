@@ -23,7 +23,14 @@ export const mainnetTokens = {
   ),
   // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
   bnb: new Token(MAINNET, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'BNB', 'BNB', 'https://www.binance.com/'),
-  busd: new Token(MAINNET, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'BUSD', 'BUSD', 'https://www.binance.com/'),
+  busd: new Token(
+    MAINNET,
+    '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    18,
+    'BUSD',
+    'BUSD',
+    'https://www.binance.com/',
+  ),
   cake: new Token(
     MAINNET,
     '0xbB892870BB6613fAb0Db141CcDD7F89e3c3a9d16',
@@ -31,7 +38,7 @@ export const mainnetTokens = {
     'ECO',
     'EcoSwap Token',
     'https://pancakeswap.finance/',
-  )
+  ),
 }
 
 export const testnetTokens = {

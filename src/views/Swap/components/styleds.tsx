@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components'
 import { AutoColumn } from 'components/Layout/Column'
 import ChartCard from '../../Info/components/InfoCharts/ChartCard'
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ padding?: string }>`
   position: relative;
-  padding: 1rem;
+  padding: ${({ padding }) => padding || '1rem'};
 `
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`

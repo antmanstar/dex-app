@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 export const useWidth = (): number => {
-  const [width, setWidth] = useState<number>(window.innerWidth);
+  const [width, setWidth] = useState<number>(window.innerWidth)
   useEffect(() => {
     const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  });
-  return width;
-};
+      setWidth(window.innerWidth)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  })
+  return width
+}

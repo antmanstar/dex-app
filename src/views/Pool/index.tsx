@@ -249,6 +249,8 @@ const TokenList = (tokens: [Token, Token]) => {
     currency2 = currency1
     address1 = 'MATIC'
     currency1 = matic
+    // address2 = 'MATIC'
+    // currency2 = matic
   }
   return (
     <>

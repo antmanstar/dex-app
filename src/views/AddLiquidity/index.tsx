@@ -165,7 +165,8 @@ export default function AddLiquidity({
     let value: BigNumber | null
     if (currencyA === ETHER || currencyB === ETHER) {
       const tokenBIsETH = currencyB === ETHER
-      estimate = router.estimateGas.addLiquidityETH
+      // estimate = router.estimateGas.addLiquidityETH
+      estimate = (d,e) => new Promise((resolve) => resolve(BigNumber.from('710000')))
       method = router.addLiquidityETH
       args = [
         wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)?.address ?? '', // token
@@ -173,7 +174,7 @@ export default function AddLiquidity({
         amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
         amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
         account,
-        deadline.toHexString(),
+        deadline.toString(),
       ]
       value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
     } else {
@@ -187,11 +188,11 @@ export default function AddLiquidity({
         amountsMin[Field.CURRENCY_A].toString(),
         amountsMin[Field.CURRENCY_B].toString(),
         account,
-        deadline.toHexString(),
+        deadline.toString(),
       ]
       value = null
     }
-
+    console.log('ARGS', args, value.toString())
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then((estimatedGasLimit) =>
@@ -338,29 +339,18 @@ export default function AddLiquidity({
         <Card>
           <CardBody>
             <ColumnCenter>
-              <Message variant="warning">
-                <div>
-                  <Text bold mb="8px">
-                    {t('You are the first liquidity provider.')}
-                  </Text>
-                  <Text mb="8px">{t('The ratio of tokens you add will set the price of this pool.')}</Text>
-                  <Text>{t('Once you are happy with the rate click supply to review.')}</Text>
-                </div>
-              </Message>
-              {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
-                <>
-                  <LightCard padding="0px"border="none !important">
-                    <LightCard padding="0" border="none !important">
-                      <PoolPriceBar
-                        currencies={currencies}
-                        poolTokenPercentage={poolTokenPercentage}
-                        noLiquidity={noLiquidity}
-                        price={price}
-                      />
-                    </LightCard>
+              <>
+                <LightCard padding="0px"border="none !important">
+                  <LightCard padding="0" border="none !important">
+                    <PoolPriceBar
+                      currencies={currencies}
+                      poolTokenPercentage={poolTokenPercentage}
+                      noLiquidity={noLiquidity}
+                      price={price}
+                    />
                   </LightCard>
-                </>
-              )}
+                </LightCard>
+              </>
             </ColumnCenter>
           </CardBody>
         </Card>
@@ -376,10 +366,10 @@ export default function AddLiquidity({
           <div>
             <CardBody>
               <Flex>
-                <Button variant="text" as={Link} to="/add" px="16px">
+                <Button variant="text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
                   {t('Add')}
                 </Button>
-                <Button variant="text" as={Link} to="/remove" px="16px">
+                <Button variant="text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">
                   {t('Remove')}
                 </Button>
               </Flex>
@@ -411,7 +401,19 @@ export default function AddLiquidity({
                   id="add-liquidity-input-tokenb"
                   showCommonBases
                 />
-
+                {noLiquidity && (
+                  <ColumnCenter>
+                    <Message variant="warning">
+                      <div>
+                        <Text bold mb="8px">
+                          {t('You are the first liquidity provider.')}
+                        </Text>
+                        <Text mb="8px">{t('The ratio of tokens you add will set the price of this pool.')}</Text>
+                        <Text>{t('Once you are happy with the rate click supply to review.')}</Text>
+                      </div>
+                    </Message>
+                  </ColumnCenter>
+                )}
                 {addIsUnsupported ? (
                   <Button disabled mb="4px">
                     {t('Unsupported Asset')}

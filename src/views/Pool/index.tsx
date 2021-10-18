@@ -1,7 +1,19 @@
-import React, { useMemo } from 'react'
+import React, { RefObject, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Pair } from '@pancakeswap/sdk'
-import { Text, Flex, CardBody, CardFooter, Button, AddIcon, SubMenuItems } from '@pancakeswap/uikit'
+import { Currency, Pair, Token } from '@pancakeswap/sdk'
+import {
+  Text,
+  Flex,
+  CardBody,
+  CardFooter,
+  Button,
+  AddIcon,
+  SubMenuItems,
+  Heading,
+  Table,
+  Th,
+  Td, Tab, TabMenu, Input,
+} from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -10,17 +22,76 @@ import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { usePairs } from '../../hooks/usePairs'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import Dots from '../../components/Loader/Dots'
-import { AppHeader, AppBody } from '../../components/App'
+import { AppHeader } from '../../components/App'
 import Page from '../Page'
 import config from '../../components/Menu/config/config'
+import Container from '../../components/Layout/Container'
+import { useCurrency, useToken } from '../../hooks/Tokens'
+import { CurrencyLogo } from '../../components/Logo'
+import useDebounce from '../../hooks/useDebounce'
+import { filterTokens } from '../../components/SearchModal/filtering'
+import { isAddress } from '../../utils'
 
-const Body = styled(CardBody)`
-  background-color: ${({ theme }) => theme.colors.dropdownDeep};
+const pairs = [
+  {
+    token1: 'matic',
+    token2: '0x3222818d06F63eCa9502e18e40000807893C3a46',
+  }
+];
+
+const AppBody = styled(`div`)`
+  max-width: 1024px;
+  width: 100%;
+  z-index: 1;
+`
+
+const Body = styled(`div`)`
+  border-radius: 10px;
+  margin-top: 2rem;
+`
+
+const Header = styled(`div`)`
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+`
+
+const PoolContainer = styled(`div`)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const TabContainer = styled(`div`)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const CurrencyContainer = styled(`div`)`
+  display: flex;
+`
+
+const InputWrapper = styled(`div`)`
+  width: 100%;
+  max-width: 400px;
 `
 
 export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
+
+  const [searchQuery, setSearchQuery] = useState<string>('')
+
+  const handleInput = useCallback((event) => {
+    const input = event.target.value
+    const checksummedInput = isAddress(input)
+    setSearchQuery(checksummedInput || input)
+  }, [])
+
+  const debouncedQuery = useDebounce(searchQuery, 200)
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -28,6 +99,26 @@ export default function Pool() {
     () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
     [trackedTokenPairs],
   )
+  const filteredPairs: any = useMemo(() => {
+
+    const lowerSearchParts = debouncedQuery
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((s) => s.length > 0)
+
+    const matchesSearch = (s: string): boolean => {
+      const sParts = s
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((s_) => s_.length > 0)
+
+      return lowerSearchParts.every((p) => p.length === 0 || sParts.some((sp) => sp.startsWith(p) || sp.endsWith(p)))
+    }
+    return trackedTokenPairs.filter((pairss) => {
+      const [pair1, pair2] = pairss;
+      return (pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))
+    })
+  }, [trackedTokenPairs, debouncedQuery])
   const liquidityTokens = useMemo(
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens],
@@ -88,26 +179,91 @@ export default function Pool() {
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>
-        <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} />
-        <Body>
-          {renderBody()}
-          {account && !v2IsLoading && (
-            <Flex flexDirection="column" alignItems="center" mt="24px">
-              <Text color="textSubtle" mb="8px">
-                {t("Don't see a pool you joined?")}
-              </Text>
-              <Button id="import-pool-link" variant="secondary" scale="sm" as={Link} to="/find">
-                {t('Find other LP tokens')}
-              </Button>
-            </Flex>
-          )}
-        </Body>
-        <CardFooter style={{ textAlign: 'center' }}>
-          <Button id="join-pool-button" as={Link} to="/add" width="100%" startIcon={<AddIcon color="white" />}>
-            {t('Add Liquidity')}
+        <Header>
+          <PoolContainer>
+            <Heading>Pool</Heading>
+            <Button id="import-pool-link" variant="link" scale="sm" as={Link} to="/find">
+              {t('Import')}
+            </Button>
+          </PoolContainer>
+          <Button id="join-pool-button" as={Link} to="/add">
+            {t('Create a Pool')}
           </Button>
-        </CardFooter>
+        </Header>
+        {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
+        <Body>
+          {/* {renderBody()} */}
+          <TabContainer>
+            <TabMenu activeIndex={0}>
+              <Tab color='primary'>
+                All
+              </Tab>
+              <Tab>
+                My Pools
+              </Tab>
+            </TabMenu>
+            <InputWrapper>
+              <Input
+                id="token-search-input"
+                placeholder={t('Search name or paste address')}
+                scale="lg"
+                autoComplete="off"
+                value={searchQuery}
+                onChange={handleInput}
+              />
+            </InputWrapper>
+          </TabContainer>
+          <Table>
+            <thead>
+              <Th>Name</Th>
+              <Th>Liquidity</Th>
+              <Th>Volume</Th>
+              <Th>Fees</Th>
+            </thead>
+            <tbody>
+            {filteredPairs.map(TokenList)}
+            </tbody>
+          </Table>
+        </Body>
       </AppBody>
     </Page>
   )
+}
+
+
+const TokenList = (tokens: [Token, Token]) => {
+  const [token1, token2] = tokens;
+  let currency1: Token | Currency = token1;
+  let currency2: Token | Currency = token2;
+  const matic = useCurrency('matic')
+
+  let address1 = token1.address;
+  let address2 = token2.address;
+
+  if(currency1.symbol.toLowerCase() === 'wmatic') {
+    address1 = 'MATIC'
+    currency1 = matic
+  }
+  if(currency2.symbol.toLowerCase() === 'wmatic') {
+    address2 = address1
+    currency2 = currency1
+    address1 = 'MATIC'
+    currency1 = matic
+  }
+  return (
+    <>
+      <Td>
+        <Button id={`pool-${address1}-${address2}`} as={Link} variant="text" to={`/add/${address1}/${address2}`}>
+          <div>
+            <CurrencyLogo currency={currency1} />
+            <CurrencyLogo currency={currency2} style={{marginLeft: '-10px'}} />
+          </div>
+          <Text ml='10px'>{currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}</Text>
+        </Button>
+      </Td>
+      <Td><Text>0</Text></Td>
+      <Td><Text>0</Text></Td>
+      <Td><Text>0</Text></Td>
+    </>
+  );
 }

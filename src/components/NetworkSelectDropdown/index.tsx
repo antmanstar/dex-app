@@ -19,6 +19,7 @@ export const NetworkSelectDropdown: React.FC = () => {
       options={[
         {
           label: t('Polygon'),
+          icon: '/images/tokens/matic.png',
           value: 'polygon',
         },
       ]}

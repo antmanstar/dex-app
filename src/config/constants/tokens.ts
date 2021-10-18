@@ -15,14 +15,14 @@ interface SerializedTokenList {
 export const mainnetTokens = {
   wbnb: new Token(
     MAINNET,
-    '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
     18,
-    'WBNB',
-    'Wrapped BNB',
+    'WMATC',
+    'Wrapped MATIC',
     'https://www.binance.com/',
   ),
   // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
-  bnb: new Token(MAINNET, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'BNB', 'BNB', 'https://www.binance.com/'),
+  bnb: new Token(MAINNET, '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889', 18, 'MATIC', 'MATIC', 'https://www.binance.com/'),
   busd: new Token(
     MAINNET,
     '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
@@ -33,7 +33,7 @@ export const mainnetTokens = {
   ),
   cake: new Token(
     MAINNET,
-    '0xbB892870BB6613fAb0Db141CcDD7F89e3c3a9d16',
+    '0x3222818d06F63eCa9502e18e40000807893C3a46',
     18,
     'ECO',
     'EcoSwap Token',
@@ -44,15 +44,23 @@ export const mainnetTokens = {
 export const testnetTokens = {
   wbnb: new Token(
     TESTNET,
-    '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
     18,
-    'WBNB',
-    'Wrapped BNB',
+    'WMATIC',
+    'Wrapped MATIC',
+    'https://www.binance.com/',
+  ),
+  bnb: new Token(
+    TESTNET,
+    '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+    18,
+    'MATIC',
+    'MATIC',
     'https://www.binance.com/',
   ),
   cake: new Token(
     TESTNET,
-    '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
+    '0x3222818d06F63eCa9502e18e40000807893C3a46',
     18,
     'ECO',
     'EcoSwap Token',

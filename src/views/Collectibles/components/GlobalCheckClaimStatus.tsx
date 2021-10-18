@@ -25,14 +25,14 @@ const GlobalCheckClaimStatus: React.FC<GlobalCheckClaimStatusProps> = ({ exclude
 
   // Check claim status
   useEffect(() => {
-    const fetchClaimAnniversaryStatus = async () => {
-      const canClaimAnniversary = await canClaim(account)
-      setCanClaimAnniversaryPoints(canClaimAnniversary)
-    }
-
-    if (account) {
-      fetchClaimAnniversaryStatus()
-    }
+    // const fetchClaimAnniversaryStatus = async () => {
+    //   const canClaimAnniversary = await canClaim(account)
+    //   setCanClaimAnniversaryPoints(canClaimAnniversary)
+    // }
+    //
+    // if (account) {
+    //   fetchClaimAnniversaryStatus()
+    // }
   }, [account, canClaim])
 
   // Check if we need to display the modal

@@ -328,24 +328,25 @@ function SwapPage({ history, theme }: SwapPageInterface) {
   const chartData = usePoolChartData(tokenAddress?.toLowerCase())
   const tokenData = useTokenData(tokenA?.address?.toLowerCase())
   const DEFAULT_TIME_WINDOW: Duration = { weeks: 1 }
-  const priceData = useTokenPriceData(tokenA?.address?.toLowerCase(), ONE_HOUR_SECONDS, DEFAULT_TIME_WINDOW)
-  const adjustedPriceData = useMemo(() => {
-    // Include latest available price
-    if (priceData && tokenData && priceData.length > 0) {
-      const data = [...priceData]
-      // if(data[data.length-1]?.close !== tokenData?.priceUSD) {
-      //   data.push({
-      //     time: new Date().getTime() / 1000,
-      //     open: priceData[priceData.length - 1].close,
-      //     close: tokenData?.priceUSD,
-      //     high: tokenData?.priceUSD,
-      //     low: priceData[priceData.length - 1].close,
-      //   },)
-      // }
-      return data
-    }
-    return undefined
-  }, [priceData, tokenData])
+  // const priceData = useTokenPriceData(tokenA?.address?.toLowerCase(), ONE_HOUR_SECONDS, DEFAULT_TIME_WINDOW)
+  // const priceData = useTokenPriceData(tokenA?.address?.toLowerCase(), ONE_HOUR_SECONDS, DEFAULT_TIME_WINDOW)
+  // const adjustedPriceData = useMemo(() => {
+  //   // Include latest available price
+  //   if (priceData && tokenData && priceData.length > 0) {
+  //     const data = []
+  //     // if(data[data.length-1]?.close !== tokenData?.priceUSD) {
+  //     //   data.push({
+  //     //     time: new Date().getTime() / 1000,
+  //     //     open: priceData[priceData.length - 1].close,
+  //     //     close: tokenData?.priceUSD,
+  //     //     high: tokenData?.priceUSD,
+  //     //     low: priceData[priceData.length - 1].close,
+  //     //   },)
+  //     // }
+  //     return data
+  //   }
+  //   return undefined
+  // }, [priceData, tokenData])
   const [onPresentConfirmModal] = useModal(
     <ConfirmSwapModal
       trade={trade}
@@ -408,7 +409,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
           <StyledSwapPageChartCard
             variant="token"
             tokenData={tokenData}
-            tokenPriceData={adjustedPriceData}
+            // tokenPriceData={adjustedPriceData}
             chartData={chartData}
             hideTabs
             defaultTab={ChartView.PRICE}

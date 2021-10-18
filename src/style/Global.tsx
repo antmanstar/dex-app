@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
   }
   body {
-    background-color: ${({ theme }) => theme.colors.background};
+    background: ${({ theme }) => theme.isDark ? "url('/bg-dark.jpg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
 
     img {
       height: auto;

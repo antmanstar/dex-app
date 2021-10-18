@@ -86,7 +86,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
   }
 
   return (
-    <Card background={theme.colors.background} borderBackground="transparent">
+    <Card background="transparent" borderBackground="transparent">
       {!hideTabs && (
         <TabToggleGroup>
           <TabToggle isActive={view === ChartView.VOLUME} onClick={() => setView(ChartView.VOLUME)}>

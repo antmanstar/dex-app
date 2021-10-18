@@ -73,10 +73,6 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
     `}
 
   svg {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
   }
 `
 
@@ -102,6 +98,7 @@ export interface SelectProps extends BoxProps {
 
 export interface OptionProps {
   label: string
+  icon?: string
   value: any
 }
 
@@ -138,9 +135,12 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange,
   return (
     <DropDownContainer isOpen={isOpen} {...props}>
       <DropDownHeader onClick={toggling}>
+        <>
+          {options[selectedOptionIndex]?.icon && <img width='24px' height='24px' src={options[selectedOptionIndex]?.icon}  alt={options[selectedOptionIndex].value}/> }
+        </>
         <Text>{options[selectedOptionIndex].label}</Text>
+        <ArrowDropDownIcon color="text" onClick={toggling} />
       </DropDownHeader>
-      <ArrowDropDownIcon color="text" onClick={toggling} />
       <DropDownListContainer>
         <DropDownList ref={dropdownRef}>
           {options.map((option, index) =>

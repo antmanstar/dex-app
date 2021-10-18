@@ -39,12 +39,13 @@ export const SUGGESTED_BASES: ChainTokenList = {
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.wbnb],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake],
+  [ChainId.MAINNET]: [mainnetTokens.bnb, mainnetTokens.cake],
+  [ChainId.TESTNET]: [testnetTokens.bnb, testnetTokens.cake],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
-  [ChainId.MAINNET]: [[mainnetTokens.cake, mainnetTokens.wbnb]],
+  [ChainId.MAINNET]: [[mainnetTokens.cake, mainnetTokens.bnb]],
+  [ChainId.TESTNET]: [[testnetTokens.cake, testnetTokens.bnb]],
 }
 
 export const NetworkContextName = 'NETWORK'

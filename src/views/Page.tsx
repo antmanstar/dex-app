@@ -12,7 +12,7 @@ const StyledPage = styled.div`
   padding: 16px;
   padding-bottom: 0;
   min-height: calc(100vh - 64px);
-  background: ${({ theme }) => theme.colors.background};
+  // background: ${({ theme }) => theme.colors.background};
   //background: url('/bg_eco.svg') no-repeat center center;
   background-size: cover;
   ${({ theme }) => theme.mediaQueries.xs} {

@@ -28,7 +28,7 @@ export const SinglePriceCard = (props: ISinglePriceCard) => {
 
   return (
     <StyledCardWrapper>
-      <Card padding="16px" background={theme.colors.input}>
+      <Card padding="16px" background={theme.colors.background}>
         <CardBody>
           <Text
             color="textSubtle"

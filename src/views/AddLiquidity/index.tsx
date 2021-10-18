@@ -45,6 +45,8 @@ const Container = styled.div`
   display: grid;
   width: 100%;
   padding: 16px;
+  margin-top: 16px;
+  max-width: 1400px;
 
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
@@ -347,13 +349,8 @@ export default function AddLiquidity({
               </Message>
               {currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && pairState !== PairState.INVALID && (
                 <>
-                  <LightCard padding="0px" borderRadius="20px">
-                    <RowBetween padding="1rem">
-                      <Text fontSize="14px">
-                        {noLiquidity ? t('Initial prices and pool share') : t('Prices and pool share')}
-                      </Text>
-                    </RowBetween>{' '}
-                    <LightCard padding="1rem" borderRadius="20px">
+                  <LightCard padding="0px"border="none !important">
+                    <LightCard padding="0" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
                         poolTokenPercentage={poolTokenPercentage}

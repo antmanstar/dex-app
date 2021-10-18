@@ -6,13 +6,14 @@ import { AutoColumn } from '../../components/Layout/Column'
 import { AutoRow } from '../../components/Layout/Row'
 import { ONE_BIPS } from '../../config/constants'
 import { Field } from '../../state/mint/actions'
+import { SinglePriceCard } from './SinglePriceCard'
 
-function PoolPriceBar({
-  currencies,
-  noLiquidity,
-  poolTokenPercentage,
-  price,
-}: {
+function PoolPriceWrapper({
+                            currencies,
+                            noLiquidity,
+                            poolTokenPercentage,
+                            price,
+                          }: {
   currencies: { [field in Field]?: Currency }
   noLiquidity?: boolean
   poolTokenPercentage?: Percent
@@ -20,40 +21,49 @@ function PoolPriceBar({
 }) {
   const { t } = useTranslation()
   return (
-    <AutoColumn gap="md">
-      <AutoRow justify="space-around" gap="4px">
-        <AutoColumn justify="center">
-          <Text>{price?.toSignificant(6) ?? '-'}</Text>
-          <Text fontSize="14px" pt={1}>
-            {t('%assetA% per %assetB%', {
-              assetA: currencies[Field.CURRENCY_B]?.symbol ?? '',
-              assetB: currencies[Field.CURRENCY_A]?.symbol ?? '',
-            })}
-          </Text>
-        </AutoColumn>
-        <AutoColumn justify="center">
-          <Text>{price?.invert()?.toSignificant(6) ?? '-'}</Text>
-          <Text fontSize="14px" pt={1}>
-            {t('%assetA% per %assetB%', {
-              assetA: currencies[Field.CURRENCY_A]?.symbol ?? '',
-              assetB: currencies[Field.CURRENCY_B]?.symbol ?? '',
-            })}
-          </Text>
-        </AutoColumn>
-        <AutoColumn justify="center">
-          <Text>
-            {noLiquidity && price
-              ? '100'
-              : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
-            %
-          </Text>
-          <Text fontSize="14px" pt={1}>
-            {t('Share of Pool')}
-          </Text>
-        </AutoColumn>
-      </AutoRow>
-    </AutoColumn>
+    <AutoRow justify="space-around" gap="4px">
+      <AutoColumn gap="md">
+        <AutoRow justify="space-around" gap="4px">
+          <AutoColumn justify="center">
+            <SinglePriceCard
+              data={`${noLiquidity && price
+                ? '100'
+                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+              %`}
+              title={t('Your Pool Share')}
+            />
+            <SinglePriceCard
+              data={`${noLiquidity && price
+                ? '100'
+                : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+              %`}
+              title={t('Your Pool Share')}
+            />
+          </AutoColumn>
+        </AutoRow>
+      </AutoColumn>
+      <AutoColumn gap="md">
+        <AutoRow justify="space-around" gap="4px">
+          <AutoColumn justify="center">
+            <SinglePriceCard
+              title={t('%assetA% per %assetB%', {
+                assetA: currencies[Field.CURRENCY_B]?.symbol ?? '',
+                assetB: currencies[Field.CURRENCY_A]?.symbol ?? '',
+              })}
+              data={price?.toSignificant(6) ?? '-'}
+            />
+            <SinglePriceCard
+              title={t('%assetA% per %assetB%', {
+                assetA: currencies[Field.CURRENCY_A]?.symbol ?? '',
+                assetB: currencies[Field.CURRENCY_B]?.symbol ?? '',
+              })}
+              data={price?.invert()?.toSignificant(6) ?? '-'}
+            />
+          </AutoColumn>
+        </AutoRow>
+      </AutoColumn>
+    </AutoRow>
   )
 }
 
-export default PoolPriceBar
+export default PoolPriceWrapper

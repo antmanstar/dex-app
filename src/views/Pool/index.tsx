@@ -182,7 +182,7 @@ export default function Pool() {
         <Header>
           <PoolContainer>
             <Heading>Pool</Heading>
-            <Button id="import-pool-link" variant="link" scale="sm" as={Link} to="/find">
+            <Button id="import-pool-link" variant="text" scale="sm" as={Link} to="/find">
               {t('Import')}
             </Button>
           </PoolContainer>

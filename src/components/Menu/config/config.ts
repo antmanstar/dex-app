@@ -9,7 +9,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     // icon: 'Dashboard',
     href: '/dashboard',
     hideSubNav: true,
-    // showItemsOnMobile: false,
+    showItemsOnMobile: false,
     // items: [
     //   {
     //     label: t('Exchange'),
@@ -26,7 +26,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     // icon: 'Swap',
     href: '/swap',
     hideSubNav: true,
-    // showItemsOnMobile: false,
+    showItemsOnMobile: false,
     // items: [
     //   {
     //     label: t('Exchange'),
@@ -43,18 +43,21 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     href: '/liquidity',
     // icon: 'Pool',
     hideSubNav: true,
+    showItemsOnMobile: false,
   },
   {
     label: t('Farms'),
     href: '/farms',
     // icon: 'Farms',
     hideSubNav: true,
+    showItemsOnMobile: false,
   },
   {
     label: t('Stake'),
     href: '/stake',
     // icon: 'Stake',
     hideSubNav: true,
+    showItemsOnMobile: false,
   },
   // {
   //   label: t('NFT'),

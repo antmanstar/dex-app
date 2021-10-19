@@ -41,6 +41,7 @@ import PoolPriceBar from './PoolPriceBar'
 import LiqPoolDetailsCard from './LiqPoolDetailsCard'
 import Page from '../Page'
 import useTheme from '../../hooks/useTheme'
+import GlobalSettings from '../../components/Menu/GlobalSettings'
 
 const Container = styled.div`
   display: grid;
@@ -371,13 +372,16 @@ export default function AddLiquidity({
           {/* /> */}
           <div>
             <CardBody>
-              <Flex>
-                <Button variant="active-text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
-                  {t('Add')}
-                </Button>
-                <Button variant="text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">
-                  {t('Remove')}
-                </Button>
+              <Flex justifyContent="space-between">
+                <Flex>
+                  <Button variant="active-text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
+                    {t('Add')}
+                  </Button>
+                  <Button variant="text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">
+                    {t('Remove')}
+                  </Button>
+                </Flex>
+                <GlobalSettings />
               </Flex>
               <AutoColumn gap="20px">
                 <CurrencyInputPanel

@@ -54,9 +54,9 @@ import { PairState } from '../../hooks/usePairs'
 import PoolPriceBar from '../AddLiquidity/PoolPriceBar'
 import LiqPoolDetailsCard from '../AddLiquidity/LiqPoolDetailsCard'
 import useTheme from '../../hooks/useTheme'
-import SwapPageSettingsButton from '../../components/SwapPageSettingButton'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import useTotalSupply from '../../hooks/useTotalSupply'
+import GlobalSettings from '../../components/Menu/GlobalSettings'
 
 const BorderCard = styled.div`
   //border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -560,7 +560,7 @@ export default function RemoveLiquidity({
                   {t('Remove')}
                 </Button>
               </Flex>
-              {/* <SwapPageSettingsButton /> */}
+              <GlobalSettings />
             </Flex>
             <AutoColumn gap="20px">
               <RowBetween>

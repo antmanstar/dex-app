@@ -15,7 +15,7 @@ import {
   Td,
   Tab,
   TabMenu,
-  Input,
+  Input, useMatchBreakpoints, Card,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -48,6 +48,7 @@ const Header = styled(`div`)`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+  border-radius: 10px;
 `
 
 const PoolContainer = styled(`div`)`
@@ -71,8 +72,50 @@ const InputWrapper = styled(`div`)`
   max-width: 400px;
 `
 
+const StyledTable = styled(Table)<{isMobile: boolean}>`
+  margin-bottom: ${({isMobile}) => isMobile ? "56px" : 0};
+  margin-top: 12px;
+`
+
+const StyledDetailsWrapper = styled.div`
+  display: grid;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+
+  grid-template-columns: 1fr 1fr 1fr;
+  
+  ${({ theme }) => theme.mediaQueries.xs} {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+`
+
+const StyledTabContainer = styled(TabContainer)`
+  display: flex;
+  flex-direction: column-reverse;
+  
+  & > div {
+    margin-top: 16px;
+  }
+  
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+
+    & > div {
+      margin-top: 0;
+    }
+  }
+`
+
+const StyledTab = styled(Tab)`
+  padding: 8px 16px;
+`
+
 
 const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token, Token], matic: Currency, volume: number, fees: number, liquidity: number }) => {
+
+  const { isMobile } = useMatchBreakpoints()
+
   const [token1, token2] = tokens
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
@@ -92,10 +135,45 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token,
     // address2 = 'MATIC'
     // currency2 = matic
   }
+
+  if (isMobile) {
+    return (
+      <tr>
+        <a href={`/add/${address1}/${address2}`}>
+          <Card mt="8px">
+            <CardBody>
+              <Flex mb="12px">
+                <div>
+                  <CurrencyLogo currency={currency1} />
+                  <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
+                </div>
+                <Text ml='10px'>{currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}</Text>
+              </Flex>
+              <StyledDetailsWrapper>
+                {[{ title: "volume", value: volume }, { title:"liquidity", value: liquidity }, { title:"fees", value: fees }].map((singleValue) => {
+                  return (
+                    <Flex alignItems="start" flexDirection="column">
+                      <Text color="textSubtle2" textTransform="capitalize" fontSize="12px">
+                        {singleValue.title}:
+                      </Text>
+                      <Text color="text" textTransform="capitalize" fontSize="16px">
+                        {singleValue.value}
+                      </Text>
+                    </Flex>
+                  )
+                })}
+              </StyledDetailsWrapper>
+            </CardBody>
+          </Card>
+        </a>
+      </tr>
+    )
+  }
+
   return (
     <tr>
       <Td>
-        <Button id={`pool-${address1}-${address2}`} as={Link} variant='text' to={`/add/${address1}/${address2}`}>
+        <Button id={`pool-${address1}-${address2}`} as={Link} variant='text' to={`/add/${address1}/${address2}`} pl="0">
           <div>
             <CurrencyLogo currency={currency1} />
             <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
@@ -113,6 +191,7 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token,
 export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>("none")
@@ -241,6 +320,11 @@ export default function Pool() {
   };
 
   const getHeaders = () => {
+
+    if (isMobile) {
+      return []
+    }
+
     return [
       {
         id: 'name',
@@ -280,20 +364,23 @@ export default function Pool() {
         {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
         <Body>
           {/* {renderBody()} */}
-          <TabContainer>
-            <TabMenu activeIndex={tab === 'all' ? 0 : 1} onItemClick={(index) => {
-              if (index === 0) {
-                setTab('all')
-              } else {
-                setTab('my')
-              }
-            }}>
-              <Tab color={tab === 'all' ? 'primary' : ''} onClick={() => setTab('all')}>
+          <StyledTabContainer>
+            <TabMenu
+              activeIndex={tab === 'all' ? 0 : 1} onItemClick={(index) => {
+                if (index === 0) {
+                  setTab('all')
+                } else {
+                  setTab('my')
+                }
+              }}
+              switchVariant
+            >
+              <StyledTab color={tab === 'all' ? 'primary' : ''} onClick={() => setTab('all')}>
                 All
-              </Tab>
-              <Tab color={tab === 'my' ? 'primary' : ''} onClick={() => setTab('my')}>
+              </StyledTab>
+              <StyledTab color={tab === 'my' ? 'primary' : ''} onClick={() => setTab('my')}>
                 My Pools
-              </Tab>
+              </StyledTab>
             </TabMenu>
             <InputWrapper>
               <Input
@@ -305,13 +392,14 @@ export default function Pool() {
                 onChange={handleInput}
               />
             </InputWrapper>
-          </TabContainer>
-          <Table>
+          </StyledTabContainer>
+          <StyledTable isMobile={isMobile}>
             <thead>
             {getHeaders().map(singleHeader => {
               return (
                 <Th
                   className="cursor-pointer"
+                  textAlign="left"
                   onClick={() => handleHeaderClick(singleHeader.id)}
                 >
                   {singleHeader.title}
@@ -322,7 +410,7 @@ export default function Pool() {
             <tbody>
             {renderTable()}
             </tbody>
-          </Table>
+          </StyledTable>
         </Body>
       </AppBody>
     </Page>

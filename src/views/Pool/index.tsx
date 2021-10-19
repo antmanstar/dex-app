@@ -72,7 +72,7 @@ const InputWrapper = styled(`div`)`
 `
 
 
-const TokenList = ({ tokens, matic }: { tokens: [Token, Token], matic: Currency }) => {
+const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token, Token], matic: Currency, volume: number, fees: number, liquidity: number }) => {
   const [token1, token2] = tokens
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
@@ -103,9 +103,9 @@ const TokenList = ({ tokens, matic }: { tokens: [Token, Token], matic: Currency 
           <Text ml='10px'>{currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}</Text>
         </Button>
       </Td>
-      <Td><Text>0</Text></Td>
-      <Td><Text>0</Text></Td>
-      <Td><Text>0</Text></Td>
+      <Td><Text>{liquidity}</Text></Td>
+      <Td><Text>{volume}</Text></Td>
+      <Td><Text>{fees}</Text></Td>
     </tr>
   )
 }
@@ -115,6 +115,8 @@ export default function Pool() {
   const { t } = useTranslation()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [sortBy, setSortBy] = useState<string>("none")
+  const [reverseOrder, setReversOrder] = useState<boolean>(false)
   const [tab, setTab] = useState<'all' | 'my'>('all')
 
   const handleInput = useCallback((event) => {
@@ -128,7 +130,7 @@ export default function Pool() {
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
-    () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
+    () => trackedTokenPairs.map((tokens, index) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens, volume:  Math.floor(index * 1000) + 1, fees: Math.floor(index * 10) + 1, liquidity: Math.floor(index * 1000) + 1 })),
     [trackedTokenPairs],
   )
 
@@ -203,7 +205,16 @@ export default function Pool() {
       }
     }
     if (filteredPairs?.length > 0) {
-      return filteredPairs.map((arr) => <TokenList tokens={arr.tokens} matic={matic} />)
+
+      let sortedOrder = [...filteredPairs]
+
+      if(sortBy !== "none")  {
+        sortedOrder.sort((a, b) => a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0);
+      }
+
+      sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
+
+      return sortedOrder.map((arr) => <TokenList tokens={arr.tokens} matic={matic} {...arr}/>)
     }
     return (
       <tr>
@@ -214,6 +225,40 @@ export default function Pool() {
         </Td>
       </tr>
     )
+  }
+
+
+  const handleHeaderClick = (key: string) => {
+    if (key !== sortBy) {
+      setSortBy(key);
+      setReversOrder(false)
+    } else if (key === sortBy && !reverseOrder) {
+      setReversOrder(true)
+    } else {
+      setSortBy("none");
+      setReversOrder(false)
+    }
+  };
+
+  const getHeaders = () => {
+    return [
+      {
+        id: 'name',
+        title: "name",
+      },
+      {
+        id: 'liquidity',
+        title: "liquidity",
+      },
+      {
+        id: 'volume',
+        title: "volume",
+      },
+      {
+        id: 'fees',
+        title: "fees",
+      },
+    ]
   }
 
   return (
@@ -263,10 +308,16 @@ export default function Pool() {
           </TabContainer>
           <Table>
             <thead>
-            <Th>Name</Th>
-            <Th>Liquidity</Th>
-            <Th>Volume</Th>
-            <Th>Fees</Th>
+            {getHeaders().map(singleHeader => {
+              return (
+                <Th
+                  className="cursor-pointer"
+                  onClick={() => handleHeaderClick(singleHeader.id)}
+                >
+                  {singleHeader.title}
+                </Th>
+              )
+            })}
             </thead>
             <tbody>
             {renderTable()}

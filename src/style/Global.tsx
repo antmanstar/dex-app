@@ -20,6 +20,9 @@ const GlobalStyle = createGlobalStyle`
       max-width: 100%;
     }
   }
+  .cursor-pointer {
+    cursor: pointer;
+  }
 `
 
 export default GlobalStyle

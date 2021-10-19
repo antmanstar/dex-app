@@ -1,18 +1,20 @@
-import React from 'react'
+import React from "react";
 import { Card, CardBody, Flex, Text } from '@pancakeswap/uikit'
-import { Currency, Percent, Price } from '@pancakeswap/sdk'
-import { AutoColumn } from 'components/Layout/Column'
+import { Currency, Pair, Percent, Price } from '@pancakeswap/sdk'
+import { AutoColumn } from "components/Layout/Column";
 import styled from 'styled-components'
 import { Field } from '../../state/mint/actions'
 import Row, { AutoRow } from '../../components/Layout/Row'
 import { useTranslation } from '../../contexts/Localization'
 import useTheme from '../../hooks/useTheme'
+import { DoubleCurrencyLogo } from '../../components/Logo'
 
 interface ILiqPoolDetailsCardInterface {
   currencies: { [field in Field]?: Currency }
   noLiquidity?: boolean
   poolTokenPercentage?: Percent
-  price?: Price
+  price?: Price,
+  pair?: Pair
 }
 
 const StyledRow = styled.div`
@@ -32,9 +34,15 @@ const StyledRow = styled.div`
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `
+const FlexContainer = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 24px;
+`
 
 const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqPoolDetailsCardInterface) => {
-  const { currencies, noLiquidity, poolTokenPercentage, price } = props
+  const { currencies, noLiquidity, poolTokenPercentage, price, pair } = props
   const { t } = useTranslation()
   const { theme } = useTheme()
 
@@ -54,26 +62,36 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
   return (
     <Card background={theme.colors.background}>
       <CardBody>
-        {currencies[Field.CURRENCY_B]?.symbol && currencies[Field.CURRENCY_B]?.symbol ? (
-          <>
-            <Text fontSize="20px" mb="24px">
-              {currencies[Field.CURRENCY_A]?.symbol ?? '-'}/{currencies[Field.CURRENCY_B]?.symbol ?? '-'}
+        <div>
+          <FlexContainer>
+            <DoubleCurrencyLogo
+              currency0={currencies[Field.CURRENCY_A]}
+              currency1={currencies[Field.CURRENCY_B]}
+              size={30}
+              overlap
+            />
+            <Text fontSize="20px" mb="0" ml="24px">
+              {currencies[Field.CURRENCY_A]?.symbol ?? ''}/{currencies[Field.CURRENCY_B]?.symbol ?? ''}
             </Text>
-            <Text fontSize="12px" color="textSubtle2" mb="24px">
-              (0x0000000000000000000000000000000000000000)
-            </Text>
-            <StyledRow>
-              <AutoColumn justify="start">{renderSingleData(t('Liquidity'), '$0.00')}</AutoColumn>
-              <AutoColumn justify="start">{renderSingleData(t('Volume (24H)'), '$0.00')}</AutoColumn>
-              <AutoColumn justify="start">{renderSingleData(t('Fees (24H)'), '$0.00')}</AutoColumn>
-              <AutoColumn justify="start">{renderSingleData(t('APR'), '0%')}</AutoColumn>
-            </StyledRow>
-          </>
-        ) : (
-          <Flex justifyContent="center" alignItems="center" py="50px">
-            {t('Please select the currencies for Liquidity')}
-          </Flex>
-        )}
+          </FlexContainer>
+        </div>
+        <Text fontSize="12px" color="subtle" mb="24px">
+          {pair?.liquidityToken?.address ? `(${pair?.liquidityToken?.address})` : '(0x0000000000000000000000000000000000000000)'}
+        </Text>
+        <StyledRow>
+          <AutoColumn justify="start">
+            {renderSingleData(t("Liquidity"), "$0.00")}
+          </AutoColumn>
+          <AutoColumn justify="start">
+            {renderSingleData(t("Volume (24H)"), "$0.00")}
+          </AutoColumn>
+          <AutoColumn justify="start">
+            {renderSingleData(t("Fees (24H)"), "$0.00")}
+          </AutoColumn>
+          <AutoColumn justify="start">
+            {renderSingleData(t("APR"), "0%")}
+          </AutoColumn>
+        </StyledRow>
       </CardBody>
     </Card>
   )

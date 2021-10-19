@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Currency, Pair, Token } from '@pancakeswap/sdk'
 import {
@@ -20,27 +20,16 @@ import {
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import FullPositionCard from '../../components/PositionCard'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { usePairs } from '../../hooks/usePairs'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import Dots from '../../components/Loader/Dots'
-import { AppHeader } from '../../components/App'
 import Page from '../Page'
 import config from '../../components/Menu/config/config'
-import Container from '../../components/Layout/Container'
-import { useCurrency, useToken } from '../../hooks/Tokens'
+import { useCurrency } from '../../hooks/Tokens'
 import { CurrencyLogo } from '../../components/Logo'
 import useDebounce from '../../hooks/useDebounce'
-import { filterTokens } from '../../components/SearchModal/filtering'
 import { isAddress } from '../../utils'
-
-const pairs = [
-  {
-    token1: 'matic',
-    token2: '0x3222818d06F63eCa9502e18e40000807893C3a46',
-  },
-]
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -82,11 +71,51 @@ const InputWrapper = styled(`div`)`
   max-width: 400px;
 `
 
+
+const TokenList = ({ tokens, matic }: { tokens: [Token, Token], matic: Currency }) => {
+  const [token1, token2] = tokens
+  let currency1: Token | Currency = token1
+  let currency2: Token | Currency = token2
+
+  let address1 = token1.address
+  let address2 = token2.address
+
+  if (currency1.symbol.toLowerCase() === 'wmatic') {
+    address1 = 'MATIC'
+    currency1 = matic
+  }
+  if (currency2.symbol.toLowerCase() === 'wmatic') {
+    address2 = address1
+    currency2 = currency1
+    address1 = 'MATIC'
+    currency1 = matic
+    // address2 = 'MATIC'
+    // currency2 = matic
+  }
+  return (
+    <tr>
+      <Td>
+        <Button id={`pool-${address1}-${address2}`} as={Link} variant='text' to={`/add/${address1}/${address2}`}>
+          <div>
+            <CurrencyLogo currency={currency1} />
+            <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
+          </div>
+          <Text ml='10px'>{currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}</Text>
+        </Button>
+      </Td>
+      <Td><Text>0</Text></Td>
+      <Td><Text>0</Text></Td>
+      <Td><Text>0</Text></Td>
+    </tr>
+  )
+}
+
 export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [tab, setTab] = useState<'all' | 'my'>('all')
 
   const handleInput = useCallback((event) => {
     const input = event.target.value
@@ -102,25 +131,7 @@ export default function Pool() {
     () => trackedTokenPairs.map((tokens) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens })),
     [trackedTokenPairs],
   )
-  const filteredPairs: any = useMemo(() => {
-    const lowerSearchParts = debouncedQuery
-      .toLowerCase()
-      .split(/\s+/)
-      .filter((s) => s.length > 0)
 
-    const matchesSearch = (s: string): boolean => {
-      const sParts = s
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((s_) => s_.length > 0)
-
-      return lowerSearchParts.every((p) => p.length === 0 || sParts.some((sp) => sp.startsWith(p) || sp.endsWith(p)))
-    }
-    return trackedTokenPairs.filter((pairss) => {
-      const [pair1, pair2] = pairss
-      return (pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))
-    })
-  }, [trackedTokenPairs, debouncedQuery])
   const liquidityTokens = useMemo(
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens],
@@ -139,56 +150,85 @@ export default function Pool() {
     [tokenPairsWithLiquidityTokens, v2PairsBalances],
   )
 
+  const filteredPairs: any = useMemo(() => {
+
+    const lowerSearchParts = debouncedQuery
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((s) => s.length > 0)
+
+    const matchesSearch = (s: string): boolean => {
+      const sParts = s
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((s_) => s_.length > 0)
+
+      return lowerSearchParts.every((p) => p.length === 0 || sParts.some((sp) => sp.startsWith(p) || sp.endsWith(p)))
+    }
+    return tokenPairsWithLiquidityTokens.filter((pairss) => {
+      const [pair1, pair2] = pairss.tokens
+      return ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) && (tab === 'my' ? v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0') : true)
+    })
+  }, [tokenPairsWithLiquidityTokens, debouncedQuery, v2PairsBalances, tab])
+
   const v2Pairs = usePairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
   const v2IsLoading =
     fetchingV2PairBalances || v2Pairs?.length < liquidityTokensWithBalances.length || v2Pairs?.some((V2Pair) => !V2Pair)
 
-  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
-
-  const renderBody = () => {
-    if (!account) {
-      return (
-        <Text color="textSubtle" textAlign="center">
-          {t('Connect to a wallet to view your liquidity.')}
-        </Text>
-      )
+  // const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
+  const matic = useCurrency('matic')
+  const renderTable = () => {
+    if(tab === 'my') {
+      if (!account) {
+        return (
+          <tr>
+            <Td colSpan={4}>
+              <Text color='textSubtle' textAlign='center'>
+                {t('Connect to a wallet to view your liquidity.')}
+              </Text>
+            </Td>
+          </tr>
+        )
+      }
+      if (v2IsLoading) {
+        return (
+          <tr>
+            <Td colSpan={4}>
+              <Text color='textSubtle' textAlign='center'>
+                <Dots>{t('Loading')}</Dots>
+              </Text>
+            </Td>
+          </tr>
+        )
+      }
     }
-    if (v2IsLoading) {
-      return (
-        <Text color="textSubtle" textAlign="center">
-          <Dots>{t('Loading')}</Dots>
-        </Text>
-      )
-    }
-    if (allV2PairsWithLiquidity?.length > 0) {
-      return allV2PairsWithLiquidity.map((v2Pair, index) => (
-        <FullPositionCard
-          key={v2Pair.liquidityToken.address}
-          pair={v2Pair}
-          mb={index < allV2PairsWithLiquidity.length - 1 ? '16px' : 0}
-        />
-      ))
+    if (filteredPairs?.length > 0) {
+      return filteredPairs.map((arr) => <TokenList tokens={arr.tokens} matic={matic} />)
     }
     return (
-      <Text color="textSubtle" textAlign="center">
-        {t('No liquidity found.')}
-      </Text>
+      <tr>
+        <Td colSpan={4}>
+          <Text color='textSubtle' textAlign='center'>
+            {t('No liquidity found.')}
+          </Text>
+        </Td>
+      </tr>
     )
   }
 
   return (
     <Page>
       {/* @ts-ignore */}
-      <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
+      <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem='/liquidity' />
       <AppBody>
         <Header>
           <PoolContainer>
             <Heading>Pool</Heading>
-            <Button id="import-pool-link" variant="text" scale="sm" as={Link} to="/find">
+            <Button id='import-pool-link' variant='text' scale='sm' as={Link} to='/find'>
               {t('Import')}
             </Button>
           </PoolContainer>
-          <Button id="join-pool-button" as={Link} to="/add">
+          <Button id='join-pool-button' as={Link} to='/add'>
             {t('Create a Pool')}
           </Button>
         </Header>
@@ -196,16 +236,26 @@ export default function Pool() {
         <Body>
           {/* {renderBody()} */}
           <TabContainer>
-            <TabMenu activeIndex={0}>
-              <Tab color="primary">All</Tab>
-              <Tab>My Pools</Tab>
+            <TabMenu activeIndex={tab === 'all' ? 0 : 1} onItemClick={(index) => {
+              if (index === 0) {
+                setTab('all')
+              } else {
+                setTab('my')
+              }
+            }}>
+              <Tab color={tab === 'all' ? 'primary' : ''} onClick={() => setTab('all')}>
+                All
+              </Tab>
+              <Tab color={tab === 'my' ? 'primary' : ''} onClick={() => setTab('my')}>
+                My Pools
+              </Tab>
             </TabMenu>
             <InputWrapper>
               <Input
-                id="token-search-input"
+                id='token-search-input'
                 placeholder={t('Search name or paste address')}
-                scale="lg"
-                autoComplete="off"
+                scale='lg'
+                autoComplete='off'
                 value={searchQuery}
                 onChange={handleInput}
               />
@@ -213,62 +263,17 @@ export default function Pool() {
           </TabContainer>
           <Table>
             <thead>
-              <Th>Name</Th>
-              <Th>Liquidity</Th>
-              <Th>Volume</Th>
-              <Th>Fees</Th>
+            <Th>Name</Th>
+            <Th>Liquidity</Th>
+            <Th>Volume</Th>
+            <Th>Fees</Th>
             </thead>
-            <tbody>{filteredPairs.map(TokenList)}</tbody>
+            <tbody>
+            {renderTable()}
+            </tbody>
           </Table>
         </Body>
       </AppBody>
     </Page>
-  )
-}
-
-const TokenList = (tokens: [Token, Token]) => {
-  const [token1, token2] = tokens
-  let currency1: Token | Currency = token1
-  let currency2: Token | Currency = token2
-  const matic = useCurrency('matic')
-
-  let address1 = token1.address
-  let address2 = token2.address
-
-  if (currency1.symbol.toLowerCase() === 'wmatic') {
-    address1 = 'MATIC'
-    currency1 = matic
-  }
-  if (currency2.symbol.toLowerCase() === 'wmatic') {
-    address2 = address1
-    currency2 = currency1
-    address1 = 'MATIC'
-    currency1 = matic
-    // address2 = 'MATIC'
-    // currency2 = matic
-  }
-  return (
-    <>
-      <Td>
-        <Button id={`pool-${address1}-${address2}`} as={Link} variant="text" to={`/add/${address1}/${address2}`}>
-          <div>
-            <CurrencyLogo currency={currency1} />
-            <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
-          </div>
-          <Text ml="10px">
-            {currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}
-          </Text>
-        </Button>
-      </Td>
-      <Td>
-        <Text>0</Text>
-      </Td>
-      <Td>
-        <Text>0</Text>
-      </Td>
-      <Td>
-        <Text>0</Text>
-      </Td>
-    </>
   )
 }

@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token } from '@pancakeswap/sdk'
 import { mainnetTokens, testnetTokens } from './tokens'
 
-export const ROUTER_ADDRESS = '0x7751caF84a756853484d7289a0249FCc4164b9e8'
+export const ROUTER_ADDRESS = '0x0Ba6C5bB5C515584B6dC2ee5C7afF40c393d9799'
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -83,7 +83,7 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0x901bb9583b24D97e995513C6778dc6888AB6870e',
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
   '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C',
-  '0x7751caF84a756853484d7289a0249FCc4164b9e8',
+  '0x0Ba6C5bB5C515584B6dC2ee5C7afF40c393d9799',
 ]
 
 export { default as farmsConfig } from './farms'

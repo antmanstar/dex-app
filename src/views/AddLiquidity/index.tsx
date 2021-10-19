@@ -167,8 +167,7 @@ export default function AddLiquidity({
     let value: BigNumber | null
     if (currencyA === ETHER || currencyB === ETHER) {
       const tokenBIsETH = currencyB === ETHER
-      // estimate = router.estimateGas.addLiquidityETH
-      estimate = (d, e) => new Promise((resolve) => resolve(BigNumber.from('710000')))
+      estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
       args = [
         wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)?.address ?? '', // token
@@ -347,6 +346,7 @@ export default function AddLiquidity({
                   poolTokenPercentage={poolTokenPercentage}
                   noLiquidity={noLiquidity}
                   price={price}
+                  pair={pair}
                 />
                 <LightCard padding="0 8px" border="none !important">
                   <PoolPriceBar

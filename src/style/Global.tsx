@@ -15,7 +15,6 @@ const GlobalStyle = createGlobalStyle`
     background: ${({ theme }) =>
       theme.isDark ? "url('/bg-dark.jpg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
     background-size: cover;
-
     img {
       height: auto;
       max-width: 100%;

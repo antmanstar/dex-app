@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, Percent, WETH } from '@pancakeswap/sdk'
+import { Currency, currencyEquals, ETHER, JSBI, Percent, Price, WETH } from '@pancakeswap/sdk'
 import {
   Button,
   Text,
@@ -55,6 +55,8 @@ import PoolPriceBar from '../AddLiquidity/PoolPriceBar'
 import LiqPoolDetailsCard from '../AddLiquidity/LiqPoolDetailsCard'
 import useTheme from '../../hooks/useTheme'
 import SwapPageSettingsButton from '../../components/SwapPageSettingButton'
+import { useTokenBalance } from '../../state/wallet/hooks'
+import useTotalSupply from '../../hooks/useTotalSupply'
 
 const BorderCard = styled.div`
   //border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -167,7 +169,7 @@ export default function RemoveLiquidity({
       { name: 'verifyingContract', type: 'address' },
     ]
     const domain = {
-      name: 'Pancake LPs',
+      name: 'Eco LPs',
       version: '1',
       chainId,
       verifyingContract: pair.liquidityToken.address,
@@ -511,6 +513,15 @@ export default function RemoveLiquidity({
     CURRENCY_B: currencyB,
   }
 
+  const userPoolBalance = useTokenBalance(account ?? undefined, pair?.liquidityToken)
+  const totalPoolTokens = useTotalSupply(pair?.liquidityToken)
+
+  const poolTokenPercentage =
+    !!userPoolBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
+      ? new Percent(userPoolBalance.raw, totalPoolTokens.raw)
+      : undefined
+  const wrappedCurrencyA = wrappedCurrency(currencyA, chainId)
+  const price = pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined;
   return (
     <Page>
       <Container>
@@ -519,14 +530,17 @@ export default function RemoveLiquidity({
             <ColumnCenter>
               {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
-                  <LightCard padding="0px" border="none !important">
-                    <LiqPoolDetailsCard currencies={currencies} />
+                  <LightCard padding="0px"border="none !important">
+                    <LiqPoolDetailsCard
+                      currencies={currencies}
+                      pair={pair}
+                    />
                     <LightCard padding="0" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
-                        // poolTokenPercentage={poolTokenPercentage}
+                        poolTokenPercentage={poolTokenPercentage}
                         // noLiquidity={noLiquidity}
-                        // price={price}
+                        price={price}
                       />
                     </LightCard>
                   </LightCard>
@@ -539,10 +553,10 @@ export default function RemoveLiquidity({
           <CardBody>
             <Flex justifyContent="space-between">
               <Flex>
-                <Button variant="text" as={Link} to="/add" pl="0px" pr="16px">
+                <Button variant="text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} pl="0px" pr="16px">
                   {t('Add')}
                 </Button>
-                <Button variant="active-text" as={Link} to="/remove" px="16px">
+                <Button variant="active-text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">
                   {t('Remove')}
                 </Button>
               </Flex>
@@ -551,9 +565,9 @@ export default function RemoveLiquidity({
             <AutoColumn gap="20px">
               <RowBetween>
                 <Text>{t('Amount')}</Text>
-                {/* <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}> */}
-                {/*  {showDetailed ? t('Simple') : t('Detailed')} */}
-                {/* </Button> */}
+                <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
+                  {showDetailed ? t('Simple') : t('Detailed')}
+                </Button>
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
@@ -624,7 +638,7 @@ export default function RemoveLiquidity({
                               currencyB === ETHER ? WETH[chainId].address : currencyIdB
                             }`}
                           >
-                            {t('Receive WBNB')}
+                            {t('Receive WMATIC')}
                           </StyledInternalLink>
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
@@ -755,7 +769,8 @@ export default function RemoveLiquidity({
 
       {pair ? (
         <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
-          <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
+          {/* <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> */}
+
         </AutoColumn>
       ) : null}
     </Page>

@@ -25,6 +25,22 @@
       "chainId": 80001,
       "decimals": 18,
       "logoURI": "/images/tokens/0x3222818d06F63eCa9502e18e40000807893C3a46.png"
+    },
+    {
+      "name": "ZENO",
+      "symbol": "ZENO",
+      "address": "0x90b3450781e70d914E232CB3c9E6cadFe959FDF1",
+      "chainId": 80001,
+      "decimals": 18,
+      "logoURI": "/images/tokens/0x90b3450781e70d914E232CB3c9E6cadFe959FDF1.png"
+    },
+    {
+      "name": "Tether",
+      "symbol": "USDT",
+      "address": "0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A",
+      "chainId": 80001,
+      "decimals": 18,
+      "logoURI": "/images/tokens/0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A.png"
     }
   ]
 }

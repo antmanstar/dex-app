@@ -19,7 +19,7 @@ export const setupNetwork = async () => {
         params: [
           {
             chainId: `0x${chainId.toString(16)}`,
-            chainName: 'Polygon Network Mainnet',
+            chainName: `Polygon Network ${chainId === 80001 ? 'Testnet' : 'Mainnet'}`,
             nativeCurrency: {
               name: 'MATIC',
               symbol: 'matic',

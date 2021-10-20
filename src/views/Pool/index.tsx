@@ -227,7 +227,7 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity, apr }: { tokens: [T
       <StyledTd><Text fontSize="14px">${liquidity}</Text></StyledTd>
       <StyledTd><Text fontSize="14px">${volume}</Text></StyledTd>
       <StyledTd><Text fontSize="14px">${fees}</Text></StyledTd>
-      <StyledTd><Text fontSize="14px">{apr}%</Text></StyledTd>
+      <StyledTd><Text textAlign="right" fontSize="14px">{apr}%</Text></StyledTd>
     </StyledTr>
   )
 }
@@ -390,7 +390,6 @@ export default function Pool() {
         id: 'apr',
         title: "APR",
       },
-
     ]
   }
 
@@ -445,11 +444,11 @@ export default function Pool() {
           </StyledTabContainer>
           <StyledTable isMobile={isMobile}>
             <thead>
-            {getHeaders().map(singleHeader => {
+            {getHeaders().map((singleHeader, index) => {
               return (
                 <Th
                   className="cursor-pointer"
-                  textAlign="left"
+                  textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
                   onClick={() => handleHeaderClick(singleHeader.id)}
                 >
                   {singleHeader.title}

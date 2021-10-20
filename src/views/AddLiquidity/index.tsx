@@ -371,7 +371,7 @@ export default function AddLiquidity({
           {/*  backTo="/liquidity" */}
           {/* /> */}
           <div>
-            <CardBody>
+            <CardBody p="12px">
               <Flex justifyContent="space-between">
                 <Flex>
                   <Button variant="active-text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
@@ -413,7 +413,7 @@ export default function AddLiquidity({
                 />
                 {noLiquidity && (
                   <ColumnCenter>
-                    <Message variant="warning">
+                    <Message variant="warning" mx="8px">
                       <div>
                         <Text bold mb="8px">
                           {t('You are the first liquidity provider.')}

@@ -79,6 +79,15 @@ const Container = styled.div`
   }
 `
 
+const StyledAutoColumn = styled(AutoColumn)`
+  margin-left: 8px;
+  margin-right: 8px;
+`
+
+const StyledSmallButton = styled(Button)`
+  font-size: 12px;
+`
+
 const AmountPercentage = [
   {
     id: 1,
@@ -550,10 +559,10 @@ export default function RemoveLiquidity({
           </CardBody>
         </Card>
         <AppBody>
-          <CardBody>
+          <CardBody p="12px">
             <Flex justifyContent="space-between">
               <Flex>
-                <Button variant="text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} pl="0px" pr="16px">
+                <Button variant="text" as={Link} to={`/add/${currencyIdA}/${currencyIdB}`} px="16px">
                   {t('Add')}
                 </Button>
                 <Button variant="active-text" as={Link} to={`/remove/${currencyIdA}/${currencyIdB}`} px="16px">
@@ -562,9 +571,9 @@ export default function RemoveLiquidity({
               </Flex>
               <GlobalSettings />
             </Flex>
-            <AutoColumn gap="20px">
+            <StyledAutoColumn gap="20px">
               <RowBetween>
-                <Text>{t('Amount')}</Text>
+                <Text ml="8px" fontSize="14px">{t('Amount')}</Text>
                 <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
                   {showDetailed ? t('Simple') : t('Detailed')}
                 </Button>
@@ -572,7 +581,7 @@ export default function RemoveLiquidity({
               {!showDetailed && (
                 <BorderCard>
                   <LightGreyCard mb="16px">
-                    <Text fontSize="24px" bold style={{ lineHeight: 1 }}>
+                    <Text fontSize="16px" bold style={{ lineHeight: 1 }}>
                       {formattedAmounts[Field.LIQUIDITY_PERCENT]}%
                     </Text>
                   </LightGreyCard>
@@ -587,7 +596,7 @@ export default function RemoveLiquidity({
                   <Flex flexWrap="wrap" justifyContent="space-between">
                     {AmountPercentage.map((percent) => {
                       return (
-                        <Button
+                        <StyledSmallButton
                           variant={
                             percent?.value === formattedAmounts[Field.LIQUIDITY_PERCENT] ? 'primary' : 'background'
                           }
@@ -595,19 +604,19 @@ export default function RemoveLiquidity({
                           onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, percent.value)}
                         >
                           {`${percent?.title || percent?.value} %`}
-                        </Button>
+                        </StyledSmallButton>
                       )
                     })}
                   </Flex>
                 </BorderCard>
               )}
-            </AutoColumn>
+            </StyledAutoColumn>
             {!showDetailed && (
               <>
                 <ColumnCenter>
                   <ArrowDownIcon color="textSubtle" width="24px" my="16px" />
                 </ColumnCenter>
-                <AutoColumn gap="10px">
+                <StyledAutoColumn gap="10px">
                   <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
                     {t('You will receive')}
                   </Text>
@@ -652,7 +661,7 @@ export default function RemoveLiquidity({
                       </RowBetween>
                     ) : null}
                   </LightGreyCard>
-                </AutoColumn>
+                </StyledAutoColumn>
               </>
             )}
 

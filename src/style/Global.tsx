@@ -13,8 +13,8 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     background: ${({ theme }) =>
-      theme.isDark ? "url('/bg-dark.jpg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
-    background-size: cover;
+      theme.isDark ? "url('/bg-dark.jpeg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
+    //background-size: cover;
     img {
       height: auto;
       max-width: 100%;

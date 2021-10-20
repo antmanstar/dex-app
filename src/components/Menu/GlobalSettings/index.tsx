@@ -7,8 +7,8 @@ const GlobalSettings = () => {
 
   return (
     <Flex>
-      <IconButton onClick={onPresentSettingsModal} variant="text" scale="md" mr="8px" id="open-settings-dialog-button">
-        <CogIcon height={26} width={26} color="textSubtle" />
+      <IconButton onClick={onPresentSettingsModal} variant="text" scale="md" id="open-settings-dialog-button">
+        <CogIcon height={26} width={26} color="text" />
       </IconButton>
     </Flex>
   )

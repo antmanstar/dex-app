@@ -43,7 +43,7 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background: ${({ theme }) => theme.colors.backgroundAlt};
+  background: ${({ theme }) => theme.colors.background};
   display: flex;
   justify-content: space-between;
   align-items: center;

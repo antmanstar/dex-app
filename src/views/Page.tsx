@@ -11,6 +11,7 @@ const StyledPage = styled.div`
   width: 100%;
   padding: 16px;
   padding-bottom: 0;
+  padding-top: 0;
   min-height: calc(100vh - 64px);
   // background: ${({ theme }) => theme.colors.background};
   //background: url('/bg_eco.svg') no-repeat center center;
@@ -20,12 +21,12 @@ const StyledPage = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 24px;
+    //padding: 24px;
     padding-bottom: 0;
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    padding-top: 32px;
+    //padding-top: 32px;
     min-height: calc(100vh - 64px);
   }
 `

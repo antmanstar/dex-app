@@ -68,7 +68,7 @@ const Container = styled.div`
   display: grid;
   width: 100%;
   padding: 16px;
-  margin-top: 16px;
+  margin-top: 48px;
   max-width: 1400px;
 
   grid-gap: 32px;

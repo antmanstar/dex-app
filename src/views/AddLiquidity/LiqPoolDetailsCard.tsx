@@ -7,7 +7,7 @@ import { Field } from '../../state/mint/actions'
 import Row, { AutoRow } from '../../components/Layout/Row'
 import { useTranslation } from '../../contexts/Localization'
 import useTheme from '../../hooks/useTheme'
-import { DoubleCurrencyLogo } from '../../components/Logo'
+import { CurrencyLogo, DoubleCurrencyLogo } from '../../components/Logo'
 
 interface ILiqPoolDetailsCardInterface {
   currencies: { [field in Field]?: Currency }
@@ -64,14 +64,16 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
       <CardBody>
         <div>
           <FlexContainer>
-            <DoubleCurrencyLogo
-              currency0={currencies[Field.CURRENCY_A]}
-              currency1={currencies[Field.CURRENCY_B]}
-              size={30}
-              overlap
-            />
-            <Text fontSize="20px" mb="0" ml="24px">
-              {currencies[Field.CURRENCY_A]?.symbol ?? ''}/{currencies[Field.CURRENCY_B]?.symbol ?? ''}
+            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="32px"/>
+            <Text fontSize="32px" mb="0" ml="10px">
+              {currencies[Field.CURRENCY_A]?.symbol ?? ''}
+            </Text>
+            <Text fontSize="32px" mb="0" ml="10px" mx="15px">
+              /
+            </Text>
+            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="32px"/>
+            <Text fontSize="32px" mb="0" ml="10px">
+              {currencies[Field.CURRENCY_B]?.symbol ?? ''}
             </Text>
           </FlexContainer>
         </div>

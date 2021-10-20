@@ -15,7 +15,7 @@ import {
   Td,
   Tab,
   TabMenu,
-  Input, useMatchBreakpoints, Card,
+  Input, useMatchBreakpoints, Card, SearchIcon,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -70,11 +70,20 @@ const CurrencyContainer = styled(`div`)`
 const InputWrapper = styled(`div`)`
   width: 100%;
   max-width: 400px;
+  position: relative;
+  
+  & > svg {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+  }
 `
 
 const StyledTable = styled(Table)<{isMobile: boolean}>`
   margin-bottom: ${({isMobile}) => isMobile ? "56px" : 0};
   margin-top: 12px;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
 `
 
 const StyledDetailsWrapper = styled.div`
@@ -111,8 +120,37 @@ const StyledTab = styled(Tab)`
   padding: 8px 16px;
 `
 
+const StyledSearchInput = styled(Input)`
+  
+  &::placeholder {
+    color: ${({theme}) => theme.colors.textSubtle2};
+    font-size: 14px;
+  }
+`
 
-const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token, Token], matic: Currency, volume: number, fees: number, liquidity: number }) => {
+const StyledTr = styled.tr`
+  &:hover {
+    & > td {
+      background-color: ${({theme}) => theme.colors.background};
+      &:last-child {
+        border-bottom-right-radius: 16px;
+        border-top-right-radius: 16px;
+      }
+
+      &:first-child {
+        border-bottom-left-radius: 16px;
+        border-top-left-radius: 16px;
+      }
+    }
+  }
+`
+
+const StyledTd = styled(Td)`
+  padding: 0.75rem;
+`
+
+
+const TokenList = ({ tokens, matic, volume, fees, liquidity, apr }: { tokens: [Token, Token], matic: Currency, volume: number, fees: number, liquidity: number, apr: number }) => {
 
   const { isMobile } = useMatchBreakpoints()
 
@@ -145,12 +183,17 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token,
               <Flex mb="12px">
                 <div>
                   <CurrencyLogo currency={currency1} />
-                  <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
+                  <CurrencyLogo currency={currency2} />
                 </div>
                 <Text ml='10px'>{currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}</Text>
               </Flex>
               <StyledDetailsWrapper>
-                {[{ title: "volume", value: volume }, { title:"liquidity", value: liquidity }, { title:"fees", value: fees }].map((singleValue) => {
+                {[
+                  { title: "volume", value: `$${volume}` },
+                  { title: "liquidity", value: `$${liquidity}` },
+                  { title: "fees", value: `$${fees}` },
+                  // { title: "apr", value: `${apr}%` }
+                ].map((singleValue) => {
                   return (
                     <Flex alignItems="start" flexDirection="column">
                       <Text color="textSubtle2" textTransform="capitalize" fontSize="12px">
@@ -171,20 +214,21 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity }: { tokens: [Token,
   }
 
   return (
-    <tr>
-      <Td>
-        <Button id={`pool-${address1}-${address2}`} as={Link} variant='text' to={`/add/${address1}/${address2}`} pl="0">
+    <StyledTr>
+      <StyledTd>
+        <Button id={`pool-${address1}-${address2}`} as={Link} scale="xxs" variant='text' to={`/add/${address1}/${address2}`} pl="0">
           <div>
             <CurrencyLogo currency={currency1} />
-            <CurrencyLogo currency={currency2} style={{ marginLeft: '-10px' }} />
+            <CurrencyLogo currency={currency2} />
           </div>
-          <Text ml='10px'>{currency1?.name?.toUpperCase()} / {currency2?.name?.toUpperCase()}</Text>
+          <Text ml='10px' fontSize="14px" fontWeight="bold">{currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}</Text>
         </Button>
-      </Td>
-      <Td><Text>{liquidity}</Text></Td>
-      <Td><Text>{volume}</Text></Td>
-      <Td><Text>{fees}</Text></Td>
-    </tr>
+      </StyledTd>
+      <StyledTd><Text fontSize="14px">${liquidity}</Text></StyledTd>
+      <StyledTd><Text fontSize="14px">${volume}</Text></StyledTd>
+      <StyledTd><Text fontSize="14px">${fees}</Text></StyledTd>
+      <StyledTd><Text textAlign="right" fontSize="14px">{apr}%</Text></StyledTd>
+    </StyledTr>
   )
 }
 
@@ -209,7 +253,7 @@ export default function Pool() {
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
-    () => trackedTokenPairs.map((tokens, index) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens, volume:  Math.floor(index * 1000) + 1, fees: Math.floor(index * 10) + 1, liquidity: Math.floor(index * 1000) + 1 })),
+    () => trackedTokenPairs.map((tokens, index) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens, volume:  Math.floor(index * 1000) + 1, fees: Math.floor(index * 10) + 1, liquidity: Math.floor(index * 1000) + 1, apr: Math.floor(index * 10) + 1 }), ),
     [trackedTokenPairs],
   )
 
@@ -342,6 +386,10 @@ export default function Pool() {
         id: 'fees',
         title: "fees",
       },
+      {
+        id: 'apr',
+        title: "APR",
+      },
     ]
   }
 
@@ -383,7 +431,7 @@ export default function Pool() {
               </StyledTab>
             </TabMenu>
             <InputWrapper>
-              <Input
+              <StyledSearchInput
                 id='token-search-input'
                 placeholder={t('Search name or paste address')}
                 scale='lg'
@@ -391,15 +439,16 @@ export default function Pool() {
                 value={searchQuery}
                 onChange={handleInput}
               />
+              <SearchIcon />
             </InputWrapper>
           </StyledTabContainer>
           <StyledTable isMobile={isMobile}>
             <thead>
-            {getHeaders().map(singleHeader => {
+            {getHeaders().map((singleHeader, index) => {
               return (
                 <Th
                   className="cursor-pointer"
-                  textAlign="left"
+                  textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
                   onClick={() => handleHeaderClick(singleHeader.id)}
                 >
                   {singleHeader.title}

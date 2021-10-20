@@ -6,8 +6,8 @@ const Transactions = () => {
   const [onPresentTransactionsModal] = useModal(<TransactionsModal />)
   return (
     <>
-      <Button variant="text" p={0} onClick={onPresentTransactionsModal} ml="16px">
-        <HistoryIcon color="textSubtle" width="26px" height="26px" />
+      <Button variant="text" p={0} onClick={onPresentTransactionsModal} ml="12px">
+        <HistoryIcon color="textSubtle" width="22px" height="22px" />
       </Button>
     </>
   )

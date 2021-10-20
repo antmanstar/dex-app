@@ -37,7 +37,7 @@ type RefreshButtonInterface =
 type AppHeaderInterface = Props & BackFuncInterface & RefreshButtonInterface
 
 const AppHeaderContainer = styled(Flex)<{ padding?: string }>`
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   padding: ${({ padding }) => padding || '24px 24px 0 24px'};
   width: 100%;
@@ -66,12 +66,12 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
       <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
         {isBackFunc && backFunction && (
           <IconButton mt="-6px" onClick={backFunction} variant="text">
-            <ArrowBackIcon width="32px" />
+            <ArrowBackIcon width="26px" />
           </IconButton>
         )}
         {backTo && (
           <IconButton as={Link} to={backTo}>
-            <ArrowBackIcon width="32px" />
+            <ArrowBackIcon width="26px" />
           </IconButton>
         )}
         <Flex flexDirection="column">
@@ -87,10 +87,10 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
         </Flex>
       </Flex>
       {!noConfig && (
-        <Flex alignItems="center">
+        <Flex alignItems="start" marginTop="-8px">
           {refreshButton && refreshFunction && (
             <IconButton onClick={refreshFunction} variant="text">
-              <RefreshIcon width="32px" />
+              <RefreshIcon width="24px" />
             </IconButton>
           )}
           <NotificationDot show={expertMode}>

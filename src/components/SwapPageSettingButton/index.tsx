@@ -1,7 +1,12 @@
 import React from 'react'
 import { Flex, IconButton, CogIcon } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
 import { setShowSettings } from '../../state/swap/actions'
+
+const StyledIconButton = styled(IconButton)`
+  width: 28px;
+`
 
 const SwapPageSettingsButton = () => {
   const dispatch = useDispatch()
@@ -12,15 +17,15 @@ const SwapPageSettingsButton = () => {
 
   return (
     <Flex>
-      <IconButton
+      <StyledIconButton
         onClick={() => handleSettingsClick()}
         variant="text"
         scale="md"
-        mr="8px"
+        // mr="8px"
         id="open-settings-dialog-button"
       >
-        <CogIcon height={26} width={26} color="textSubtle" />
-      </IconButton>
+        <CogIcon height={22} width={22} color="textSubtle" />
+      </StyledIconButton>
     </Flex>
   )
 }

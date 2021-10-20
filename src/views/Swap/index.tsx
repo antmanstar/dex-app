@@ -427,7 +427,14 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                   title={t('Swap')}
                   subtitle={t('Trade tokens in an instant')}
                   refreshFunction={() => {
-                    console.log('clicked on refresh button')
+                    // TODO: Refresh button needs to be tested
+                    if (independentField) {
+                      if (independentField === Field.INPUT) {
+                        handleTypeInput(formattedAmounts[Field.INPUT])
+                      } else if (independentField === Field.OUTPUT) {
+                        handleTypeOutput(formattedAmounts[Field.OUTPUT])
+                      }
+                    }
                   }}
                   refreshButton
                   onSwapPage

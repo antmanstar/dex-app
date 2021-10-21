@@ -439,7 +439,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                   refreshButton
                   onSwapPage
                 />
-                <Wrapper id="swap-page">
+                <Wrapper id="swap-page" padding="1rem 1rem 1.5rem ">
                   <AutoColumn gap="md">
                     <CurrencyInputPanel
                       label={
@@ -485,6 +485,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       onCurrencySelect={handleOutputSelect}
                       otherCurrency={currencies[Field.INPUT]}
                       id="swap-currency-output"
+                      secondInput
                     />
 
                     {isExpertMode && recipient !== null && !showWrap ? (

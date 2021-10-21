@@ -43,7 +43,7 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.backgroundAlt3};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -131,7 +131,7 @@ const StyledSearchInput = styled(Input)`
 const StyledTr = styled.tr`
   &:hover {
     & > td {
-      background-color: ${({theme}) => theme.colors.background};
+      background-color: ${({theme}) => theme.colors.backgroundAlt3};
       &:last-child {
         border-bottom-right-radius: 16px;
         border-top-right-radius: 16px;

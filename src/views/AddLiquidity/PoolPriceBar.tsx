@@ -24,7 +24,7 @@ function PoolPriceWrapper({
     <AutoRow justify="space-between" gap="4px">
       <AutoColumn gap="md">
         <AutoRow justify="space-around" gap="4px">
-          <AutoColumn justify="center">
+          <AutoColumn justify="center" gap="lg">
             <SinglePriceCard
               data={`${
                 noLiquidity && price
@@ -48,7 +48,7 @@ function PoolPriceWrapper({
       </AutoColumn>
       <AutoColumn gap="md">
         <AutoRow justify="space-around" gap="4px">
-          <AutoColumn justify="center">
+          <AutoColumn justify="center" gap="lg">
             <SinglePriceCard
               title={t('%assetA% per %assetB%', {
                 assetA: currencies[Field.CURRENCY_B]?.symbol ?? '',

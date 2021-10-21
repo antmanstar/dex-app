@@ -12,11 +12,15 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
   }
   body {
+    background-color: ${({theme}) => theme.colors.backgroundMain};
     background-image: ${({ theme }) =>
-      theme.isDark ? "url('/grad-left.png'), url('grad-right.png'), url('/bg-dark.png')" : "url('/grad-left.png'), url('grad-right.png'), url('/bg-light.jpg')"};
+      theme.isDark ? "url('/grad-left.png'), url('/grad-right.png')" : "url('/grad-left.png'), url('/grad-right.png')"};
     background-repeat: no-repeat, no-repeat, no-repeat;
-    background-position: left bottom, right bottom, center center;
-    background-size: 550px, 450px, cover;
+    background-position: left bottom, right bottom;
+    background-size: 550px, 500px, cover;
+    @media screen and (min-width: 576px) and (max-width: 1269px) {
+      background-size: 1000px, 500px, cover;
+    }
     @media screen and (max-width: 576px) {
       background-size: cover;
     }

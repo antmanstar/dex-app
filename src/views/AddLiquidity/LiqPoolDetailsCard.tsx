@@ -64,15 +64,15 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
       <CardBody>
         <div>
           <FlexContainer>
-            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="32px"/>
-            <Text fontSize="32px" mb="0" ml="10px">
+            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="22px"/>
+            <Text fontSize="22px" mb="0" ml="10px">
               {currencies[Field.CURRENCY_A]?.symbol ?? ''}
             </Text>
-            <Text fontSize="32px" mb="0" ml="10px" mx="15px">
+            <Text fontSize="22px" mb="0" ml="10px" mx="15px">
               /
             </Text>
-            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="32px"/>
-            <Text fontSize="32px" mb="0" ml="10px">
+            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="22px"/>
+            <Text fontSize="22px" mb="0" ml="10px">
               {currencies[Field.CURRENCY_B]?.symbol ?? ''}
             </Text>
           </FlexContainer>

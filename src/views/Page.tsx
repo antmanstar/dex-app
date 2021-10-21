@@ -19,15 +19,15 @@ const StyledPage = styled.div`
   ${({ theme }) => theme.mediaQueries.xs} {
     background-size: auto;
   }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    //padding: 24px;
+  
+  @media screen and (min-width: 577px) {
+    min-height: calc(100vh - 112px);
     padding-bottom: 0;
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
     //padding-top: 32px;
-    min-height: calc(100vh - 56px);
+    min-height: calc(100vh - 112px);
   }
 `
 

@@ -558,7 +558,7 @@ export default function RemoveLiquidity({
             <ColumnCenter>
               {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
-                  <LightCard padding="0px"border="none !important">
+                  <LightCard padding="0px" border="none !important">
                     <LiqPoolDetailsCard
                       currencies={currencies}
                       pair={pair}
@@ -590,12 +590,12 @@ export default function RemoveLiquidity({
               </Flex>
               <GlobalSettings />
             </Flex>
-            <StyledAutoColumn gap="20px">
-              <RowBetween>
+            <StyledAutoColumn gap="0px">
+              <RowBetween padding='0.75rem 0.5rem 0.75rem 0'>
                 <Text ml="8px" fontSize="14px">{t('Amount')}</Text>
-                <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
+                <Text onClick={() => setShowDetailed(!showDetailed)}>
                   {showDetailed ? t('Simple') : t('Detailed')}
-                </Button>
+                </Text>
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
@@ -730,7 +730,7 @@ export default function RemoveLiquidity({
               </Box>
             )}
             {pair && (
-              <AutoColumn gap="10px" style={{ marginTop: '16px' }}>
+              <AutoColumn gap="10px" style={{ margin: '16px 8px 0' }}>
                 <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
                   {t('Prices')}
                 </Text>
@@ -754,7 +754,7 @@ export default function RemoveLiquidity({
                 </LightGreyCard>
               </AutoColumn>
             )}
-            <Box position="relative" mt="16px">
+            <Box position="relative" margin="16px 8px 0">
               {!account ? (
                 <ConnectWalletButton width="100%" />
               ) : (

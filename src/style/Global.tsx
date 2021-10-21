@@ -16,11 +16,8 @@ const GlobalStyle = createGlobalStyle`
     background-image: ${({ theme }) =>
       theme.isDark ? "url('/grad-left.png'), url('/grad-right.png')" : "url('/grad-left.png'), url('/grad-right.png')"};
     background-repeat: no-repeat, no-repeat, no-repeat;
-    background-position: left bottom, right bottom;
+    background-position: left top, right bottom;
     background-size: 550px, 500px, cover;
-    @media screen and (min-width: 576px) and (max-width: 1269px) {
-      background-size: 1000px, 500px, cover;
-    }
     @media screen and (max-width: 576px) {
       background-size: cover;
     }

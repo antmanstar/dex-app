@@ -67,14 +67,22 @@ const BorderCard = styled.div`
 const Container = styled.div`
   display: grid;
   width: 100%;
-  padding: 16px;
-  margin-top: 48px;
+  padding: 16px 0;
   max-width: 1400px;
 
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
 
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 16px;
+    margin-top: 48px;
+  }
+  
   ${({ theme }) => theme.mediaQueries.lg} {
+    grid-template-columns: 1fr 350px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xxl} {
     grid-template-columns: 1fr 432px;
   }
 `
@@ -544,7 +552,7 @@ export default function RemoveLiquidity({
                       currencies={currencies}
                       pair={pair}
                     />
-                    <LightCard padding="0" border="none !important">
+                    <LightCard padding="24px" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
                         poolTokenPercentage={poolTokenPercentage}

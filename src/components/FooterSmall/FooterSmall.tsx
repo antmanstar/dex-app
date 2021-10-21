@@ -31,6 +31,12 @@ const StyledSocial = styled(StyledLinks)`
   }
 `
 
+const StyledAudit = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const StyledContainer = styled(Flex)`
   height: 56px;
   border-top: 1px solid ${({theme}) => theme.colors.tertiary};
@@ -71,8 +77,8 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
           )
         })}
       </StyledLinks>
-      {!isMobile && !isTablet && <StyledLinks>
-        <Text>
+      {!isMobile && !isTablet && <StyledAudit>
+        <Text fontSize="14px" mr="4px">
           Audited By:
         </Text>
         {audit.map(singleLink => {
@@ -82,7 +88,7 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
             </StyledAuditButton>
           )
         })}
-      </StyledLinks>}
+      </StyledAudit>}
       <StyledSocial>
         {socialMedia.map(singleLink => {
           return (

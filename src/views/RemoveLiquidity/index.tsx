@@ -96,6 +96,17 @@ const StyledSmallButton = styled(Button)`
   font-size: 12px;
 `
 
+const StyledLightCard = styled(LightCard)`
+  @media screen and (max-width: 576px) {
+    padding: 12px;
+  }
+`
+
+const StyledPage = styled(Page)`
+  padding-left: 8px;
+  padding-right: 8px;
+`
+
 const AmountPercentage = [
   {
     id: 1,
@@ -540,7 +551,7 @@ export default function RemoveLiquidity({
   const wrappedCurrencyA = wrappedCurrency(currencyA, chainId)
   const price = pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined;
   return (
-    <Page>
+    <StyledPage>
       <Container>
         <Card p="4px">
           <CardBody p="0">
@@ -552,14 +563,14 @@ export default function RemoveLiquidity({
                       currencies={currencies}
                       pair={pair}
                     />
-                    <LightCard padding="24px" border="none !important">
+                    <StyledLightCard padding="24px" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
                         poolTokenPercentage={poolTokenPercentage}
                         // noLiquidity={noLiquidity}
                         price={price}
                       />
-                    </LightCard>
+                    </StyledLightCard>
                   </LightCard>
                 </>
               )}
@@ -790,6 +801,6 @@ export default function RemoveLiquidity({
 
         </AutoColumn>
       ) : null}
-    </Page>
+    </StyledPage>
   )
 }

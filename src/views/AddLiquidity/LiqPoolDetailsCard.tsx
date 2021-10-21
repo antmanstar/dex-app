@@ -24,7 +24,7 @@ const StyledRow = styled.div`
   flex-direction: row;
 
   grid-gap: 32px;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
 
   ${({ theme }) => theme.mediaQueries.xs} {
     grid-template-columns: 1fr 1fr;
@@ -39,6 +39,18 @@ const FlexContainer = styled.div`
   justify-content: start;
   align-items: center;
   margin-bottom: 24px;
+`
+
+const AddressText = styled(Text)`
+  @media screen and (max-width: 360px) {
+    font-size: 11px;
+  }
+`
+
+const StyledCardBody = styled(CardBody)`
+  @media screen and (max-width: 360px) {
+    padding: 16px;
+  }
 `
 
 const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqPoolDetailsCardInterface) => {
@@ -61,7 +73,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
 
   return (
     <Card background={theme.colors.background}>
-      <CardBody>
+      <StyledCardBody>
         <div>
           <FlexContainer>
             <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="22px"/>
@@ -77,9 +89,9 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
             </Text>
           </FlexContainer>
         </div>
-        <Text fontSize="12px" color="subtle" mb="24px">
+        <AddressText fontSize="12px" color="subtle" mb="24px">
           {pair?.liquidityToken?.address ? `(${pair?.liquidityToken?.address})` : '(0x0000000000000000000000000000000000000000)'}
-        </Text>
+        </AddressText>
         <StyledRow>
           <AutoColumn justify="start">
             {renderSingleData(t("Liquidity"), "$0.00")}
@@ -94,7 +106,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
             {renderSingleData(t("APR"), "0%")}
           </AutoColumn>
         </StyledRow>
-      </CardBody>
+      </StyledCardBody>
     </Card>
   )
 }

@@ -23,8 +23,12 @@ const StyledCardWrapper = styled.div`
     min-width: 216px;
   }
 
-  @media screen and (max-width: 360px) {
-    min-width: 260px;
+  @media screen and (max-width: 576px) {
+    min-width: 0;
+    
+    ${CardBody} {
+      padding: 8px;
+    }
   }
 `
 

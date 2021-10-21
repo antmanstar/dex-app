@@ -67,6 +67,17 @@ const Container = styled.div`
   }
 `
 
+const StyledLightCard = styled(LightCard)`
+  @media screen and (max-width: 576px) {
+    padding: 12px;
+  }
+`
+
+const StyledPage = styled(Page)`
+  padding-left: 8px;
+  padding-right: 8px;
+`
+
 export default function AddLiquidity({
   match: {
     params: { currencyIdA, currencyIdB },
@@ -345,7 +356,7 @@ export default function AddLiquidity({
   )
 
   return (
-    <Page>
+    <StyledPage>
       <Container>
         <Card p="4px">
           <CardBody p="0">
@@ -358,14 +369,14 @@ export default function AddLiquidity({
                   price={price}
                   pair={pair}
                 />
-                <LightCard padding="24px" border="none !important">
+                <StyledLightCard padding="24px" border="none !important">
                   <PoolPriceBar
                     currencies={currencies}
                     poolTokenPercentage={poolTokenPercentage}
                     noLiquidity={noLiquidity}
                     price={price}
                   />
-                </LightCard>
+                </StyledLightCard>
               </LightCard>
             </ColumnCenter>
           </CardBody>
@@ -510,6 +521,6 @@ export default function AddLiquidity({
       ) : (
         <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
       )}
-    </Page>
+    </StyledPage>
   )
 }

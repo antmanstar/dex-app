@@ -78,6 +78,24 @@ const StyledPage = styled(Page)`
   padding-right: 8px;
 `
 
+const StyledConnectWalletButton = styled(ConnectWalletButton)`
+  margin: 0 8px;
+`
+
+const StyledButtonsContainer = styled(AutoColumn)`
+  margin: 0 8px;
+`
+const PositionCardWrapper = styled(AutoColumn)`
+  margin: 2rem 0;
+  min-width: 20rem;
+  width: 100%;
+  max-width: 400px;
+  
+  @media screen and (max-width: 360px) {
+    min-width: 0;
+  }
+`
+
 export default function AddLiquidity({
   match: {
     params: { currencyIdA, currencyIdB },
@@ -430,6 +448,7 @@ export default function AddLiquidity({
                   currency={currencies[Field.CURRENCY_B]}
                   id="add-liquidity-input-tokenb"
                   showCommonBases
+                  secondInput
                 />
                 {noLiquidity && (
                   <ColumnCenter>
@@ -445,13 +464,13 @@ export default function AddLiquidity({
                   </ColumnCenter>
                 )}
                 {addIsUnsupported ? (
-                  <Button disabled mb="4px">
+                  <Button disabled mb="4px" mx="8px">
                     {t('Unsupported Asset')}
                   </Button>
                 ) : !account ? (
-                  <ConnectWalletButton />
+                  <StyledConnectWalletButton />
                 ) : (
-                  <AutoColumn gap="md">
+                  <StyledButtonsContainer gap="md">
                     {(approvalA === ApprovalState.NOT_APPROVED ||
                       approvalA === ApprovalState.PENDING ||
                       approvalB === ApprovalState.NOT_APPROVED ||
@@ -505,7 +524,7 @@ export default function AddLiquidity({
                     >
                       {error ?? t('Supply')}
                     </Button>
-                  </AutoColumn>
+                  </StyledButtonsContainer>
                 )}
               </AutoColumn>
             </CardBody>
@@ -514,9 +533,9 @@ export default function AddLiquidity({
       </Container>
       {!addIsUnsupported ? (
         pair && !noLiquidity && pairState !== PairState.INVALID ? (
-          <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+          <PositionCardWrapper>
             <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-          </AutoColumn>
+          </PositionCardWrapper>
         ) : null
       ) : (
         <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />

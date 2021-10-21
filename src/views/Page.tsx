@@ -10,7 +10,7 @@ const StyledPage = styled.div`
   align-items: center;
   width: 100%;
   padding: 16px;
-  padding-bottom: 0;
+  padding-bottom: 56px;
   padding-top: 0;
   min-height: calc(100vh - 56px);
   // background: ${({ theme }) => theme.colors.background};

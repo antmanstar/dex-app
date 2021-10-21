@@ -25,6 +25,11 @@ const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm'
   padding: 0 0.5rem;
   border-left: 1px solid ${({ theme }) => theme.colors.borderColor};
   border-radius: 0;
+  
+  @media screen and (max-width: 360px) {
+    padding-left: 0.5rem;
+    padding-right: 0;
+  }
 `
 const LabelRow = styled.div<{secondInput?: boolean}>`
   display: flex;

@@ -29,6 +29,11 @@ const StyledPage = styled.div`
     //padding-top: 32px;
     min-height: calc(100vh - 112px);
   }
+  
+  @media screen and (max-width: 360px) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 `
 
 const Page: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...props }) => {

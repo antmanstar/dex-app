@@ -27,6 +27,7 @@ interface Props {
   padding?: string
   hideSettingsIcon?: boolean
   hideTransactionIcon?: boolean
+  margin?: string
 }
 
 type BackFuncInterface = { isBackFunc?: false; backFunction?: never } | { isBackFunc?: true; backFunction: () => void }
@@ -54,6 +55,7 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   isBackFunc = false,
   backFunction,
   padding,
+  margin,
   hideSettingsIcon,
   hideTransactionIcon,
   refreshButton = false,
@@ -62,7 +64,7 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   const [expertMode] = useExpertModeManager()
 
   return (
-    <AppHeaderContainer padding={padding}>
+    <AppHeaderContainer padding={padding} margin={margin}>
       <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
         {isBackFunc && backFunction && (
           <IconButton mt="-6px" onClick={backFunction} variant="text">

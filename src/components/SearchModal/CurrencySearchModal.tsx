@@ -24,7 +24,7 @@ import { CurrencyModalView } from './types'
 
 const Footer = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.background};
   text-align: center;
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 12px 0;
@@ -37,6 +37,7 @@ const StyledModalContainer = styled(ModalContainer)`
 
 const StyledModalBody = styled(ModalBody)`
   padding: 24px;
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
 `
 
 interface CurrencySearchModalProps extends InjectedModalProps {
@@ -90,7 +91,7 @@ export default function CurrencySearchModal({
 
   return (
     <StyledModalContainer minWidth="320px">
-      <ModalHeader background={theme.colors.tertiary}>
+      <ModalHeader background={theme.colors.background}>
         <ModalTitle>
           {config[modalView].onBack && <ModalBackButton onBack={config[modalView].onBack} />}
           <Heading>{config[modalView].title}</Heading>

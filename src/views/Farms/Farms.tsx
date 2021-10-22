@@ -383,6 +383,7 @@ const Farms: React.FC = () => {
       <Page>
         <Header>
           <ControlContainer>
+            <Heading>Farms</Heading>
             <ViewControls>
               {/* <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> */}
               {/* <ToggleWrapper> */}
@@ -398,7 +399,7 @@ const Farms: React.FC = () => {
             </ViewControls>
             <FilterContainer>
               <LabelWrapper>
-                <Text textTransform="uppercase">{t('Sort by')}</Text>
+                {/* <Text textTransform="uppercase">{t('Sort by')}</Text> */}
                 <Select
                   options={[
                     {
@@ -426,7 +427,7 @@ const Farms: React.FC = () => {
                 />
               </LabelWrapper>
               <LabelWrapper style={{ marginLeft: 16 }}>
-                <Text textTransform="uppercase">{t('Search')}</Text>
+                {/* <Text textTransform="uppercase">{t('Search')}</Text> */}
                 <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
               </LabelWrapper>
             </FilterContainer>

@@ -28,6 +28,7 @@ interface Props {
   hideSettingsIcon?: boolean
   hideTransactionIcon?: boolean
   margin?: string
+  independentSubtitle?: boolean
 }
 
 type BackFuncInterface = { isBackFunc?: false; backFunction?: never } | { isBackFunc?: true; backFunction: () => void }
@@ -60,48 +61,57 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   hideTransactionIcon,
   refreshButton = false,
   refreshFunction,
+  independentSubtitle,
 }) => {
   const [expertMode] = useExpertModeManager()
 
   return (
-    <AppHeaderContainer padding={padding} margin={margin}>
-      <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
-        {isBackFunc && backFunction && (
-          <IconButton mt="-6px" onClick={backFunction} variant="text">
-            <ArrowBackIcon width="26px" />
-          </IconButton>
-        )}
-        {backTo && (
-          <IconButton as={Link} to={backTo}>
-            <ArrowBackIcon width="26px" />
-          </IconButton>
-        )}
-        <Flex flexDirection="column">
-          <Heading as="h2" mb="8px">
-            {title}
-          </Heading>
-          <Flex alignItems="center">
-            {helper && <QuestionHelper text={helper} mr="4px" placement="top-start" />}
-            <Text color="textSubtle" fontSize="14px">
-              {subtitle}
-            </Text>
-          </Flex>
-        </Flex>
-      </Flex>
-      {!noConfig && (
-        <Flex alignItems="start" marginTop="-8px">
-          {refreshButton && refreshFunction && (
-            <IconButton onClick={refreshFunction} variant="text">
-              <RefreshIcon width="24px" />
+    <Flex flexDirection="column">
+      <AppHeaderContainer padding={padding} margin={margin}>
+        <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
+          {isBackFunc && backFunction && (
+            <IconButton mt="-6px" onClick={backFunction} variant="text">
+              <ArrowBackIcon width="26px" />
             </IconButton>
           )}
-          <NotificationDot show={expertMode}>
-            {!hideSettingsIcon ? onSwapPage ? <SwapPageSettingsButton /> : <GlobalSettings /> : null}
-          </NotificationDot>
-          {!hideTransactionIcon && <Transactions />}
+          {backTo && (
+            <IconButton as={Link} to={backTo}>
+              <ArrowBackIcon width="26px" />
+            </IconButton>
+          )}
+          <Flex flexDirection="column">
+            <Heading as="h2" mb="8px">
+              {title}
+            </Heading>
+            {!independentSubtitle && <Flex alignItems='center'>
+              {helper && <QuestionHelper text={helper} mr='4px' placement='top-start' />}
+              <Text color='textSubtle' fontSize='14px'>
+                {subtitle}
+              </Text>
+            </Flex>}
+          </Flex>
         </Flex>
-      )}
-    </AppHeaderContainer>
+        {!noConfig && (
+          <Flex alignItems="start" marginTop="-8px">
+            {refreshButton && refreshFunction && (
+              <IconButton onClick={refreshFunction} variant="text">
+                <RefreshIcon width="24px" />
+              </IconButton>
+            )}
+            <NotificationDot show={expertMode}>
+              {!hideSettingsIcon ? onSwapPage ? <SwapPageSettingsButton /> : <GlobalSettings /> : null}
+            </NotificationDot>
+            {!hideTransactionIcon && <Transactions />}
+          </Flex>
+        )}
+      </AppHeaderContainer>
+      {independentSubtitle && <Flex alignItems='center' ml="24px">
+        {helper && <QuestionHelper text={helper} mr='4px' placement='top-start' />}
+        <Text color='textSubtle' fontSize='14px'>
+          {subtitle}
+        </Text>
+      </Flex>}
+    </Flex>
   )
 }
 

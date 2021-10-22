@@ -437,6 +437,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       }
                     }
                   }}
+                  independentSubtitle
                   refreshButton
                   onSwapPage
                 />

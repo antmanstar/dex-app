@@ -7,7 +7,7 @@ import { Field } from '../../state/mint/actions'
 import Row, { AutoRow } from '../../components/Layout/Row'
 import { useTranslation } from '../../contexts/Localization'
 import useTheme from '../../hooks/useTheme'
-import { DoubleCurrencyLogo } from '../../components/Logo'
+import { CurrencyLogo, DoubleCurrencyLogo } from '../../components/Logo'
 
 interface ILiqPoolDetailsCardInterface {
   currencies: { [field in Field]?: Currency }
@@ -24,7 +24,7 @@ const StyledRow = styled.div`
   flex-direction: row;
 
   grid-gap: 32px;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
 
   ${({ theme }) => theme.mediaQueries.xs} {
     grid-template-columns: 1fr 1fr;
@@ -39,6 +39,18 @@ const FlexContainer = styled.div`
   justify-content: start;
   align-items: center;
   margin-bottom: 24px;
+`
+
+const AddressText = styled(Text)`
+  @media screen and (max-width: 360px) {
+    font-size: 11px;
+  }
+`
+
+const StyledCardBody = styled(CardBody)`
+  @media screen and (max-width: 360px) {
+    padding: 16px;
+  }
 `
 
 const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqPoolDetailsCardInterface) => {
@@ -61,23 +73,25 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
 
   return (
     <Card background={theme.colors.background}>
-      <CardBody>
+      <StyledCardBody>
         <div>
           <FlexContainer>
-            <DoubleCurrencyLogo
-              currency0={currencies[Field.CURRENCY_A]}
-              currency1={currencies[Field.CURRENCY_B]}
-              size={30}
-              overlap
-            />
-            <Text fontSize="20px" mb="0" ml="24px">
-              {currencies[Field.CURRENCY_A]?.symbol ?? ''}/{currencies[Field.CURRENCY_B]?.symbol ?? ''}
+            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="22px"/>
+            <Text fontSize="22px" mb="0" ml="10px">
+              {currencies[Field.CURRENCY_A]?.symbol ?? ''}
+            </Text>
+            <Text fontSize="22px" mb="0" ml="10px" mx="15px">
+              /
+            </Text>
+            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="22px"/>
+            <Text fontSize="22px" mb="0" ml="10px">
+              {currencies[Field.CURRENCY_B]?.symbol ?? ''}
             </Text>
           </FlexContainer>
         </div>
-        <Text fontSize="12px" color="subtle" mb="24px">
+        <AddressText fontSize="12px" color="subtle" mb="24px">
           {pair?.liquidityToken?.address ? `(${pair?.liquidityToken?.address})` : '(0x0000000000000000000000000000000000000000)'}
-        </Text>
+        </AddressText>
         <StyledRow>
           <AutoColumn justify="start">
             {renderSingleData(t("Liquidity"), "$0.00")}
@@ -92,7 +106,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
             {renderSingleData(t("APR"), "0%")}
           </AutoColumn>
         </StyledRow>
-      </CardBody>
+      </StyledCardBody>
     </Card>
   )
 }

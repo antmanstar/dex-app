@@ -10,23 +10,29 @@ const StyledPage = styled.div`
   align-items: center;
   width: 100%;
   padding: 16px;
-  padding-bottom: 0;
-  min-height: calc(100vh - 64px);
+  padding-bottom: 56px;
+  padding-top: 0;
+  min-height: calc(100vh - 56px);
   // background: ${({ theme }) => theme.colors.background};
   //background: url('/bg_eco.svg') no-repeat center center;
   background-size: cover;
   ${({ theme }) => theme.mediaQueries.xs} {
     background-size: auto;
   }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 24px;
+  
+  @media screen and (min-width: 577px) {
+    min-height: calc(100vh - 112px);
     padding-bottom: 0;
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    padding-top: 32px;
-    min-height: calc(100vh - 64px);
+    //padding-top: 32px;
+    min-height: calc(100vh - 112px);
+  }
+  
+  @media screen and (max-width: 360px) {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 `
 

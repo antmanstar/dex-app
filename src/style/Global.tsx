@@ -12,9 +12,18 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
   }
   body {
-    background: ${({ theme }) =>
-      theme.isDark ? "url('/bg-dark.jpeg') no-repeat center center" : "url('/bg-light.jpg') no-repeat center center"};
-    //background-size: cover;
+    background-color: ${({theme}) => theme.colors.backgroundMain};
+    background-image: ${({ theme }) =>
+      theme.isDark ? "url('/grad-left.png'), url('/grad-right.png')" : "url('/grad-left.png'), url('/grad-right.png')"};
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: left top, right bottom;
+    background-size: 550px, 500px, cover;
+    @media screen and (min-width: 576px) and (max-width: 1269px) {
+      background-size: 800px, 500px, cover;
+    }
+    @media screen and (max-width: 576px) {
+      background-size: cover;
+    }
     img {
       height: auto;
       max-width: 100%;

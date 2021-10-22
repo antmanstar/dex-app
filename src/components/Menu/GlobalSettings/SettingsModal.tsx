@@ -24,7 +24,7 @@ const PancakeToggleWrapper = styled.div`
 
 const ScrollableContainer = styled(Flex)`
   flex-direction: column;
-  max-height: 400px;
+  max-height: 450px;
   ${({ theme }) => theme.mediaQueries.sm} {
     max-height: none;
   }

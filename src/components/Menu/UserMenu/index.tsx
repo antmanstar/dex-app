@@ -13,9 +13,19 @@ import { useProfile } from 'state/profile/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { FetchStatus, useGetBnbBalance } from 'hooks/useTokenBalance'
 import { useTranslation } from 'contexts/Localization'
+import styled from 'styled-components'
 import WalletModal, { WalletView, LOW_BNB_BALANCE } from './WalletModal'
 import ProfileUserMenuItem from './ProfileUserMenutItem'
 import WalletUserMenuItem from './WalletUserMenuItem'
+
+const StyledConnectWalletButton = styled(ConnectWalletButton)`
+  height: 40px;
+  width: 186px;
+  
+  @media screen and (min-width: 576px) and (max-width: 747px) {
+    display: none;
+  }
+`
 
 const UserMenu = () => {
   const { t } = useTranslation()
@@ -30,7 +40,7 @@ const UserMenu = () => {
   const hasLowBnbBalance = fetchStatus === FetchStatus.SUCCESS && balance.lte(LOW_BNB_BALANCE)
 
   if (!account) {
-    return <ConnectWalletButton scale="md" minWidth="186px" />
+    return <StyledConnectWalletButton />
   }
 
   return (

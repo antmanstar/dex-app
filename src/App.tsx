@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Router, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@pancakeswap/uikit'
+import { ResetCSS, useMatchBreakpoints } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import useScrollOnRouteChange from 'hooks/useScrollOnRouteChange'
@@ -26,6 +26,9 @@ import {
 import RedirectOldRemoveLiquidityPathStructure from './views/RemoveLiquidity/redirects'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
 import GlobalCheckClaimStatus from './views/Collectibles/components/GlobalCheckClaimStatus'
+import FooterSmall from './components/FooterSmall/FooterSmall'
+import { footerLinks, smallFooterLinks } from './components/Menu/config/footerConfig'
+import { useTranslation } from './contexts/Localization'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -63,6 +66,9 @@ const App: React.FC = () => {
   // useFetchProfile()
   // usePollCoreFarmData()
   useScrollOnRouteChange()
+
+  const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <Router history={history}>
@@ -162,6 +168,9 @@ const App: React.FC = () => {
             <Route component={NotFound} />
           </Switch>
         </SuspenseWithChunkError>
+        {!isMobile && <FooterSmall
+          {...smallFooterLinks(t)}
+        />}
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />

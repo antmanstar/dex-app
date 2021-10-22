@@ -1,5 +1,6 @@
-import { FooterLinkType } from '@pancakeswap/uikit'
+import { CertikIcon, FooterLinkType, GithubIcon, MediumIcon, PaladinIcon } from '@pancakeswap/uikit'
 import { ContextApi } from 'contexts/Localization/types'
+import { ISmallFooterLinks } from '../../FooterSmall/types'
 
 export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
   {
@@ -74,3 +75,78 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     ],
   },
 ]
+
+export const smallFooterLinks: (t: ContextApi['t']) => ISmallFooterLinks = (t) => {
+  return {
+    links: [
+      {
+        id: 1,
+        title: t("Privacy"),
+        url: "#",
+      },
+      {
+        id: 2,
+        title: t("Terms"),
+        url: "#",
+      },
+      {
+        id: 3,
+        title: t("Contact"),
+        url: "#",
+      },
+      {
+        id: 4,
+        title: t("About"),
+        url: "#",
+      },
+    ],
+    audit: [
+      {
+        title: t("Certik"),
+        url: "https://www.certik.com",
+        icon: CertikIcon,
+        isTsSvg: true,
+      },
+      {
+        title: t("Paladin"),
+        url: "https://www.paladin.com",
+        icon: PaladinIcon,
+        isTsSvg: true,
+      },
+    ],
+    socialMedia: [
+      {
+        id: 1,
+        title: t("Telegram"),
+        url: "https://www.telegram.com",
+        icon: "/images/footer/telegram.svg",
+      },
+      {
+        id: 2,
+        title: t("discord"),
+        url: "https://www.dicord.com",
+        icon: "/images/footer/discord.svg"
+      },
+      {
+        id: 2,
+        title: t("Twitter"),
+        url: "#",
+        icon: "/images/footer/twitter.svg",
+      },
+      {
+        id: 3,
+        title: t("Medium"),
+        url: "#",
+        icon: MediumIcon,
+        isTsSvg: true,
+      },
+      {
+        id: 4,
+        title: t("Github"),
+        url: "#",
+        icon: GithubIcon,
+        isTsSvg: true,
+      },
+    ],
+  }
+}

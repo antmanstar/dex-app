@@ -46,15 +46,53 @@ import GlobalSettings from '../../components/Menu/GlobalSettings'
 const Container = styled.div`
   display: grid;
   width: 100%;
-  padding: 16px;
-  margin-top: 16px;
+  padding-top: 16px;
+  //margin-top: 48px;
   max-width: 1400px;
 
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
 
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 48px;
+    padding: 16px;
+  }
+  
   ${({ theme }) => theme.mediaQueries.lg} {
+    grid-template-columns: 1fr 350px;
+  }
+  
+  ${({ theme }) => theme.mediaQueries.xxl} {
     grid-template-columns: 1fr 432px;
+  }
+`
+
+const StyledLightCard = styled(LightCard)`
+  @media screen and (max-width: 576px) {
+    padding: 12px;
+  }
+`
+
+const StyledPage = styled(Page)`
+  padding-left: 8px;
+  padding-right: 8px;
+`
+
+const StyledConnectWalletButton = styled(ConnectWalletButton)`
+  margin: 0 8px;
+`
+
+const StyledButtonsContainer = styled(AutoColumn)`
+  margin: 0 8px;
+`
+const PositionCardWrapper = styled(AutoColumn)`
+  margin: 2rem 0;
+  min-width: 20rem;
+  width: 100%;
+  max-width: 400px;
+  
+  @media screen and (max-width: 360px) {
+    min-width: 0;
   }
 `
 
@@ -336,7 +374,7 @@ export default function AddLiquidity({
   )
 
   return (
-    <Page>
+    <StyledPage>
       <Container>
         <Card p="4px">
           <CardBody p="0">
@@ -349,14 +387,14 @@ export default function AddLiquidity({
                   price={price}
                   pair={pair}
                 />
-                <LightCard padding="0 8px" border="none !important">
+                <StyledLightCard padding="24px" border="none !important">
                   <PoolPriceBar
                     currencies={currencies}
                     poolTokenPercentage={poolTokenPercentage}
                     noLiquidity={noLiquidity}
                     price={price}
                   />
-                </LightCard>
+                </StyledLightCard>
               </LightCard>
             </ColumnCenter>
           </CardBody>
@@ -410,6 +448,7 @@ export default function AddLiquidity({
                   currency={currencies[Field.CURRENCY_B]}
                   id="add-liquidity-input-tokenb"
                   showCommonBases
+                  secondInput
                 />
                 {noLiquidity && (
                   <ColumnCenter>
@@ -425,13 +464,13 @@ export default function AddLiquidity({
                   </ColumnCenter>
                 )}
                 {addIsUnsupported ? (
-                  <Button disabled mb="4px">
+                  <Button disabled mb="4px" mx="8px">
                     {t('Unsupported Asset')}
                   </Button>
                 ) : !account ? (
-                  <ConnectWalletButton />
+                  <StyledConnectWalletButton />
                 ) : (
-                  <AutoColumn gap="md">
+                  <StyledButtonsContainer gap="md">
                     {(approvalA === ApprovalState.NOT_APPROVED ||
                       approvalA === ApprovalState.PENDING ||
                       approvalB === ApprovalState.NOT_APPROVED ||
@@ -485,7 +524,7 @@ export default function AddLiquidity({
                     >
                       {error ?? t('Supply')}
                     </Button>
-                  </AutoColumn>
+                  </StyledButtonsContainer>
                 )}
               </AutoColumn>
             </CardBody>
@@ -494,13 +533,13 @@ export default function AddLiquidity({
       </Container>
       {!addIsUnsupported ? (
         pair && !noLiquidity && pairState !== PairState.INVALID ? (
-          <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+          <PositionCardWrapper>
             <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-          </AutoColumn>
+          </PositionCardWrapper>
         ) : null
       ) : (
         <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
       )}
-    </Page>
+    </StyledPage>
   )
 }

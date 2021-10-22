@@ -372,13 +372,14 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         <AppHeader
           title={t('Settings')}
           padding="0.25rem"
+          margin="0 0 0 -14px"
           subtitle=""
           backFunction={() => dispatch(setShowSettings({ showSettings: false }))}
           isBackFunc
           hideSettingsIcon
           hideTransactionIcon
         />
-        <Wrapper>
+        <Wrapper padding="4px">
           <SettingsModal
             onDismiss={() => {
               dispatch(setShowSettings({ showSettings: false }))
@@ -436,10 +437,11 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       }
                     }
                   }}
+                  independentSubtitle
                   refreshButton
                   onSwapPage
                 />
-                <Wrapper id="swap-page">
+                <Wrapper id="swap-page" padding="1rem 1rem 1.5rem ">
                   <AutoColumn gap="md">
                     <CurrencyInputPanel
                       label={
@@ -485,6 +487,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       onCurrencySelect={handleOutputSelect}
                       otherCurrency={currencies[Field.INPUT]}
                       id="swap-currency-output"
+                      secondInput
                     />
 
                     {isExpertMode && recipient !== null && !showWrap ? (

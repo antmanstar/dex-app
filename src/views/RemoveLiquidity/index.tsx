@@ -67,14 +67,22 @@ const BorderCard = styled.div`
 const Container = styled.div`
   display: grid;
   width: 100%;
-  padding: 16px;
-  margin-top: 16px;
+  padding: 16px 0;
   max-width: 1400px;
 
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
 
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 16px;
+    margin-top: 48px;
+  }
+  
   ${({ theme }) => theme.mediaQueries.lg} {
+    grid-template-columns: 1fr 350px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xxl} {
     grid-template-columns: 1fr 432px;
   }
 `
@@ -86,6 +94,17 @@ const StyledAutoColumn = styled(AutoColumn)`
 
 const StyledSmallButton = styled(Button)`
   font-size: 12px;
+`
+
+const StyledLightCard = styled(LightCard)`
+  @media screen and (max-width: 576px) {
+    padding: 12px;
+  }
+`
+
+const StyledPage = styled(Page)`
+  padding-left: 8px;
+  padding-right: 8px;
 `
 
 const AmountPercentage = [
@@ -532,26 +551,26 @@ export default function RemoveLiquidity({
   const wrappedCurrencyA = wrappedCurrency(currencyA, chainId)
   const price = pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined;
   return (
-    <Page>
+    <StyledPage>
       <Container>
         <Card p="4px">
           <CardBody p="0">
             <ColumnCenter>
               {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
-                  <LightCard padding="0px"border="none !important">
+                  <LightCard padding="0px" border="none !important">
                     <LiqPoolDetailsCard
                       currencies={currencies}
                       pair={pair}
                     />
-                    <LightCard padding="0" border="none !important">
+                    <StyledLightCard padding="24px" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
                         poolTokenPercentage={poolTokenPercentage}
                         // noLiquidity={noLiquidity}
                         price={price}
                       />
-                    </LightCard>
+                    </StyledLightCard>
                   </LightCard>
                 </>
               )}
@@ -571,12 +590,12 @@ export default function RemoveLiquidity({
               </Flex>
               <GlobalSettings />
             </Flex>
-            <StyledAutoColumn gap="20px">
-              <RowBetween>
+            <StyledAutoColumn gap="0px">
+              <RowBetween padding='0.75rem 0.5rem 0.75rem 0'>
                 <Text ml="8px" fontSize="14px">{t('Amount')}</Text>
-                <Button variant="text" scale="sm" onClick={() => setShowDetailed(!showDetailed)}>
+                <Text onClick={() => setShowDetailed(!showDetailed)}>
                   {showDetailed ? t('Simple') : t('Detailed')}
-                </Button>
+                </Text>
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
@@ -711,7 +730,7 @@ export default function RemoveLiquidity({
               </Box>
             )}
             {pair && (
-              <AutoColumn gap="10px" style={{ marginTop: '16px' }}>
+              <AutoColumn gap="10px" style={{ margin: '16px 8px 0' }}>
                 <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
                   {t('Prices')}
                 </Text>
@@ -735,7 +754,7 @@ export default function RemoveLiquidity({
                 </LightGreyCard>
               </AutoColumn>
             )}
-            <Box position="relative" mt="16px">
+            <Box position="relative" margin="16px 8px 0">
               {!account ? (
                 <ConnectWalletButton width="100%" />
               ) : (
@@ -782,6 +801,6 @@ export default function RemoveLiquidity({
 
         </AutoColumn>
       ) : null}
-    </Page>
+    </StyledPage>
   )
 }

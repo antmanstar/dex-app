@@ -30,6 +30,10 @@ const ScrollableContainer = styled(Flex)`
   }
 `
 
+const StyledModal = styled(Modal)`
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
+`
+
 const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => {
   const [showConfirmExpertModal, setShowConfirmExpertModal] = useState(false)
   const [showExpertModeAcknowledgement, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgementShow()
@@ -128,9 +132,9 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => 
   }
 
   return (
-    <Modal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }}>
+    <StyledModal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }} headerBackground={theme.colors.background}>
       {renderModalBody()}
-    </Modal>
+    </StyledModal>
   )
 }
 

@@ -16,7 +16,7 @@ const InputRow = styled.div<{ selected: boolean }>`
   flex-flow: row nowrap;
   align-items: center;
   background: ${({ theme }) => theme.colors.input};
-  border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
+  //border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 10px;
   margin: 0 0.5rem;
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};

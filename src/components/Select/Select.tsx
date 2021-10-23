@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div`
+const DropDownHeader = styled.div<{background?: string;}>`
   width: 100%;
   height: 40px;
   display: flex;
@@ -12,7 +12,7 @@ const DropDownHeader = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.inset};
   // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
   border-radius: 8px;
-  background: ${({ theme }) => theme.colors.backgroundAlt};
+  background: ${({ theme, background }) => background || theme.colors.backgroundAlt};
   transition: border-radius 0.15s;
 `
 
@@ -94,6 +94,8 @@ const ListItem = styled.li`
 export interface SelectProps extends BoxProps {
   options: OptionProps[]
   onOptionChange?: (option: OptionProps) => void
+  selectedTextColor?: string
+  selectedBackgroundColor?: string
 }
 
 export interface OptionProps {
@@ -102,7 +104,7 @@ export interface OptionProps {
   value: any
 }
 
-const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange, ...props }) => {
+const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange, selectedTextColor, selectedBackgroundColor, ...props }) => {
   const dropdownRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
@@ -134,7 +136,7 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange,
 
   return (
     <DropDownContainer isOpen={isOpen} {...props}>
-      <DropDownHeader onClick={toggling}>
+      <DropDownHeader onClick={toggling} background={selectedBackgroundColor}>
         <>
           {options[selectedOptionIndex]?.icon && (
             <img
@@ -145,8 +147,8 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange,
             />
           )}
         </>
-        <Text>{options[selectedOptionIndex].label}</Text>
-        <ArrowDropDownIcon color="text" onClick={toggling} />
+        <Text color={selectedTextColor || "text"}>{options[selectedOptionIndex].label}</Text>
+        <ArrowDropDownIcon color={selectedTextColor || "text"} onClick={toggling} />
       </DropDownHeader>
       <DropDownListContainer>
         <DropDownList ref={dropdownRef}>

@@ -17,6 +17,7 @@ import styled from 'styled-components'
 import { FetchStatus, useGetBnbBalance } from 'hooks/useTokenBalance'
 import WalletInfo from './WalletInfo'
 import WalletTransactions from './WalletTransactions'
+import useTheme from '../../../hooks/useTheme'
 
 export enum WalletView {
   WALLET_INFO,
@@ -30,19 +31,29 @@ interface WalletModalProps extends InjectedModalProps {
 export const LOW_BNB_BALANCE = parseUnits('2', 'gwei')
 
 const ModalHeader = styled(UIKitModalHeader)`
-  background: ${({ theme }) => theme.colors.gradients.bubblegum};
+  background: ${({ theme }) => theme.colors.background};
 `
 
 const Tabs = styled.div`
-  background-color: ${({ theme }) => theme.colors.dropdown};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 16px 24px;
+`
+
+const StyledButtonMenuContainer = styled(ButtonMenu)`
+  border: none;
+  background: ${({theme}) => theme.colors.background};
+`
+
+const StyledButtonMenu = styled(ButtonMenuItem)`
+  border-radius: 16px;
 `
 
 const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALLET_INFO, onDismiss }) => {
   const [view, setView] = useState(initialView)
   const { t } = useTranslation()
   const { balance, fetchStatus } = useGetBnbBalance()
+  const { theme } = useTheme()
   const hasLowBnbBalance = fetchStatus === FetchStatus.SUCCESS && balance.lte(LOW_BNB_BALANCE)
 
   const handleClick = (newIndex: number) => {
@@ -53,19 +64,19 @@ const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALL
     <ModalContainer title={t('Welcome!')} minWidth="320px">
       <ModalHeader>
         <ModalTitle>
-          <Heading>{t('Your Wallet')}</Heading>
+          <Heading fontSize="22px !important">{t('Your Wallet')}</Heading>
         </ModalTitle>
-        <IconButton variant="text" onClick={onDismiss}>
-          <CloseIcon width="24px" color="text" />
+        <IconButton variant="text" onClick={onDismiss} scale="sm">
+          <CloseIcon width="22px" color="text" />
         </IconButton>
       </ModalHeader>
       <Tabs>
-        <ButtonMenu scale="sm" variant="subtle" onItemClick={handleClick} activeIndex={view} fullWidth>
-          <ButtonMenuItem>{t('Wallet')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Transactions')}</ButtonMenuItem>
-        </ButtonMenu>
+        <StyledButtonMenuContainer scale="sm" variant="subtle" onItemClick={handleClick} activeIndex={view} fullWidth>
+          <StyledButtonMenu>{t('Wallet')}</StyledButtonMenu>
+          <StyledButtonMenu>{t('Transactions')}</StyledButtonMenu>
+        </StyledButtonMenuContainer>
       </Tabs>
-      <ModalBody p="24px" maxWidth="400px" width="100%">
+      <ModalBody p="24px" maxWidth="400px" width="100%" background={theme.colors.backgroundAlt}>
         {view === WalletView.WALLET_INFO && <WalletInfo hasLowBnbBalance={hasLowBnbBalance} onDismiss={onDismiss} />}
         {view === WalletView.TRANSACTIONS && <WalletTransactions />}
       </ModalBody>

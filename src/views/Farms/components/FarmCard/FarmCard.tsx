@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Card, Flex, Text, Skeleton } from '@pancakeswap/uikit'
+import { Card, Flex, Text, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DeserializedFarm } from 'state/types'
 import { getBscScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
@@ -20,14 +20,25 @@ export interface FarmWithStakedValue extends DeserializedFarm {
   liquidity?: BigNumber
 }
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<{isActive?: boolean}>`
   align-self: baseline;
+  max-height: 105px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 2px solid ${({isActive}) => isActive ? "transparent" : "#4c5969"};
+  
+  &:hover {
+    background: ${({theme}) => theme.colors.primary};
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
+    border: 2px solid transparent;
+  }
 `
 
 const FarmCardInnerContainer = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
-  padding: 24px;
+  padding: 12px 16px;
 `
 
 const ExpandingWrapper = styled.div`
@@ -42,10 +53,13 @@ interface FarmCardProps {
   removed: boolean
   cakePrice?: BigNumber
   account?: string
+  onClick?: () => void
+  isCardActive?: boolean
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePrice, account, onClick, isCardActive }) => {
   const { t } = useTranslation()
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
@@ -54,8 +68,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
       ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
       : ''
 
-  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
-  const earnLabel = farm.dual ? farm.dual.earnLabel : t('CAKE + Fees')
+  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', '')
+  const earnLabel = farm.dual ? farm.dual.earnLabel : t('ECO + Fees')
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: farm.quoteToken.address,
@@ -63,10 +77,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
-  const isPromotedFarm = farm.token.symbol === 'CAKE'
+  // const isPromotedFarm = farm.token.symbol === 'ECO'
 
   return (
-    <StyledCard isActive={isPromotedFarm}>
+    <StyledCard isActive={isCardActive} onClick={onClick}>
       <FarmCardInnerContainer>
         <CardHeading
           lpLabel={lpLabel}
@@ -75,42 +89,44 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
           token={farm.token}
           quoteToken={farm.quoteToken}
         />
-        {!removed && (
-          <Flex justifyContent="space-between" alignItems="center">
-            <Text>{t('APR')}:</Text>
-            <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-              {farm.apr ? (
-                <ApyButton
-                  variant="text-and-button"
-                  pid={farm.pid}
-                  lpSymbol={farm.lpSymbol}
-                  multiplier={farm.multiplier}
-                  lpLabel={lpLabel}
-                  addLiquidityUrl={addLiquidityUrl}
-                  cakePrice={cakePrice}
-                  apr={farm.apr}
-                  displayApr={displayApr}
-                />
-              ) : (
-                <Skeleton height={24} width={80} />
-              )}
-            </Text>
-          </Flex>
-        )}
         <Flex justifyContent="space-between">
-          <Text>{t('Earn')}:</Text>
-          <Text bold>{earnLabel}</Text>
+          {!removed && (
+            <Flex justifyContent="flex-start" alignItems="start" flexDirection="column">
+              <Text fontWeight="400">{t('APR')}:</Text>
+              <Text fontWeight="400" style={{ display: 'flex', alignItems: 'center' }}>
+                {farm.apr ? (
+                  <ApyButton
+                    variant="text-and-button"
+                    pid={farm.pid}
+                    lpSymbol={farm.lpSymbol}
+                    multiplier={farm.multiplier}
+                    lpLabel={lpLabel}
+                    addLiquidityUrl={addLiquidityUrl}
+                    cakePrice={cakePrice}
+                    apr={farm.apr}
+                    displayApr={displayApr}
+                  />
+                ) : (
+                  <Skeleton height={24} width={80} />
+                )}
+              </Text>
+            </Flex>
+          )}
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontWeight="400">{t('Earn')}:</Text>
+            <Text fontWeight="400">{earnLabel}</Text>
+          </Flex>
         </Flex>
-        <CardActionsContainer
-          farm={farm}
-          lpLabel={lpLabel}
-          account={account}
-          cakePrice={cakePrice}
-          addLiquidityUrl={addLiquidityUrl}
-        />
+        {/* <CardActionsContainer */}
+        {/*  farm={farm} */}
+        {/*  lpLabel={lpLabel} */}
+        {/*  account={account} */}
+        {/*  cakePrice={cakePrice} */}
+        {/*  addLiquidityUrl={addLiquidityUrl} */}
+        {/* /> */}
       </FarmCardInnerContainer>
 
-      <ExpandingWrapper>
+      {isMobile && isTablet &&<ExpandingWrapper>
         <ExpandableSectionButton
           onClick={() => setShowExpandableSection(!showExpandableSection)}
           expanded={showExpandableSection}
@@ -125,7 +141,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
             addLiquidityUrl={addLiquidityUrl}
           />
         )}
-      </ExpandingWrapper>
+      </ExpandingWrapper>}
     </StyledCard>
   )
 }

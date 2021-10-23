@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation, NavLink, Link } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex } from '@pancakeswap/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex, Card } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
 import FlexLayout from 'components/Layout/Flex'
@@ -29,6 +29,9 @@ import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
+import RowDataJSON from "../../config/constants/DummyFarmsData.json";
+import CardHeading from './components/FarmCard/CardHeading'
+import { FarmDetails } from './FarmDetails'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -98,7 +101,7 @@ const ViewControls = styled.div`
 `
 
 const Header = styled(`div`)`
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.backgroundAlt3};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,6 +114,32 @@ const StyledImage = styled(Image)`
   margin-right: auto;
   margin-top: 58px;
 `
+
+const FarmsContainer = styled(Card)`
+  background: ${({theme}) => theme.colors.backgroundAlt};
+  padding: 24px 8px;
+  
+  ${FlexLayout} {
+    & > * {
+      max-width: 240px;
+      min-width: 0;
+      margin: 12px 8px;
+      //max-width: 31.5%;
+    }
+  }
+`
+
+const FarmsWithDetailsContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  margin-top: 24px;
+  grid-column-gap: 24px;
+`
+
+const StyledPage = styled(Page)`
+  padding: 16px 0;
+`
+
 const NUMBER_OF_FARMS_VISIBLE = 12
 
 const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
@@ -136,6 +165,7 @@ const Farms: React.FC = () => {
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
   const { theme } = useTheme()
+  const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
 
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
@@ -302,6 +332,20 @@ const Farms: React.FC = () => {
     return row
   })
 
+  const dummyRowData = RowDataJSON;
+
+  useEffect(() => {
+    if (dummyRowData) {
+      setActiveFarmCard(dummyRowData[1]);
+    }
+  }, [dummyRowData])
+
+  // console.log('active card', activeFarmCard);
+
+  const handleSelectFarm = (data: any) => {
+    setActiveFarmCard(data);
+  }
+
   const renderContent = (): JSX.Element => {
     if (viewMode === ViewMode.TABLE && rowData.length) {
       const columnSchema = DesktopColumnSchema
@@ -332,45 +376,61 @@ const Farms: React.FC = () => {
       return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
     }
 
+    // @ts-ignore
     return (
-      <FlexLayout>
-        <Route exact path={`${path}`}>
-          {chosenFarmsMemoized.map((farm) => (
-            <FarmCard
-              key={farm.pid}
-              farm={farm}
-              displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={cakePrice}
-              account={account}
-              removed={false}
-            />
-          ))}
-        </Route>
-        <Route exact path={`${path}/history`}>
-          {chosenFarmsMemoized.map((farm) => (
-            <FarmCard
-              key={farm.pid}
-              farm={farm}
-              displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={cakePrice}
-              account={account}
-              removed
-            />
-          ))}
-        </Route>
-        <Route exact path={`${path}/archived`}>
-          {chosenFarmsMemoized.map((farm) => (
-            <FarmCard
-              key={farm.pid}
-              farm={farm}
-              displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={cakePrice}
-              account={account}
-              removed
-            />
-          ))}
-        </Route>
-      </FlexLayout>
+      <FarmsWithDetailsContainer>
+        <FarmsContainer>
+          <FlexLayout>
+            <Route exact path={`${path}`}>
+              {dummyRowData.map((farm) => (
+                <FarmCard
+                  isCardActive={activeFarmCard?.pid === farm.pid}
+                  key={farm.pid}
+                  // @ts-ignore
+                  farm={farm}
+                  // @ts-ignore
+                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                  cakePrice={cakePrice}
+                  account={account}
+                  onClick={() => handleSelectFarm(farm)}
+                  removed={false}
+                />
+              ))}
+            </Route>
+            <Route exact path={`${path}/history`}>
+              {dummyRowData.map((farm) => (
+                <FarmCard
+                  key={farm.pid}
+                  // @ts-ignore
+                  farm={farm}
+                  // @ts-ignore
+                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                  cakePrice={cakePrice}
+                  account={account}
+                  onClick={() => handleSelectFarm(farm)}
+                  removed
+                />
+              ))}
+            </Route>
+            <Route exact path={`${path}/archived`}>
+              {dummyRowData.map((farm) => (
+                <FarmCard
+                  key={farm.pid}
+                  // @ts-ignore
+                  farm={farm}
+                  // @ts-ignore
+                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                  cakePrice={cakePrice}
+                  account={account}
+                  onClick={() => handleSelectFarm(farm)}
+                  removed
+                />
+              ))}
+            </Route>
+          </FlexLayout>
+        </FarmsContainer>
+        {activeFarmCard && <FarmDetails data={activeFarmCard}/>}
+      </FarmsWithDetailsContainer>
     )
   }
 
@@ -380,7 +440,7 @@ const Farms: React.FC = () => {
 
   return (
     <>
-      <Page>
+      <StyledPage>
         <Header>
           <ControlContainer>
             <Heading>Farms</Heading>
@@ -440,7 +500,7 @@ const Farms: React.FC = () => {
           </Flex>
         )}
         <div ref={observerRef} />
-      </Page>
+      </StyledPage>
     </>
   )
 }

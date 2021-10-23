@@ -29,7 +29,6 @@ import GlobalCheckClaimStatus from './views/Collectibles/components/GlobalCheckC
 import FooterSmall from './components/FooterSmall/FooterSmall'
 import { footerLinks, smallFooterLinks } from './components/Menu/config/footerConfig'
 import { useTranslation } from './contexts/Localization'
-import { GradDiv } from './views/GradDiv'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -76,7 +75,6 @@ const App: React.FC = () => {
       <ResetCSS />
       <GlobalStyle />
       <GlobalCheckClaimStatus excludeLocations={[]} />
-      <GradDiv />
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>

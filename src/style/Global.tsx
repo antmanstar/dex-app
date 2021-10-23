@@ -18,25 +18,32 @@ const GlobalStyle = createGlobalStyle`
     //background-repeat: no-repeat, no-repeat, no-repeat;
     //background-position: left top, right bottom;
     //background-size: 550px, 500px, cover;
-    @media screen and (min-width: 576px) and (max-width: 1269px) {
-      //background-size: 800px, 500px, cover;
-    }
-    @media screen and (max-width: 576px) {
-      //background-size: cover;
-    }
+    //
+    //@media screen and (min-width: 576px) and (max-width: 1269px) {
+    //  background-size: 800px, 500px, cover;
+    //}
+    //@media screen and (max-width: 576px) {
+    //  background-size: cover;
+    //}
 
-    overflow-x: hidden;
+    background-image: ${({theme}) => theme.colors.gradients.radialLeft}, ${({theme}) => theme.colors.gradients.radialRight};
+    background-size: 1500px 1500px, 1428px;
+    background-repeat: no-repeat;
+    background-position: -1125px -300px, calc(100vw - 350px) 100px;
+    height: 100%;
+    position: relative;
 
     &:before {
       content: " ";
       position: absolute;
       right: 0;
       left: 0;
-      top: 0;
+      top: -56px;
       bottom: 0;
       background: ${({theme}) => theme.colors.gradients.bodyBg};
       z-index: -1;
       opacity: .5;
+      height: 100%;
     }
     img {
       height: auto;
@@ -45,6 +52,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .overflow-hidden {
+    overflow: hidden;
   }
 `
 

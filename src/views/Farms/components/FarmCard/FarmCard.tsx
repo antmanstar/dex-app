@@ -20,9 +20,12 @@ export interface FarmWithStakedValue extends DeserializedFarm {
   liquidity?: BigNumber
 }
 
+const StyledCardSummary = styled(Flex)`
+`
+
 const StyledCard = styled(Card)<{isActive?: boolean}>`
   align-self: baseline;
-  max-height: 105px;
+  //max-height: 105px;
   cursor: pointer;
   transition: all 0.25s ease;
   border: 2px solid ${({isActive}) => isActive ? "transparent" : "#4c5969"};
@@ -33,6 +36,12 @@ const StyledCard = styled(Card)<{isActive?: boolean}>`
     box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
     border: 2px solid transparent;
   }
+  
+  ${StyledCardSummary} {
+    ${Text} {
+      color: ${({theme, isActive}) => isActive ? theme.colors.primaryButtonText : theme.colors.text};
+    }
+  }
 `
 
 const FarmCardInnerContainer = styled(Flex)`
@@ -41,9 +50,9 @@ const FarmCardInnerContainer = styled(Flex)`
   padding: 12px 16px;
 `
 
-const ExpandingWrapper = styled.div`
-  padding: 24px;
-  border-top: 2px solid ${({ theme }) => theme.colors.cardBorder};
+const ExpandingWrapper = styled.div<{isCardActive?: boolean}>`
+  padding: 12px 16px;
+  border-top: 2px solid ${({ isCardActive, theme }) => isCardActive ? theme.colors.text : "#4c5969"};
   overflow: hidden;
 `
 
@@ -68,7 +77,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
       ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
       : ''
 
-  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', '')
+  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', 'ECO')
   const earnLabel = farm.dual ? farm.dual.earnLabel : t('ECO + Fees')
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
@@ -88,10 +97,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
           isCommunityFarm={farm.isCommunity}
           token={farm.token}
           quoteToken={farm.quoteToken}
+          isCardActive={isCardActive}
         />
         <Flex justifyContent="space-between">
           {!removed && (
-            <Flex justifyContent="flex-start" alignItems="start" flexDirection="column">
+            <StyledCardSummary justifyContent="flex-start" alignItems="start" flexDirection="column">
               <Text fontWeight="400">{t('APR')}:</Text>
               <Text fontWeight="400" style={{ display: 'flex', alignItems: 'center' }}>
                 {farm.apr ? (
@@ -110,12 +120,12 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
                   <Skeleton height={24} width={80} />
                 )}
               </Text>
-            </Flex>
+            </StyledCardSummary>
           )}
-          <Flex justifyContent="flex-start" flexDirection="column">
+          <StyledCardSummary justifyContent="flex-start" flexDirection="column">
             <Text fontWeight="400">{t('Earn')}:</Text>
             <Text fontWeight="400">{earnLabel}</Text>
-          </Flex>
+          </StyledCardSummary>
         </Flex>
         {/* <CardActionsContainer */}
         {/*  farm={farm} */}
@@ -126,10 +136,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
         {/* /> */}
       </FarmCardInnerContainer>
 
-      {isMobile && isTablet &&<ExpandingWrapper>
+      {(isMobile || isTablet) &&<ExpandingWrapper isCardActive={isCardActive}>
         <ExpandableSectionButton
           onClick={() => setShowExpandableSection(!showExpandableSection)}
           expanded={showExpandableSection}
+          isCardActive={isCardActive}
         />
         {showExpandableSection && (
           <DetailsSection

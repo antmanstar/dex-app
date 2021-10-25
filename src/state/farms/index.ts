@@ -26,6 +26,7 @@ const initialState: SerializedFarmsState = {
   data: noAccountFarmConfig,
   loadArchivedFarmsData: false,
   userDataLoaded: false,
+  activeBodyType: 'details',
 }
 
 export const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(pid))
@@ -88,6 +89,9 @@ export const farmsSlice = createSlice({
       const loadArchivedFarmsData = action.payload
       state.loadArchivedFarmsData = loadArchivedFarmsData
     },
+    setActiveBodyType: (state, action) => {
+      state.activeBodyType = action.payload
+    },
   },
   extraReducers: (builder) => {
     // Update farms with live data
@@ -111,6 +115,6 @@ export const farmsSlice = createSlice({
 })
 
 // Actions
-export const { setLoadArchivedFarmsData } = farmsSlice.actions
+export const { setLoadArchivedFarmsData, setActiveBodyType } = farmsSlice.actions
 
 export default farmsSlice.reducer

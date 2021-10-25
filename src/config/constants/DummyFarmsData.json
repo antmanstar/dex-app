@@ -4,22 +4,22 @@
       "56": "0x0eD7e52944161450477ee417DE9Cd3a859b14fD0",
       "97": "0x3ed8936cAFDF85cfDBa29Fbe5940A5b0524824F4"
     },
-    "lpSymbol": "ECS-BNB LP",
+    "lpSymbol": "ECO-USDT LP",
     "pid": 251,
     "token": {
       "decimals": 18,
       "symbol": "ECO",
       "name": "EcoSwap Token",
       "chainId": 56,
-      "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+      "address": "0x3222818d06F63eCa9502e18e40000807893C3a46",
       "projectLink": "https://pancakeswap.finance/"
     },
     "quoteToken": {
       "decimals": 18,
-      "symbol": "WBNB",
-      "name": "Wrapped BNB",
+      "symbol": "USDT",
+      "name": "Tether",
       "chainId": 56,
-      "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "address": "0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A",
       "projectLink": "https://www.binance.com/"
     },
     "userData": {
@@ -39,22 +39,22 @@
       "56": "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16",
       "97": ""
     },
-    "lpSymbol": "BUSD-BNB LP",
+    "lpSymbol": "MATIC-ECO LP",
     "pid": 252,
     "token": {
       "decimals": 18,
-      "symbol": "BUSD",
-      "name": "Binance USD",
+      "symbol": "MATIC",
+      "name": "Matic",
       "chainId": 56,
-      "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+      "address": "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
       "projectLink": "https://www.paxos.com/busd/"
     },
     "quoteToken": {
       "decimals": 18,
-      "symbol": "WBNB",
-      "name": "Wrapped BNB",
+      "symbol": "ECO",
+      "name": "EcoSwap Token",
       "chainId": 56,
-      "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      "address": "0x3222818d06F63eCa9502e18e40000807893C3a46",
       "projectLink": "https://www.binance.com/"
     },
     "userData": {

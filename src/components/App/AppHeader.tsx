@@ -29,6 +29,8 @@ interface Props {
   hideTransactionIcon?: boolean
   margin?: string
   independentSubtitle?: boolean
+  headingFontSize?: string
+  headingFontWeight?: string
 }
 
 type BackFuncInterface = { isBackFunc?: false; backFunction?: never } | { isBackFunc?: true; backFunction: () => void }
@@ -44,6 +46,18 @@ const AppHeaderContainer = styled(Flex)<{ padding?: string }>`
   padding: ${({ padding }) => padding || '24px 24px 0 24px'};
   width: 100%;
   //border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+`
+
+const StyledHeading = styled(Heading)<{headingFontWeight?: string, headingFontSize?: string}>`
+  ${({ headingFontWeight, headingFontSize }) => {
+    if (headingFontSize || headingFontWeight) {
+      return `
+        font-size: ${headingFontSize};
+        font-weight: ${headingFontWeight}
+      `
+    }
+    return ""
+  }}
 `
 
 const AppHeader: React.FC<AppHeaderInterface> = ({
@@ -62,6 +76,8 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   refreshButton = false,
   refreshFunction,
   independentSubtitle,
+  headingFontSize,
+  headingFontWeight,
 }) => {
   const [expertMode] = useExpertModeManager()
 
@@ -80,9 +96,9 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
             </IconButton>
           )}
           <Flex flexDirection="column">
-            <Heading as="h2" mb="8px">
+            <StyledHeading as="h2" mb="8px" headingFontSize={headingFontSize} headingFontWeight={headingFontWeight}>
               {title}
-            </Heading>
+            </StyledHeading>
             {!independentSubtitle && <Flex alignItems='center'>
               {helper && <QuestionHelper text={helper} mr='4px' placement='top-start' />}
               <Text color='textSubtle' fontSize='14px'>

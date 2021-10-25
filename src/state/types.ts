@@ -110,6 +110,7 @@ export interface SerializedFarmsState {
   data: SerializedFarm[]
   loadArchivedFarmsData: boolean
   userDataLoaded: boolean
+  activeBodyType: "details" | "claim" | "stake" | "unstake"
 }
 
 export interface DeserializedFarmsState {

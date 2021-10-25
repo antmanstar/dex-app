@@ -13,6 +13,7 @@ export interface ExpandableSectionProps {
   isCommunityFarm?: boolean
   token: Token
   quoteToken: Token
+  isCardActive?: boolean
 }
 
 const Wrapper = styled(Flex)`
@@ -25,15 +26,16 @@ const MultiplierTag = styled(Tag)`
   margin-left: 4px;
 `
 
-const StyledHeading = styled(Heading)`
+const StyledHeading = styled(Heading)<{isCardActive?: boolean}>`
   font-size: 20px;
+  color: ${({theme, isCardActive}) => isCardActive ? theme.colors.primaryButtonText : theme.colors.text}
 `
 
-const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, isCommunityFarm, token, quoteToken }) => {
+const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, isCommunityFarm, token, quoteToken, isCardActive }) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="4px">
       <Flex flexDirection="column" alignItems="flex-start">
-        <StyledHeading mb="4px" scale="sm">{lpLabel.split(' ')[0]}</StyledHeading>
+        <StyledHeading mb="4px" scale="sm" isCardActive={isCardActive}>{lpLabel.split(' ')[0]}</StyledHeading>
         {/* <Flex justifyContent="center"> */}
         {/*  {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
         {/*  {multiplier ? ( */}

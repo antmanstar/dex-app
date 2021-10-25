@@ -18,7 +18,6 @@ import isArchivedPid from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import { ViewMode } from 'state/user/actions'
-import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
@@ -30,8 +29,7 @@ import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
 import RowDataJSON from "../../config/constants/DummyFarmsData.json";
-import CardHeading from './components/FarmCard/CardHeading'
-import { FarmDetails } from './FarmDetails'
+import { FarmDetailsCard } from './FarmDetailsCard'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -134,10 +132,26 @@ const FarmsWithDetailsContainer = styled.div`
   grid-template-columns: 2fr 1fr;
   margin-top: 24px;
   grid-column-gap: 24px;
+  
+  @media screen and (max-width: 991px) {
+    //grid-template-columns: 1fr 1fr;
+    padding-left: 8px;
+    padding-right: 8px;
+    
+    display: flex;
+    width: 100%;
+    //flex-direction: column;
+  }
 `
 
 const StyledPage = styled(Page)`
   padding: 16px 0;
+`
+
+const DesktopFarmsDetails = styled.div`
+  @media screen and (max-width: 991px) {
+    display: none;
+  }
 `
 
 const NUMBER_OF_FARMS_VISIBLE = 12
@@ -340,8 +354,6 @@ const Farms: React.FC = () => {
     }
   }, [dummyRowData])
 
-  // console.log('active card', activeFarmCard);
-
   const handleSelectFarm = (data: any) => {
     setActiveFarmCard(data);
   }
@@ -375,6 +387,8 @@ const Farms: React.FC = () => {
 
       return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
     }
+
+    // TODO: Remove all the ts-ignores after integrated with real data
 
     // @ts-ignore
     return (
@@ -429,7 +443,9 @@ const Farms: React.FC = () => {
             </Route>
           </FlexLayout>
         </FarmsContainer>
-        {activeFarmCard && <FarmDetails data={activeFarmCard}/>}
+        <DesktopFarmsDetails>
+          {activeFarmCard && <FarmDetailsCard data={activeFarmCard}/>}
+        </DesktopFarmsDetails>
       </FarmsWithDetailsContainer>
     )
   }

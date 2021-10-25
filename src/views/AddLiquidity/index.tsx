@@ -57,11 +57,11 @@ const Container = styled.div`
     margin-top: 48px;
     padding: 16px;
   }
-  
+
   ${({ theme }) => theme.mediaQueries.lg} {
     grid-template-columns: 1fr 350px;
   }
-  
+
   ${({ theme }) => theme.mediaQueries.xxl} {
     grid-template-columns: 1fr 432px;
   }
@@ -90,7 +90,7 @@ const PositionCardWrapper = styled(AutoColumn)`
   min-width: 20rem;
   width: 100%;
   max-width: 400px;
-  
+
   @media screen and (max-width: 360px) {
     min-width: 0;
   }

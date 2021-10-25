@@ -9,14 +9,14 @@ export interface ExpandableSectionButtonProps {
   isCardActive?: boolean
 }
 
-const Wrapper = styled.div<{isCardActive?: boolean}>`
+const Wrapper = styled.div<{ isCardActive?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 
   svg {
-    fill: ${({ theme, isCardActive }) => isCardActive ? theme.colors.text : theme.colors.primary};
+    fill: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.text : theme.colors.primary)};
   }
 `
 
@@ -24,8 +24,13 @@ const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onCli
   const { t } = useTranslation()
 
   return (
-    <Wrapper aria-label={t('Hide or show expandable content')} role="button" onClick={() => onClick()} isCardActive={isCardActive}>
-      <Text color={(expanded || isCardActive) ? 'text' : 'primary'} bold>
+    <Wrapper
+      aria-label={t('Hide or show expandable content')}
+      role="button"
+      onClick={() => onClick()}
+      isCardActive={isCardActive}
+    >
+      <Text color={expanded || isCardActive ? 'text' : 'primary'} bold>
         {expanded ? t('Hide') : t('Details')}
       </Text>
       {expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}

@@ -20,26 +20,25 @@ export interface FarmWithStakedValue extends DeserializedFarm {
   liquidity?: BigNumber
 }
 
-const StyledCardSummary = styled(Flex)`
-`
+const StyledCardSummary = styled(Flex)``
 
-const StyledCard = styled(Card)<{isActive?: boolean}>`
+const StyledCard = styled(Card)<{ isActive?: boolean }>`
   align-self: baseline;
   //max-height: 105px;
   cursor: pointer;
   transition: all 0.25s ease;
-  border: 2px solid ${({isActive}) => isActive ? "transparent" : "#4c5969"};
-  
+  border: 2px solid ${({ isActive }) => (isActive ? 'transparent' : '#4c5969')};
+
   &:hover {
-    background: ${({theme}) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.primary};
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
     border: 2px solid transparent;
   }
-  
+
   ${StyledCardSummary} {
     ${Text} {
-      color: ${({theme, isActive}) => isActive ? theme.colors.primaryButtonText : theme.colors.text};
+      color: ${({ theme, isActive }) => (isActive ? theme.colors.primaryButtonText : theme.colors.text)};
     }
   }
 `
@@ -50,9 +49,9 @@ const FarmCardInnerContainer = styled(Flex)`
   padding: 12px 16px;
 `
 
-const ExpandingWrapper = styled.div<{isCardActive?: boolean}>`
+const ExpandingWrapper = styled.div<{ isCardActive?: boolean }>`
   padding: 12px 16px;
-  border-top: 2px solid ${({ isCardActive, theme }) => isCardActive ? theme.colors.text : "#4c5969"};
+  border-top: 2px solid ${({ isCardActive, theme }) => (isCardActive ? theme.colors.text : '#4c5969')};
   overflow: hidden;
 `
 
@@ -66,7 +65,15 @@ interface FarmCardProps {
   isCardActive?: boolean
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePrice, account, onClick, isCardActive }) => {
+const FarmCard: React.FC<FarmCardProps> = ({
+  farm,
+  displayApr,
+  removed,
+  cakePrice,
+  account,
+  onClick,
+  isCardActive,
+}) => {
   const { t } = useTranslation()
   const { isMobile, isTablet } = useMatchBreakpoints()
 
@@ -136,23 +143,25 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
         {/* /> */}
       </FarmCardInnerContainer>
 
-      {(isMobile || isTablet) &&<ExpandingWrapper isCardActive={isCardActive}>
-        <ExpandableSectionButton
-          onClick={() => setShowExpandableSection(!showExpandableSection)}
-          expanded={showExpandableSection}
-          isCardActive={isCardActive}
-        />
-        {showExpandableSection && (
-          <DetailsSection
-            removed={removed}
-            bscScanAddress={getBscScanLink(lpAddress, 'address')}
-            infoAddress={`/info/pool/${lpAddress}`}
-            totalValueFormatted={totalValueFormatted}
-            lpLabel={lpLabel}
-            addLiquidityUrl={addLiquidityUrl}
+      {(isMobile || isTablet) && (
+        <ExpandingWrapper isCardActive={isCardActive}>
+          <ExpandableSectionButton
+            onClick={() => setShowExpandableSection(!showExpandableSection)}
+            expanded={showExpandableSection}
+            isCardActive={isCardActive}
           />
-        )}
-      </ExpandingWrapper>}
+          {showExpandableSection && (
+            <DetailsSection
+              removed={removed}
+              bscScanAddress={getBscScanLink(lpAddress, 'address')}
+              infoAddress={`/info/pool/${lpAddress}`}
+              totalValueFormatted={totalValueFormatted}
+              lpLabel={lpLabel}
+              addLiquidityUrl={addLiquidityUrl}
+            />
+          )}
+        </ExpandingWrapper>
+      )}
     </StyledCard>
   )
 }

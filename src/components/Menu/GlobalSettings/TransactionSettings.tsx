@@ -26,7 +26,7 @@ const StyledInputBox = styled(Box)`
   @media screen and (max-width: 360px) {
     width: 60px;
     margin-right: 0;
-    
+
     ${Input} {
       padding: 0 8px;
     }

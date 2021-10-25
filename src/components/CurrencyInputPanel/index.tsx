@@ -25,13 +25,13 @@ const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm'
   padding: 0 0.5rem;
   border-left: 1px solid ${({ theme }) => theme.colors.borderColor};
   border-radius: 0;
-  
+
   @media screen and (max-width: 360px) {
     padding-left: 0.5rem;
     padding-right: 0;
   }
 `
-const LabelRow = styled.div<{secondInput?: boolean}>`
+const LabelRow = styled.div<{ secondInput?: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -39,13 +39,13 @@ const LabelRow = styled.div<{secondInput?: boolean}>`
   font-size: 0.75rem;
   line-height: 1rem;
   padding: 0.75rem 0.5rem 0.75rem 1rem;
-  ${({secondInput}) => {
+  ${({ secondInput }) => {
     if (secondInput) {
       return `
         padding-top: 0;
       `
     }
-    return ""
+    return ''
   }}
 `
 const InputPanel = styled.div<{ hideInput?: boolean }>`
@@ -93,7 +93,7 @@ export default function CurrencyInputPanel({
   otherCurrency,
   id,
   showCommonBases,
-  secondInput
+  secondInput,
 }: CurrencyInputPanelProps) {
   const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)

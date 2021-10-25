@@ -77,7 +77,7 @@ const Container = styled.div`
     padding: 16px;
     margin-top: 48px;
   }
-  
+
   ${({ theme }) => theme.mediaQueries.lg} {
     grid-template-columns: 1fr 350px;
   }
@@ -549,7 +549,7 @@ export default function RemoveLiquidity({
       ? new Percent(userPoolBalance.raw, totalPoolTokens.raw)
       : undefined
   const wrappedCurrencyA = wrappedCurrency(currencyA, chainId)
-  const price = pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined;
+  const price = pair && wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined
   return (
     <StyledPage>
       <Container>
@@ -559,10 +559,7 @@ export default function RemoveLiquidity({
               {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
                 <>
                   <LightCard padding="0px" border="none !important">
-                    <LiqPoolDetailsCard
-                      currencies={currencies}
-                      pair={pair}
-                    />
+                    <LiqPoolDetailsCard currencies={currencies} pair={pair} />
                     <StyledLightCard padding="24px" border="none !important">
                       <PoolPriceBar
                         currencies={currencies}
@@ -591,11 +588,11 @@ export default function RemoveLiquidity({
               <GlobalSettings />
             </Flex>
             <StyledAutoColumn gap="0px">
-              <RowBetween padding='0.75rem 0.5rem 0.75rem 0'>
-                <Text ml="8px" fontSize="14px">{t('Amount')}</Text>
-                <Text onClick={() => setShowDetailed(!showDetailed)}>
-                  {showDetailed ? t('Simple') : t('Detailed')}
+              <RowBetween padding="0.75rem 0.5rem 0.75rem 0">
+                <Text ml="8px" fontSize="14px">
+                  {t('Amount')}
                 </Text>
+                <Text onClick={() => setShowDetailed(!showDetailed)}>{showDetailed ? t('Simple') : t('Detailed')}</Text>
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
@@ -798,7 +795,6 @@ export default function RemoveLiquidity({
       {pair ? (
         <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
           {/* <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> */}
-
         </AutoColumn>
       ) : null}
     </StyledPage>

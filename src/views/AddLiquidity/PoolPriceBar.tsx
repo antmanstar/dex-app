@@ -11,8 +11,8 @@ import { SinglePriceCard } from './SinglePriceCard'
 
 const StyledSection = styled.div`
   display: grid;
-  background-color: ${({theme}) => theme.colors.background};
-  
+  background-color: ${({ theme }) => theme.colors.background};
+
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 8px;
   border-radius: 10px;
@@ -31,12 +31,12 @@ function PoolPriceWrapper({
   price?: Price
 }) {
   const { t } = useTranslation()
-  
+
   const { isMobile } = useMatchBreakpoints()
-  
+
   if (isMobile) {
     return (
-      <StyledSection >
+      <StyledSection>
         <SinglePriceCard
           data={`${
             noLiquidity && price
@@ -72,7 +72,7 @@ function PoolPriceWrapper({
       </StyledSection>
     )
   }
-  
+
   return (
     <AutoRow justify="space-between" gap="4px">
       <AutoColumn gap="md">

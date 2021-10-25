@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 import { Card, CardBody, Flex, Text } from '@pancakeswap/uikit'
 import { Currency, Pair, Percent, Price } from '@pancakeswap/sdk'
-import { AutoColumn } from "components/Layout/Column";
+import { AutoColumn } from 'components/Layout/Column'
 import styled from 'styled-components'
 import { Field } from '../../state/mint/actions'
 import Row, { AutoRow } from '../../components/Layout/Row'
@@ -13,7 +13,7 @@ interface ILiqPoolDetailsCardInterface {
   currencies: { [field in Field]?: Currency }
   noLiquidity?: boolean
   poolTokenPercentage?: Percent
-  price?: Price,
+  price?: Price
   pair?: Pair
 }
 
@@ -76,35 +76,29 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
       <StyledCardBody>
         <div>
           <FlexContainer>
-            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="22px"/>
+            <CurrencyLogo currency={currencies[Field.CURRENCY_A]} size="22px" />
             <Text fontSize="22px" mb="0" ml="10px">
               {currencies[Field.CURRENCY_A]?.symbol ?? ''}
             </Text>
             <Text fontSize="22px" mb="0" ml="10px" mx="15px">
               /
             </Text>
-            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="22px"/>
+            <CurrencyLogo currency={currencies[Field.CURRENCY_B]} size="22px" />
             <Text fontSize="22px" mb="0" ml="10px">
               {currencies[Field.CURRENCY_B]?.symbol ?? ''}
             </Text>
           </FlexContainer>
         </div>
         <AddressText fontSize="12px" color="subtle" mb="24px">
-          {pair?.liquidityToken?.address ? `(${pair?.liquidityToken?.address})` : '(0x0000000000000000000000000000000000000000)'}
+          {pair?.liquidityToken?.address
+            ? `(${pair?.liquidityToken?.address})`
+            : '(0x0000000000000000000000000000000000000000)'}
         </AddressText>
         <StyledRow>
-          <AutoColumn justify="start">
-            {renderSingleData(t("Liquidity"), "$0.00")}
-          </AutoColumn>
-          <AutoColumn justify="start">
-            {renderSingleData(t("Volume (24H)"), "$0.00")}
-          </AutoColumn>
-          <AutoColumn justify="start">
-            {renderSingleData(t("Fees (24H)"), "$0.00")}
-          </AutoColumn>
-          <AutoColumn justify="start">
-            {renderSingleData(t("APR"), "0%")}
-          </AutoColumn>
+          <AutoColumn justify="start">{renderSingleData(t('Liquidity'), '$0.00')}</AutoColumn>
+          <AutoColumn justify="start">{renderSingleData(t('Volume (24H)'), '$0.00')}</AutoColumn>
+          <AutoColumn justify="start">{renderSingleData(t('Fees (24H)'), '$0.00')}</AutoColumn>
+          <AutoColumn justify="start">{renderSingleData(t('APR'), '0%')}</AutoColumn>
         </StyledRow>
       </StyledCardBody>
     </Card>

@@ -42,7 +42,7 @@ const Tabs = styled.div`
 
 const StyledButtonMenuContainer = styled(ButtonMenu)`
   border: none;
-  background: ${({theme}) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.background};
 `
 
 const StyledButtonMenu = styled(ButtonMenuItem)`

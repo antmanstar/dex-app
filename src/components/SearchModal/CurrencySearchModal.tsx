@@ -37,7 +37,7 @@ const StyledModalContainer = styled(ModalContainer)`
 
 const StyledModalBody = styled(ModalBody)`
   padding: 24px;
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 interface CurrencySearchModalProps extends InjectedModalProps {

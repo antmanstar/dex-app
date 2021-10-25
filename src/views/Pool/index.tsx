@@ -15,7 +15,10 @@ import {
   Td,
   Tab,
   TabMenu,
-  Input, useMatchBreakpoints, Card, SearchIcon,
+  Input,
+  useMatchBreakpoints,
+  Card,
+  SearchIcon,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -71,7 +74,7 @@ const InputWrapper = styled(`div`)`
   width: 100%;
   max-width: 400px;
   position: relative;
-  
+
   & > svg {
     position: absolute;
     right: 12px;
@@ -79,8 +82,8 @@ const InputWrapper = styled(`div`)`
   }
 `
 
-const StyledTable = styled(Table)<{isMobile: boolean}>`
-  margin-bottom: ${({isMobile}) => isMobile ? "56px" : 0};
+const StyledTable = styled(Table)<{ isMobile: boolean }>`
+  margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : 0)};
   margin-top: 12px;
   border-collapse: separate;
   border-spacing: 0 0.5rem;
@@ -93,7 +96,7 @@ const StyledDetailsWrapper = styled.div`
   flex-direction: row;
 
   grid-template-columns: 1fr 1fr 1fr;
-  
+
   ${({ theme }) => theme.mediaQueries.xs} {
     grid-template-columns: 1fr 1fr 1fr;
   }
@@ -102,11 +105,11 @@ const StyledDetailsWrapper = styled.div`
 const StyledTabContainer = styled(TabContainer)`
   display: flex;
   flex-direction: column-reverse;
-  
+
   & > div {
     margin-top: 16px;
   }
-  
+
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
 
@@ -121,9 +124,8 @@ const StyledTab = styled(Tab)`
 `
 
 const StyledSearchInput = styled(Input)`
-  
   &::placeholder {
-    color: ${({theme}) => theme.colors.textSubtle2};
+    color: ${({ theme }) => theme.colors.textSubtle2};
     font-size: 14px;
   }
 `
@@ -131,7 +133,7 @@ const StyledSearchInput = styled(Input)`
 const StyledTr = styled.tr`
   &:hover {
     & > td {
-      background-color: ${({theme}) => theme.colors.backgroundAlt3};
+      background-color: ${({ theme }) => theme.colors.backgroundAlt3};
       &:last-child {
         border-bottom-right-radius: 16px;
         border-top-right-radius: 16px;
@@ -149,9 +151,21 @@ const StyledTd = styled(Td)`
   padding: 0.75rem;
 `
 
-
-const TokenList = ({ tokens, matic, volume, fees, liquidity, apr }: { tokens: [Token, Token], matic: Currency, volume: number, fees: number, liquidity: number, apr: number }) => {
-
+const TokenList = ({
+  tokens,
+  matic,
+  volume,
+  fees,
+  liquidity,
+  apr,
+}: {
+  tokens: [Token, Token]
+  matic: Currency
+  volume: number
+  fees: number
+  liquidity: number
+  apr: number
+}) => {
   const { isMobile } = useMatchBreakpoints()
 
   const [token1, token2] = tokens
@@ -185,13 +199,15 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity, apr }: { tokens: [T
                   <CurrencyLogo currency={currency1} />
                   <CurrencyLogo currency={currency2} />
                 </div>
-                <Text ml='10px'>{currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}</Text>
+                <Text ml="10px">
+                  {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
+                </Text>
               </Flex>
               <StyledDetailsWrapper>
                 {[
-                  { title: "volume", value: `$${volume}` },
-                  { title: "liquidity", value: `$${liquidity}` },
-                  { title: "fees", value: `$${fees}` },
+                  { title: 'volume', value: `$${volume}` },
+                  { title: 'liquidity', value: `$${liquidity}` },
+                  { title: 'fees', value: `$${fees}` },
                   // { title: "apr", value: `${apr}%` }
                 ].map((singleValue) => {
                   return (
@@ -216,18 +232,37 @@ const TokenList = ({ tokens, matic, volume, fees, liquidity, apr }: { tokens: [T
   return (
     <StyledTr>
       <StyledTd>
-        <Button id={`pool-${address1}-${address2}`} as={Link} scale="xxs" variant='text' to={`/add/${address1}/${address2}`} pl="0">
+        <Button
+          id={`pool-${address1}-${address2}`}
+          as={Link}
+          scale="xxs"
+          variant="text"
+          to={`/add/${address1}/${address2}`}
+          pl="0"
+        >
           <div>
             <CurrencyLogo currency={currency1} />
             <CurrencyLogo currency={currency2} />
           </div>
-          <Text ml='10px' fontSize="14px" fontWeight="bold">{currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}</Text>
+          <Text ml="10px" fontSize="14px" fontWeight="bold">
+            {currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}
+          </Text>
         </Button>
       </StyledTd>
-      <StyledTd><Text fontSize="14px">${liquidity}</Text></StyledTd>
-      <StyledTd><Text fontSize="14px">${volume}</Text></StyledTd>
-      <StyledTd><Text fontSize="14px">${fees}</Text></StyledTd>
-      <StyledTd><Text textAlign="right" fontSize="14px">{apr}%</Text></StyledTd>
+      <StyledTd>
+        <Text fontSize="14px">${liquidity}</Text>
+      </StyledTd>
+      <StyledTd>
+        <Text fontSize="14px">${volume}</Text>
+      </StyledTd>
+      <StyledTd>
+        <Text fontSize="14px">${fees}</Text>
+      </StyledTd>
+      <StyledTd>
+        <Text textAlign="right" fontSize="14px">
+          {apr}%
+        </Text>
+      </StyledTd>
     </StyledTr>
   )
 }
@@ -238,7 +273,7 @@ export default function Pool() {
   const { isMobile } = useMatchBreakpoints()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [sortBy, setSortBy] = useState<string>("none")
+  const [sortBy, setSortBy] = useState<string>('none')
   const [reverseOrder, setReversOrder] = useState<boolean>(false)
   const [tab, setTab] = useState<'all' | 'my'>('all')
 
@@ -253,7 +288,15 @@ export default function Pool() {
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
-    () => trackedTokenPairs.map((tokens, index) => ({ liquidityToken: toV2LiquidityToken(tokens), tokens, volume:  Math.floor(index * 1000) + 1, fees: Math.floor(index * 10) + 1, liquidity: Math.floor(index * 1000) + 1, apr: Math.floor(index * 10) + 1 }), ),
+    () =>
+      trackedTokenPairs.map((tokens, index) => ({
+        liquidityToken: toV2LiquidityToken(tokens),
+        tokens,
+        volume: Math.floor(index * 1000) + 1,
+        fees: Math.floor(index * 10) + 1,
+        liquidity: Math.floor(index * 1000) + 1,
+        apr: Math.floor(index * 10) + 1,
+      })),
     [trackedTokenPairs],
   )
 
@@ -276,7 +319,6 @@ export default function Pool() {
   )
 
   const filteredPairs: any = useMemo(() => {
-
     const lowerSearchParts = debouncedQuery
       .toLowerCase()
       .split(/\s+/)
@@ -292,7 +334,10 @@ export default function Pool() {
     }
     return tokenPairsWithLiquidityTokens.filter((pairss) => {
       const [pair1, pair2] = pairss.tokens
-      return ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) && (tab === 'my' ? v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0') : true)
+      return (
+        ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) &&
+        (tab === 'my' ? v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0') : true)
+      )
     })
   }, [tokenPairsWithLiquidityTokens, debouncedQuery, v2PairsBalances, tab])
 
@@ -303,12 +348,12 @@ export default function Pool() {
   // const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
   const matic = useCurrency('matic')
   const renderTable = () => {
-    if(tab === 'my') {
+    if (tab === 'my') {
       if (!account) {
         return (
           <tr>
             <Td colSpan={4}>
-              <Text color='textSubtle' textAlign='center'>
+              <Text color="textSubtle" textAlign="center">
                 {t('Connect to a wallet to view your liquidity.')}
               </Text>
             </Td>
@@ -319,7 +364,7 @@ export default function Pool() {
         return (
           <tr>
             <Td colSpan={4}>
-              <Text color='textSubtle' textAlign='center'>
+              <Text color="textSubtle" textAlign="center">
                 <Dots>{t('Loading')}</Dots>
               </Text>
             </Td>
@@ -328,21 +373,20 @@ export default function Pool() {
       }
     }
     if (filteredPairs?.length > 0) {
-
       let sortedOrder = [...filteredPairs]
 
-      if(sortBy !== "none")  {
-        sortedOrder.sort((a, b) => a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0);
+      if (sortBy !== 'none') {
+        sortedOrder.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0))
       }
 
       sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
 
-      return sortedOrder.map((arr) => <TokenList tokens={arr.tokens} matic={matic} {...arr}/>)
+      return sortedOrder.map((arr) => <TokenList tokens={arr.tokens} matic={matic} {...arr} />)
     }
     return (
       <tr>
         <Td colSpan={4}>
-          <Text color='textSubtle' textAlign='center'>
+          <Text color="textSubtle" textAlign="center">
             {t('No liquidity found.')}
           </Text>
         </Td>
@@ -350,21 +394,19 @@ export default function Pool() {
     )
   }
 
-
   const handleHeaderClick = (key: string) => {
     if (key !== sortBy) {
-      setSortBy(key);
+      setSortBy(key)
       setReversOrder(false)
     } else if (key === sortBy && !reverseOrder) {
       setReversOrder(true)
     } else {
-      setSortBy("none");
+      setSortBy('none')
       setReversOrder(false)
     }
-  };
+  }
 
   const getHeaders = () => {
-
     if (isMobile) {
       return []
     }
@@ -372,23 +414,23 @@ export default function Pool() {
     return [
       {
         id: 'name',
-        title: "name",
+        title: 'name',
       },
       {
         id: 'liquidity',
-        title: "liquidity",
+        title: 'liquidity',
       },
       {
         id: 'volume',
-        title: "volume",
+        title: 'volume',
       },
       {
         id: 'fees',
-        title: "fees",
+        title: 'fees',
       },
       {
         id: 'apr',
-        title: "APR",
+        title: 'APR',
       },
     ]
   }
@@ -396,16 +438,16 @@ export default function Pool() {
   return (
     <Page>
       {/* @ts-ignore */}
-      <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem='/liquidity' />
+      <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>
         <Header>
           <PoolContainer>
             <Heading>Pool</Heading>
-            <Button id='import-pool-link' variant='text' scale='sm' as={Link} to='/find'>
+            <Button id="import-pool-link" variant="text" scale="sm" as={Link} to="/find">
               {t('Import')}
             </Button>
           </PoolContainer>
-          <Button id='join-pool-button' as={Link} to='/add'>
+          <Button id="join-pool-button" as={Link} to="/add">
             {t('Create a Pool')}
           </Button>
         </Header>
@@ -414,7 +456,8 @@ export default function Pool() {
           {/* {renderBody()} */}
           <StyledTabContainer>
             <TabMenu
-              activeIndex={tab === 'all' ? 0 : 1} onItemClick={(index) => {
+              activeIndex={tab === 'all' ? 0 : 1}
+              onItemClick={(index) => {
                 if (index === 0) {
                   setTab('all')
                 } else {
@@ -432,10 +475,10 @@ export default function Pool() {
             </TabMenu>
             <InputWrapper>
               <StyledSearchInput
-                id='token-search-input'
+                id="token-search-input"
                 placeholder={t('Search name or paste address')}
-                scale='lg'
-                autoComplete='off'
+                scale="lg"
+                autoComplete="off"
                 value={searchQuery}
                 onChange={handleInput}
               />
@@ -444,21 +487,19 @@ export default function Pool() {
           </StyledTabContainer>
           <StyledTable isMobile={isMobile}>
             <thead>
-            {getHeaders().map((singleHeader, index) => {
-              return (
-                <Th
-                  className="cursor-pointer"
-                  textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
-                  onClick={() => handleHeaderClick(singleHeader.id)}
-                >
-                  {singleHeader.title}
-                </Th>
-              )
-            })}
+              {getHeaders().map((singleHeader, index) => {
+                return (
+                  <Th
+                    className="cursor-pointer"
+                    textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
+                    onClick={() => handleHeaderClick(singleHeader.id)}
+                  >
+                    {singleHeader.title}
+                  </Th>
+                )
+              })}
             </thead>
-            <tbody>
-            {renderTable()}
-            </tbody>
+            <tbody>{renderTable()}</tbody>
           </StyledTable>
         </Body>
       </AppBody>

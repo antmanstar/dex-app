@@ -28,7 +28,7 @@ import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
-import RowDataJSON from "../../config/constants/DummyFarmsData.json";
+import RowDataJSON from '../../config/constants/DummyFarmsData.json'
 import { FarmDetailsCard } from './FarmDetailsCard'
 
 const ControlContainer = styled.div`
@@ -114,9 +114,9 @@ const StyledImage = styled(Image)`
 `
 
 const FarmsContainer = styled(Card)`
-  background: ${({theme}) => theme.colors.backgroundAlt};
+  background: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 24px 8px;
-  
+
   ${FlexLayout} {
     & > * {
       max-width: 240px;
@@ -132,12 +132,12 @@ const FarmsWithDetailsContainer = styled.div`
   grid-template-columns: 2fr 1fr;
   margin-top: 24px;
   grid-column-gap: 24px;
-  
+
   @media screen and (max-width: 991px) {
     //grid-template-columns: 1fr 1fr;
     padding-left: 8px;
     padding-right: 8px;
-    
+
     display: flex;
     width: 100%;
     //flex-direction: column;
@@ -346,16 +346,16 @@ const Farms: React.FC = () => {
     return row
   })
 
-  const dummyRowData = RowDataJSON;
+  const dummyRowData = RowDataJSON
 
   useEffect(() => {
     if (dummyRowData) {
-      setActiveFarmCard(dummyRowData[1]);
+      setActiveFarmCard(dummyRowData[1])
     }
   }, [dummyRowData])
 
   const handleSelectFarm = (data: any) => {
-    setActiveFarmCard(data);
+    setActiveFarmCard(data)
   }
 
   const renderContent = (): JSX.Element => {
@@ -443,9 +443,7 @@ const Farms: React.FC = () => {
             </Route>
           </FlexLayout>
         </FarmsContainer>
-        <DesktopFarmsDetails>
-          {activeFarmCard && <FarmDetailsCard data={activeFarmCard}/>}
-        </DesktopFarmsDetails>
+        <DesktopFarmsDetails>{activeFarmCard && <FarmDetailsCard data={activeFarmCard} />}</DesktopFarmsDetails>
       </FarmsWithDetailsContainer>
     )
   }

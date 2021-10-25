@@ -84,9 +84,9 @@ const App: React.FC = () => {
             {/* <Route exact path="/farms/auction"> */}
             {/*  <FarmAuction /> */}
             {/* </Route> */}
-             <Route path="/farms">
+            <Route path="/farms">
               <Farms />
-             </Route>
+            </Route>
             <Route path="/pools">
               <Pools />
             </Route>
@@ -168,9 +168,7 @@ const App: React.FC = () => {
             <Route component={NotFound} />
           </Switch>
         </SuspenseWithChunkError>
-        {!isMobile && <FooterSmall
-          {...smallFooterLinks(t)}
-        />}
+        {!isMobile && <FooterSmall {...smallFooterLinks(t)} />}
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />

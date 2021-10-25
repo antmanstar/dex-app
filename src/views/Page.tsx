@@ -19,7 +19,7 @@ const StyledPage = styled.div`
   ${({ theme }) => theme.mediaQueries.xs} {
     background-size: auto;
   }
-  
+
   @media screen and (min-width: 577px) {
     min-height: calc(100vh - 112px);
     padding-bottom: 0;
@@ -29,7 +29,7 @@ const StyledPage = styled.div`
     //padding-top: 32px;
     min-height: calc(100vh - 112px);
   }
-  
+
   @media screen and (max-width: 360px) {
     padding-left: 8px;
     padding-right: 8px;

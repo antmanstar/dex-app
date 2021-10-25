@@ -26,16 +26,25 @@ const MultiplierTag = styled(Tag)`
   margin-left: 4px;
 `
 
-const StyledHeading = styled(Heading)<{isCardActive?: boolean}>`
+const StyledHeading = styled(Heading)<{ isCardActive?: boolean }>`
   font-size: 20px;
-  color: ${({theme, isCardActive}) => isCardActive ? theme.colors.primaryButtonText : theme.colors.text}
+  color: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.primaryButtonText : theme.colors.text)};
 `
 
-const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, isCommunityFarm, token, quoteToken, isCardActive }) => {
+const CardHeading: React.FC<ExpandableSectionProps> = ({
+  lpLabel,
+  multiplier,
+  isCommunityFarm,
+  token,
+  quoteToken,
+  isCardActive,
+}) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="4px">
       <Flex flexDirection="column" alignItems="flex-start">
-        <StyledHeading mb="4px" scale="sm" isCardActive={isCardActive}>{lpLabel.split(' ')[0]}</StyledHeading>
+        <StyledHeading mb="4px" scale="sm" isCardActive={isCardActive}>
+          {lpLabel.split(' ')[0]}
+        </StyledHeading>
         {/* <Flex justifyContent="center"> */}
         {/*  {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
         {/*  {multiplier ? ( */}
@@ -46,8 +55,8 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({ lpLabel, multiplier, is
         {/* </Flex> */}
       </Flex>
       <Flex>
-        <CurrencyLogo currency={token} size="30px" style={{marginRight: "-8px"}}/>
-        <CurrencyLogo currency={quoteToken} size="30px" style={{marginRight: "0"}}/>
+        <CurrencyLogo currency={token} size="30px" style={{ marginRight: '-8px' }} />
+        <CurrencyLogo currency={quoteToken} size="30px" style={{ marginRight: '0' }} />
       </Flex>
       {/* <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={64} height={64} /> */}
     </Wrapper>

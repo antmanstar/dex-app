@@ -12,9 +12,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Poppins', sans-serif;
   }
   body {
-    background-color: ${({theme}) => theme.colors.backgroundMain};
+    background-color: ${({ theme }) => theme.colors.backgroundMain};
       // background-image: ${({ theme }) =>
-            theme.isDark ? "url('/grad-left.png'), url('/grad-right.png')" : "url('/grad-left.png'), url('/grad-right.png')"};
+        theme.isDark
+          ? "url('/grad-left.png'), url('/grad-right.png')"
+          : "url('/grad-left.png'), url('/grad-right.png')"};
     //background-repeat: no-repeat, no-repeat, no-repeat;
     //background-position: left top, right bottom;
     //background-size: 550px, 500px, cover;
@@ -26,7 +28,8 @@ const GlobalStyle = createGlobalStyle`
     //  background-size: cover;
     //}
 
-    background-image: ${({theme}) => theme.colors.gradients.radialLeft}, ${({theme}) => theme.colors.gradients.radialRight};
+    background-image: ${({ theme }) => theme.colors.gradients.radialLeft}, ${({ theme }) =>
+  theme.colors.gradients.radialRight};
     background-size: 1500px 1500px, 1428px;
     background-repeat: no-repeat;
     background-position: -1125px -300px, calc(100vw - 350px) 100px;
@@ -40,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
       left: 0;
       top: -56px;
       bottom: 0;
-      background: ${({theme}) => theme.colors.gradients.bodyBg};
+      background: ${({ theme }) => theme.colors.gradients.bodyBg};
       z-index: -1;
       opacity: .5;
       height: 100%;

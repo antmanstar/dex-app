@@ -31,7 +31,7 @@ const ScrollableContainer = styled(Flex)`
 `
 
 const StyledModal = styled(Modal)`
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => {
@@ -132,7 +132,12 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => 
   }
 
   return (
-    <StyledModal title={t('Settings')} onDismiss={onDismiss} style={{ maxWidth: '420px' }} headerBackground={theme.colors.background}>
+    <StyledModal
+      title={t('Settings')}
+      onDismiss={onDismiss}
+      style={{ maxWidth: '420px' }}
+      headerBackground={theme.colors.background}
+    >
       {renderModalBody()}
     </StyledModal>
   )

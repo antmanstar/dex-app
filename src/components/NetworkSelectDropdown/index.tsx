@@ -4,18 +4,20 @@ import { useTranslation } from '../../contexts/Localization'
 
 export const NetworkSelectDropdown: React.FC = () => {
   const { t } = useTranslation()
-  const [network, setNetwork] = useState("polygon")
+  const [network, setNetwork] = useState('polygon')
 
   const handleSortOptionChange = (value) => {
-    setNetwork(value);
+    setNetwork(value)
     console.log('selected value', value)
   }
 
   const getSelectedBG = (value: string) => {
     switch (value) {
       // TODO: Add these colors in toolkit
-      case "polygon": return "linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)";
-      default: return "linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)";
+      case 'polygon':
+        return 'linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)'
+      default:
+        return 'linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)'
     }
   }
 

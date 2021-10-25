@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div<{background?: string;}>`
+const DropDownHeader = styled.div<{ background?: string }>`
   width: 100%;
   height: 40px;
   display: flex;
@@ -104,7 +104,13 @@ export interface OptionProps {
   value: any
 }
 
-const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange, selectedTextColor, selectedBackgroundColor, ...props }) => {
+const Select: React.FunctionComponent<SelectProps> = ({
+  options,
+  onOptionChange,
+  selectedTextColor,
+  selectedBackgroundColor,
+  ...props
+}) => {
   const dropdownRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
@@ -147,8 +153,8 @@ const Select: React.FunctionComponent<SelectProps> = ({ options, onOptionChange,
             />
           )}
         </>
-        <Text color={selectedTextColor || "text"}>{options[selectedOptionIndex].label}</Text>
-        <ArrowDropDownIcon color={selectedTextColor || "text"} onClick={toggling} />
+        <Text color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>
+        <ArrowDropDownIcon color={selectedTextColor || 'text'} onClick={toggling} />
       </DropDownHeader>
       <DropDownListContainer>
         <DropDownList ref={dropdownRef}>

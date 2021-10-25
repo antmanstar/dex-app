@@ -48,7 +48,7 @@ const AppHeaderContainer = styled(Flex)<{ padding?: string }>`
   //border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `
 
-const StyledHeading = styled(Heading)<{headingFontWeight?: string, headingFontSize?: string}>`
+const StyledHeading = styled(Heading)<{ headingFontWeight?: string; headingFontSize?: string }>`
   ${({ headingFontWeight, headingFontSize }) => {
     if (headingFontSize || headingFontWeight) {
       return `
@@ -56,7 +56,7 @@ const StyledHeading = styled(Heading)<{headingFontWeight?: string, headingFontSi
         font-weight: ${headingFontWeight}
       `
     }
-    return ""
+    return ''
   }}
 `
 
@@ -99,12 +99,14 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
             <StyledHeading as="h2" mb="8px" headingFontSize={headingFontSize} headingFontWeight={headingFontWeight}>
               {title}
             </StyledHeading>
-            {!independentSubtitle && <Flex alignItems='center'>
-              {helper && <QuestionHelper text={helper} mr='4px' placement='top-start' />}
-              <Text color='textSubtle' fontSize='14px'>
-                {subtitle}
-              </Text>
-            </Flex>}
+            {!independentSubtitle && (
+              <Flex alignItems="center">
+                {helper && <QuestionHelper text={helper} mr="4px" placement="top-start" />}
+                <Text color="textSubtle" fontSize="14px">
+                  {subtitle}
+                </Text>
+              </Flex>
+            )}
           </Flex>
         </Flex>
         {!noConfig && (
@@ -121,12 +123,14 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
           </Flex>
         )}
       </AppHeaderContainer>
-      {independentSubtitle && <Flex alignItems='center' ml="24px">
-        {helper && <QuestionHelper text={helper} mr='4px' placement='top-start' />}
-        <Text color='textSubtle' fontSize='14px'>
-          {subtitle}
-        </Text>
-      </Flex>}
+      {independentSubtitle && (
+        <Flex alignItems="center" ml="24px">
+          {helper && <QuestionHelper text={helper} mr="4px" placement="top-start" />}
+          <Text color="textSubtle" fontSize="14px">
+            {subtitle}
+          </Text>
+        </Flex>
+      )}
     </Flex>
   )
 }

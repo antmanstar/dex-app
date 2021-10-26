@@ -2,7 +2,18 @@ import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation, NavLink, Link } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex, Card } from '@pancakeswap/uikit'
+import {
+  Image,
+  Heading,
+  RowType,
+  Toggle,
+  Text,
+  Button,
+  ArrowForwardIcon,
+  Flex,
+  Card,
+  useMatchBreakpoints, useModal,
+} from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
 import FlexLayout from 'components/Layout/Flex'
@@ -21,6 +32,7 @@ import { ViewMode } from 'state/user/actions'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
+import { useDispatch } from 'react-redux'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -30,6 +42,9 @@ import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
 import RowDataJSON from '../../config/constants/DummyFarmsData.json'
 import { FarmDetailsCard } from './FarmDetailsCard'
+import { DetailsModal } from './DetailsModal'
+import { setActiveBodyType } from '../../state/farms'
+import { useWidth } from '../../hooks/useWidth'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -115,7 +130,7 @@ const StyledImage = styled(Image)`
 
 const FarmsContainer = styled(Card)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
-  padding: 24px 8px;
+  padding: 12px 8px;
 
   ${FlexLayout} {
     & > * {
@@ -132,8 +147,12 @@ const FarmsWithDetailsContainer = styled.div`
   grid-template-columns: 2fr 1fr;
   margin-top: 24px;
   grid-column-gap: 24px;
+  
+  @media screen and (max-width: 1024px) {
+    grid-column-gap: 16px;
+  }
 
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 968px) {
     //grid-template-columns: 1fr 1fr;
     padding-left: 8px;
     padding-right: 8px;
@@ -149,7 +168,7 @@ const StyledPage = styled(Page)`
 `
 
 const DesktopFarmsDetails = styled.div`
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 968px) {
     display: none;
   }
 `
@@ -178,8 +197,13 @@ const Farms: React.FC = () => {
   const [sortOption, setSortOption] = useState('hot')
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
+  const { isTablet, isMobile } = useMatchBreakpoints()
+  const dispatch = useDispatch()
   const { theme } = useTheme()
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
+  const [detailsModal, dismissDetailsModal] = useModal(<DetailsModal data={activeFarmCard} customOnDismiss={() => {setActiveFarmCard(undefined)}}/>)
+  const width = useWidth()
+  const shouldRenderModal = width < 968
 
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
@@ -349,13 +373,30 @@ const Farms: React.FC = () => {
   const dummyRowData = RowDataJSON
 
   useEffect(() => {
-    if (dummyRowData) {
+    if (dummyRowData && !shouldRenderModal) {
       setActiveFarmCard(dummyRowData[1])
     }
-  }, [dummyRowData])
+
+    if (shouldRenderModal) {
+      setActiveFarmCard(undefined)
+    }
+
+  }, [dummyRowData, shouldRenderModal])
+
+  useEffect(() => {
+    if (shouldRenderModal && activeFarmCard) {
+      detailsModal()
+    }
+
+    if (!shouldRenderModal && activeFarmCard) {
+      dismissDetailsModal()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFarmCard, shouldRenderModal])
 
   const handleSelectFarm = (data: any) => {
     setActiveFarmCard(data)
+    dispatch(setActiveBodyType('details'))
   }
 
   const renderContent = (): JSX.Element => {
@@ -414,6 +455,7 @@ const Farms: React.FC = () => {
             <Route exact path={`${path}/history`}>
               {dummyRowData.map((farm) => (
                 <FarmCard
+                  isCardActive={activeFarmCard?.pid === farm.pid}
                   key={farm.pid}
                   // @ts-ignore
                   farm={farm}
@@ -429,6 +471,7 @@ const Farms: React.FC = () => {
             <Route exact path={`${path}/archived`}>
               {dummyRowData.map((farm) => (
                 <FarmCard
+                  isCardActive={activeFarmCard?.pid === farm.pid}
                   key={farm.pid}
                   // @ts-ignore
                   farm={farm}

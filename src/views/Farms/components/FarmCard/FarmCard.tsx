@@ -161,25 +161,25 @@ const FarmCard: React.FC<FarmCardProps> = ({
         {/* /> */}
       </FarmCardInnerContainer>
 
-      {(isMobile || isTablet) && (
-        <ExpandingWrapper isCardActive={isCardActive}>
-          <ExpandableSectionButton
-            onClick={() => setShowExpandableSection(!showExpandableSection)}
-            expanded={showExpandableSection}
-            isCardActive={isCardActive}
-          />
-          {showExpandableSection && (
-            <DetailsSection
-              removed={removed}
-              bscScanAddress={getBscScanLink(lpAddress, 'address')}
-              infoAddress={`/info/pool/${lpAddress}`}
-              totalValueFormatted={totalValueFormatted}
-              lpLabel={lpLabel}
-              addLiquidityUrl={addLiquidityUrl}
-            />
-          )}
-        </ExpandingWrapper>
-      )}
+      {/* {(isMobile || isTablet) && ( */}
+      {/*  <ExpandingWrapper isCardActive={isCardActive}> */}
+      {/*    <ExpandableSectionButton */}
+      {/*      onClick={() => setShowExpandableSection(!showExpandableSection)} */}
+      {/*      expanded={showExpandableSection} */}
+      {/*      isCardActive={isCardActive} */}
+      {/*    /> */}
+      {/*    {showExpandableSection && ( */}
+      {/*      <DetailsSection */}
+      {/*        removed={removed} */}
+      {/*        bscScanAddress={getBscScanLink(lpAddress, 'address')} */}
+      {/*        infoAddress={`/info/pool/${lpAddress}`} */}
+      {/*        totalValueFormatted={totalValueFormatted} */}
+      {/*        lpLabel={lpLabel} */}
+      {/*        addLiquidityUrl={addLiquidityUrl} */}
+      {/*      /> */}
+      {/*    )} */}
+      {/*  </ExpandingWrapper> */}
+      {/* )} */}
     </StyledCard>
   )
 }

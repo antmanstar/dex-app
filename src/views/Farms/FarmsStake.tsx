@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Input, Text } from '@pancakeswap/uikit'
+import { Button, Flex, Heading, Input, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
@@ -16,10 +16,19 @@ interface IFarmsStake {
 const StyledLightGreyCard = styled(LightGreyCard)`
   display: flex;
   flex-direction: column;
+  padding: 14px 16px;
+
+  ${({theme}) => theme.mediaQueries.md} {
+    padding: 1.25rem;
+  }
 `
 
 const Wrapper = styled(Flex)`
-  padding: 18px;
+  padding: 16px;
+  
+  ${({theme}) => theme.mediaQueries.md} {
+    padding: 18px;
+  }
 `
 
 const StyledHeading = styled(AppHeader)`
@@ -30,11 +39,13 @@ const StyledHeading = styled(AppHeader)`
 const StakingInput = styled(Input)`
   width: 100px;
   font-size: 24px;
+  padding-right: 0;
 `
 
 export const FarmsStake: React.FC<IFarmsStake> = (props: IFarmsStake) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const { isMobile } = useMatchBreakpoints()
 
   const { data } = props
   const { token, quoteToken, lpSymbol } = data
@@ -57,7 +68,7 @@ export const FarmsStake: React.FC<IFarmsStake> = (props: IFarmsStake) => {
       <Flex justifyContent="space-between" px="4px">
         <Text fontWeight="500">{t('Amount')}</Text>
         <Text className="cursor-pointer">
-          {lpSymbolFormatted}-{t('LP')} {t('Balance')}: 0
+          {t('LP')} {t('Tokens')} {t('Balance')}: 0
         </Text>
       </Flex>
       <StyledLightGreyCard mb="12px">
@@ -67,9 +78,11 @@ export const FarmsStake: React.FC<IFarmsStake> = (props: IFarmsStake) => {
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
           <Flex justifyContent="center" alignItems="center">
-            <CurrencyLogo currency={token} size="30px" />
-            {quoteToken && <CurrencyLogo currency={quoteToken} size="30px" style={{ marginLeft: '-8px' }} />}
-            <Flex justifyContent="center" alignItems="center" ml="4px">
+            {!isMobile && <>
+              <CurrencyLogo currency={token} size="30px" />
+              {quoteToken && <CurrencyLogo currency={quoteToken} size="30px" style={{ marginLeft: '-8px', marginRight: "4px" }} />}
+            </>}
+            <Flex justifyContent="center" alignItems="center">
               {lpSymbolFormatted}
             </Flex>
           </Flex>

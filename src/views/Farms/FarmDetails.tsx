@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Flex, Heading, Text } from '@pancakeswap/uikit'
+import { Button, Flex, Heading, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,9 +7,11 @@ import CardHeading from './components/FarmCard/CardHeading'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { setActiveBodyType } from '../../state/farms'
+import { useWidth } from '../../hooks/useWidth'
 
 interface IFarmDetails {
   data: any
+  hideDetailsHeading?: boolean
 }
 
 const StyledSingleRow = styled(Flex)`
@@ -40,9 +42,17 @@ const StyledDetailsWrapper = styled(Flex)`
 
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { t } = useTranslation()
-  const { data } = props
+  const { data, hideDetailsHeading } = props
+  const { isMobile } = useMatchBreakpoints()
   const { account } = useActiveWeb3React()
   const dispatch = useDispatch()
+  const width = useWidth()
+  const renderInSingleLine = width > 468 && width < 969
+
+  const totalValueFormatted =
+    data.liquidity && data.liquidity.gt(0)
+      ? `$${data.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+      : ''
 
   const renderButtons = () => {
     if (!account) {
@@ -62,23 +72,24 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
             {t('Stake')}
           </Button>
           <Button onClick={() => dispatch(setActiveBodyType('unstake'))}>{t('Unstake')}</Button>
+          {renderInSingleLine && <Button onClick={() => dispatch(setActiveBodyType('claim'))}>{t('Claim')}</Button>}
         </Flex>
-        <Flex justifyContent="center">
+        {!renderInSingleLine && <Flex justifyContent='center'>
           <Button onClick={() => dispatch(setActiveBodyType('claim'))}>{t('Claim')}</Button>
-        </Flex>
+        </Flex>}
       </StyledSingleRow>
     )
   }
 
   return (
     <Flex flexDirection="column">
-      <StyledPoolName>
+      {!hideDetailsHeading && <StyledPoolName>
         <CardHeading
           token={data.token}
           quoteToken={data.quoteToken}
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('ECO', 'ECO')}
         />
-      </StyledPoolName>
+      </StyledPoolName>}
       <StyledDetailsWrapper flexDirection="column">
         <StyledHeading mb="24px" fontSize="20px">
           {t('Pool Info')}
@@ -86,9 +97,9 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
         <StyledSingleRow justifyContent="space-between">
           <StyledValue textAlign="left">{t('Total Staked')}:</StyledValue>
           <Flex flexDirection="column">
-            <StyledValue textAlign="right">0.00000000 USDT</StyledValue>
+            <StyledValue textAlign="right">{(Number(totalValueFormatted) / 2) || '0.00000000'} USDT</StyledValue>
             <StyledValue textAlign="right">0.00000000 ECO</StyledValue>
-            <StyledValue textAlign="right">≅ 0.00000000 USDT</StyledValue>
+            <StyledValue textAlign="right">≅ {totalValueFormatted || '0.00000000'} USDT</StyledValue>
           </Flex>
         </StyledSingleRow>
         <StyledSingleRow justifyContent="space-between">

@@ -27,13 +27,31 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
   //max-height: 105px;
   cursor: pointer;
   transition: all 0.25s ease;
-  border: 2px solid ${({ isActive }) => (isActive ? 'transparent' : '#4c5969')};
+  border: 2px solid ${({ isActive , theme}) => (isActive ? 'transparent' : theme.colors.cardBorder)};
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary};
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
     border: 2px solid transparent;
+    
+    ${StyledCardSummary} {
+      ${Text} {
+        color: ${({ theme}) => theme.colors.primaryButtonText };
+      }
+    }
+    
+    h2 {
+      color: ${({ theme}) => theme.colors.primaryButtonText };
+    }
+    
+    svg {
+      fill: ${({ theme}) => theme.colors.primaryButtonText };
+    }
+  }
+  
+  svg {
+    fill: ${({ theme, isActive}) => isActive ? theme.colors.primaryButtonText : theme.colors.text };
   }
 
   ${StyledCardSummary} {

@@ -28,7 +28,7 @@ const StyledHeading = styled(Heading)`
 const StyledPoolName = styled(Flex)`
   padding: 18px;
   padding-bottom: 9px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.borderColor};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
   & > div {
     width: 100%;
   }

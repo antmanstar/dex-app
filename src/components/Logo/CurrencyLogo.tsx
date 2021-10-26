@@ -32,6 +32,12 @@ export default function CurrencyLogo({
       }
       return [getTokenLogoURL(currency.address)]
     }
+    // TODO: Remove this loop after integration is complete of real data
+    // @ts-ignore
+    if (currency?.address) {
+      // @ts-ignore
+      return [getTokenLogoURL(currency.address)]
+    }
     return []
   }, [currency, uriLocations])
 

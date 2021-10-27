@@ -21,6 +21,7 @@ interface HarvestActionProps extends FarmWithStakedValue {
 
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userData, userDataReady }) => {
   const { toastSuccess, toastError } = useToast()
+  // TODO: Remove duplicate lines once UI is final
   const earningsBigNumber = new BigNumber(userData.earnings)
   const cakePrice = usePriceCakeBusd()
   let earnings = BIG_ZERO
@@ -42,21 +43,21 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
 
   return (
     <ActionContainer>
-      <ActionTitles>
-        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
-          CAKE
-        </Text>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {t('Earned')}
-        </Text>
-      </ActionTitles>
+      {/* <ActionTitles> */}
+      {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px"> */}
+      {/*    ECO */}
+      {/*  </Text> */}
+      {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
+      {/*    {t('Earned')} */}
+      {/*  </Text> */}
+      {/* </ActionTitles> */}
       <ActionContent>
-        <div>
-          <Heading>{displayBalance}</Heading>
-          {earningsBusd > 0 && (
-            <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" />
-          )}
-        </div>
+        {/* <div> */}
+        {/*  <Heading>{displayBalance}</Heading> */}
+        {/*  {earningsBusd > 0 && ( */}
+        {/*    <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" /> */}
+        {/*  )} */}
+        {/* </div> */}
         <Button
           disabled={earnings.eq(0) || pendingTx || !userDataReady}
           onClick={async () => {
@@ -65,7 +66,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
               await onReward()
               toastSuccess(
                 `${t('Harvested')}!`,
-                t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'CAKE' }),
+                t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'ECO' }),
               )
             } catch (e) {
               toastError(
@@ -79,6 +80,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
             dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
           }}
           ml="4px"
+          mt="8px"
         >
           {t('Harvest')}
         </Button>

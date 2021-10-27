@@ -7,6 +7,8 @@ interface IDetailsModal {
   data: any
   onDismiss?: () => void
   customOnDismiss?: () => void
+  location?: any
+  userDataReady: boolean
 }
 
 const StyledModal = styled(Modal)`
@@ -22,7 +24,7 @@ const StyledModal = styled(Modal)`
 
 export const DetailsModal: React.FC<IDetailsModal> = (props: IDetailsModal) => {
 
-  const { data, onDismiss, customOnDismiss } = props
+  const { data, onDismiss, customOnDismiss, location, userDataReady } = props
 
   const handleDismiss = useCallback(() => {
     if (customOnDismiss) {
@@ -33,7 +35,7 @@ export const DetailsModal: React.FC<IDetailsModal> = (props: IDetailsModal) => {
 
   return (
     <StyledModal title={data?.lpSymbol.toUpperCase()} onDismiss={handleDismiss}>
-      <FarmDetailsCard data={data} hideDetailsHeading/>
+      <FarmDetailsCard userDataReady={userDataReady} data={data} location={location} hideDetailsHeading/>
     </StyledModal>
   )
 }

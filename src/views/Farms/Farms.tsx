@@ -131,14 +131,22 @@ const StyledImage = styled(Image)`
 const FarmsContainer = styled(Card)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 12px 8px;
+  width: 100%;
+  //min-height: calc(100vh - 500px);
+`
 
-  ${FlexLayout} {
-    & > * {
-      max-width: 240px;
-      min-width: 0;
-      margin: 12px 8px;
-      //max-width: 31.5%;
-    }
+const StyledFlexLayout = styled(FlexLayout)`
+  justify-content: center;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content: flex-start;
+  }
+  
+  & > * {
+    max-width: 240px;
+    min-width: 0;
+    margin: 12px 8px;
+    //max-width: 31.5%;
   }
 `
 
@@ -200,8 +208,8 @@ const Farms: React.FC = () => {
   const { isTablet, isMobile } = useMatchBreakpoints()
   const dispatch = useDispatch()
   const { theme } = useTheme()
+  const location = useLocation()
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
-  const [detailsModal, dismissDetailsModal] = useModal(<DetailsModal data={activeFarmCard} customOnDismiss={() => {setActiveFarmCard(undefined)}}/>)
   const width = useWidth()
   const shouldRenderModal = width < 968
 
@@ -214,6 +222,15 @@ const Farms: React.FC = () => {
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
   const userDataReady = !account || (!!account && userDataLoaded)
+
+  const [detailsModal, dismissDetailsModal] = useModal(
+    <DetailsModal
+      data={activeFarmCard}
+      customOnDismiss={() => {setActiveFarmCard(undefined)}}
+      location={location}
+      userDataReady={userDataReady}
+    />
+  )
 
   const [stakedOnly, setStakedOnly] = useUserFarmStakedOnly(isActive)
 
@@ -370,18 +387,36 @@ const Farms: React.FC = () => {
     return row
   })
 
-  const dummyRowData = RowDataJSON
+  // const dummyRowData = RowDataJSON
 
   useEffect(() => {
-    if (dummyRowData && !shouldRenderModal) {
-      setActiveFarmCard(dummyRowData[1])
+    if (chosenFarmsMemoized && !shouldRenderModal) {
+      setActiveFarmCard(chosenFarmsMemoized[0])
     }
 
     if (shouldRenderModal) {
       setActiveFarmCard(undefined)
     }
 
-  }, [dummyRowData, shouldRenderModal])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRenderModal])
+
+  const updatedData = activeFarmCard && chosenFarmsMemoized?.filter(single => single?.pid === activeFarmCard?.pid)[0]
+
+  useEffect(() => {
+    /*
+    * TODO: Because of this 5 seconds when you open the stake or unstake modal it
+    * disappears. Need a efficient way to handle the selected pool update
+    * */
+
+    const intervalId = setInterval(() => {
+      if (updatedData && activeFarmCard && activeFarmCard !== updatedData) {
+        setActiveFarmCard(updatedData)
+      }
+    }, 5000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatedData, activeFarmCard])
 
   useEffect(() => {
     if (shouldRenderModal && activeFarmCard) {
@@ -400,50 +435,45 @@ const Farms: React.FC = () => {
   }
 
   const renderContent = (): JSX.Element => {
-    if (viewMode === ViewMode.TABLE && rowData.length) {
-      const columnSchema = DesktopColumnSchema
+    // if (viewMode === ViewMode.TABLE && rowData.length) {
+    //   const columnSchema = DesktopColumnSchema
+    //
+    //   const columns = columnSchema.map((column) => ({
+    //     id: column.id,
+    //     name: column.name,
+    //     label: column.label,
+    //     sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
+    //       switch (column.name) {
+    //         case 'farm':
+    //           return b.id - a.id
+    //         case 'apr':
+    //           if (a.original.apr.value && b.original.apr.value) {
+    //             return Number(a.original.apr.value) - Number(b.original.apr.value)
+    //           }
+    //
+    //           return 0
+    //         case 'earned':
+    //           return a.original.earned.earnings - b.original.earned.earnings
+    //         default:
+    //           return 1
+    //       }
+    //     },
+    //     sortable: column.sortable,
+    //   }))
+    //
+    //   return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
+    // }
 
-      const columns = columnSchema.map((column) => ({
-        id: column.id,
-        name: column.name,
-        label: column.label,
-        sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
-          switch (column.name) {
-            case 'farm':
-              return b.id - a.id
-            case 'apr':
-              if (a.original.apr.value && b.original.apr.value) {
-                return Number(a.original.apr.value) - Number(b.original.apr.value)
-              }
-
-              return 0
-            case 'earned':
-              return a.original.earned.earnings - b.original.earned.earnings
-            default:
-              return 1
-          }
-        },
-        sortable: column.sortable,
-      }))
-
-      return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
-    }
-
-    // TODO: Remove all the ts-ignores after integrated with real data
-
-    // @ts-ignore
     return (
       <FarmsWithDetailsContainer>
         <FarmsContainer>
-          <FlexLayout>
+          <StyledFlexLayout>
             <Route exact path={`${path}`}>
-              {dummyRowData.map((farm) => (
+              {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}
                   key={farm.pid}
-                  // @ts-ignore
                   farm={farm}
-                  // @ts-ignore
                   displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
                   cakePrice={cakePrice}
                   account={account}
@@ -453,13 +483,11 @@ const Farms: React.FC = () => {
               ))}
             </Route>
             <Route exact path={`${path}/history`}>
-              {dummyRowData.map((farm) => (
+              {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}
                   key={farm.pid}
-                  // @ts-ignore
                   farm={farm}
-                  // @ts-ignore
                   displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
                   cakePrice={cakePrice}
                   account={account}
@@ -469,13 +497,11 @@ const Farms: React.FC = () => {
               ))}
             </Route>
             <Route exact path={`${path}/archived`}>
-              {dummyRowData.map((farm) => (
+              {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}
                   key={farm.pid}
-                  // @ts-ignore
                   farm={farm}
-                  // @ts-ignore
                   displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
                   cakePrice={cakePrice}
                   account={account}
@@ -484,9 +510,9 @@ const Farms: React.FC = () => {
                 />
               ))}
             </Route>
-          </FlexLayout>
+          </StyledFlexLayout>
         </FarmsContainer>
-        <DesktopFarmsDetails>{activeFarmCard && <FarmDetailsCard data={activeFarmCard} />}</DesktopFarmsDetails>
+        <DesktopFarmsDetails>{activeFarmCard && <FarmDetailsCard userDataReady={userDataReady} location={location} data={activeFarmCard} />}</DesktopFarmsDetails>
       </FarmsWithDetailsContainer>
     )
   }

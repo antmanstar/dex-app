@@ -1,17 +1,21 @@
-import React from 'react'
-import { Button, Flex, Heading, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import React, { useCallback } from 'react'
+import { Flex, Heading, Skeleton, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { useDispatch, useSelector } from 'react-redux'
+import BigNumber from 'bignumber.js'
 import CardHeading from './components/FarmCard/CardHeading'
-import ConnectWalletButton from '../../components/ConnectWalletButton'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { setActiveBodyType } from '../../state/farms'
-import { useWidth } from '../../hooks/useWidth'
+import { getBalanceAmount } from '../../utils/formatBalance'
+import { useFarmUser, usePriceCakeBusd } from '../../state/farms/hooks'
+import StakedAction from './components/FarmTable/Actions/StakedAction'
+import HarvestAction from './components/FarmTable/Actions/HarvestAction'
+import { BIG_ZERO } from '../../utils/bigNumber'
 
 interface IFarmDetails {
   data: any
   hideDetailsHeading?: boolean
+  location?: any
+  userDataReady: boolean
 }
 
 const StyledSingleRow = styled(Flex)`
@@ -42,12 +46,33 @@ const StyledDetailsWrapper = styled(Flex)`
 
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { t } = useTranslation()
-  const { data, hideDetailsHeading } = props
-  const { isMobile } = useMatchBreakpoints()
+  const { data, hideDetailsHeading, location, userDataReady } = props
   const { account } = useActiveWeb3React()
-  const dispatch = useDispatch()
-  const width = useWidth()
-  const renderInSingleLine = width > 468 && width < 969
+  const { stakedBalance } = useFarmUser(data.pid)
+
+  const displayBalance = useCallback(() => {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0000001)) {
+      return '<0.0000001'
+    }
+    if (stakedBalanceBigNumber.gt(0)) {
+      return stakedBalanceBigNumber.toFixed(8, BigNumber.ROUND_DOWN)
+    }
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+  }, [stakedBalance])
+
+  const earningsBigNumber = new BigNumber(data?.userData.earnings)
+  const cakePrice = usePriceCakeBusd()
+  let earnings = BIG_ZERO
+  let earningsBusd = 0
+  let displayEarnings = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
+
+  // If user didn't connect wallet default balance will be 0
+  if (!earningsBigNumber.isZero()) {
+    earnings = getBalanceAmount(earningsBigNumber)
+    earningsBusd = earnings.multipliedBy(cakePrice).toNumber()
+    displayEarnings = earnings.toFixed(3, BigNumber.ROUND_DOWN)
+  }
 
   const totalValueFormatted =
     data.liquidity && data.liquidity.gt(0)
@@ -55,28 +80,11 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
       : ''
 
   const renderButtons = () => {
-    if (!account) {
-      return (
-        <StyledSingleRow justifyContent="center">{!account && <ConnectWalletButton width="100%" />}</StyledSingleRow>
-      )
-    }
 
     return (
       <StyledSingleRow justifyContent="center" flexDirection="column">
-        <Flex justifyContent="space-evenly" mb="24px">
-          <Button
-            onClick={() => {
-              dispatch(setActiveBodyType('stake'))
-            }}
-          >
-            {t('Stake')}
-          </Button>
-          <Button onClick={() => dispatch(setActiveBodyType('unstake'))}>{t('Unstake')}</Button>
-          {renderInSingleLine && <Button onClick={() => dispatch(setActiveBodyType('claim'))}>{t('Claim')}</Button>}
-        </Flex>
-        {!renderInSingleLine && <Flex justifyContent='center'>
-          <Button onClick={() => dispatch(setActiveBodyType('claim'))}>{t('Claim')}</Button>
-        </Flex>}
+        <StakedAction location={location} {...data} displayApr={data.apr?.value} />
+        {account && <HarvestAction {...data} userDataReady={userDataReady} />}
       </StyledSingleRow>
     )
   }
@@ -96,51 +104,70 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
         </StyledHeading>
         <StyledSingleRow justifyContent="space-between">
           <StyledValue textAlign="left">{t('Total Staked')}:</StyledValue>
-          <Flex flexDirection="column">
-            <StyledValue textAlign="right">{(Number(totalValueFormatted) / 2) || '0.00000000'} USDT</StyledValue>
-            <StyledValue textAlign="right">0.00000000 ECO</StyledValue>
-            <StyledValue textAlign="right">≅ {totalValueFormatted || '0.00000000'} USDT</StyledValue>
-          </Flex>
+          {totalValueFormatted ? (
+            <Flex flexDirection="column">
+              <StyledValue textAlign="right">
+                {totalValueFormatted ?
+                  `${(Number(totalValueFormatted) / 2) || '0.00000000'  } ${data.token}`
+                  : <Skeleton height={24} width={80} />
+                }
+              </StyledValue>
+              <StyledValue textAlign="right">
+                {
+                  // TODO: Convert into ECO
+                  totalValueFormatted ?
+                    `${(Number(totalValueFormatted) / 2) || '0.00000000'  } ${data.quoteToken}`
+                    : <Skeleton height={24} width={80} />
+                }
+              </StyledValue>
+              <StyledValue textAlign="right">
+                {
+                  // TODO: Convert into USDT
+                  totalValueFormatted ?
+                  `≅ ${totalValueFormatted || '0.00000000'} USDT`
+                  : <Skeleton height={24} width={80} />
+                }
+              </StyledValue>
+            </Flex>
+          ) : <Flex flexDirection="column">
+            <StyledValue textAlign="right">
+              <Skeleton height={24} width={80} />
+            </StyledValue>
+          </Flex>}
         </StyledSingleRow>
         <StyledSingleRow justifyContent="space-between">
           <StyledValue textAlign="left">{t('Staked')}:</StyledValue>
           <Flex flexDirection="column">
-            <StyledValue textAlign="right">0 USDT</StyledValue>
-            <StyledValue textAlign="right">0 ECO</StyledValue>
-            <StyledValue textAlign="right">≅ 0.00000000 USDT</StyledValue>
+            {
+              // TODO: Convert tokens
+              displayBalance() ? (
+              <>
+                <StyledValue textAlign="right">≅ {displayBalance()} {t("LP")} {t("Tokens")}</StyledValue>
+              </>
+            ) : (
+              <StyledValue textAlign="right">
+                <Skeleton height={24} width={80} />
+              </StyledValue>
+            )}
           </Flex>
         </StyledSingleRow>
         <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Pending Share')}:</StyledValue>
-          <StyledValue textAlign="right">0 %</StyledValue>
+          <StyledValue textAlign="left">{t('Pool Share')}:</StyledValue>
+          <StyledValue textAlign="right">
+            {
+              totalValueFormatted && displayBalance() ?
+                `${(Number(displayBalance()) / Number(totalValueFormatted)).toFixed(8)} %`
+                : <Skeleton height={24} width={80} />
+            }
+          </StyledValue>
         </StyledSingleRow>
         <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Pending Claim')}:</StyledValue>
+        <StyledValue textAlign="left">{t('Earnings')}:</StyledValue>
           <Flex flexDirection="column">
-            <StyledValue textAlign="right">0.00000000 ECO</StyledValue>
-            <StyledValue textAlign="right">≅ 0.00000000 USDT</StyledValue>
-          </Flex>
-        </StyledSingleRow>
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Pending Affiliate Claim')}:</StyledValue>
-          <Flex flexDirection="column">
-            <StyledValue textAlign="right">0.00000000 ECO</StyledValue>
-            <StyledValue textAlign="right">≅ 0.00000000 USDT</StyledValue>
+            <StyledValue textAlign="right">{displayEarnings}</StyledValue>
           </Flex>
         </StyledSingleRow>
         {renderButtons()}
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Staking Fee')}:</StyledValue>
-          <StyledValue textAlign="right" color="green">
-            0 %
-          </StyledValue>
-        </StyledSingleRow>
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Referral Payments')}:</StyledValue>
-          <StyledValue textAlign="right" color="red">
-            0 %
-          </StyledValue>
-        </StyledSingleRow>
       </StyledDetailsWrapper>
     </Flex>
   )

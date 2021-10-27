@@ -46,6 +46,14 @@ export const mainnetTokens = {
     'EcoSwap Token',
     'https://pancakeswap.finance/',
   ),
+  weth: new Token(
+    TESTNET,
+    '0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8',
+    18,
+    'WETH',
+    'Wrapped ETH',
+    'https://www.binance.com/',
+  ),
 }
 
 export const testnetTokens = {
@@ -55,6 +63,14 @@ export const testnetTokens = {
     18,
     'WMATIC',
     'Wrapped MATIC',
+    'https://www.binance.com/',
+  ),
+  weth: new Token(
+    TESTNET,
+    '0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8',
+    18,
+    'WETH',
+    'Wrapped ETH',
     'https://www.binance.com/',
   ),
   bnb: new Token(

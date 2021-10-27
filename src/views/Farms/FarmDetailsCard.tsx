@@ -4,12 +4,12 @@ import styled from 'styled-components'
 import { Card } from '@pancakeswap/uikit'
 import { AppState } from '../../state'
 import { FarmDetails } from './FarmDetails'
-import { FarmsStake } from './FarmsStake'
-import { FarmsUnStake } from './FarmsUnstake'
 
 interface IFarmDetailsCard {
   data: any
   hideDetailsHeading?: boolean
+  location: any
+  userDataReady: boolean
 }
 
 type BackFuncInterface = { isBackFunc?: false; backFunction?: never } | { isBackFunc?: true; backFunction: () => void }
@@ -25,20 +25,20 @@ export const FarmDetailsCard: React.FC<Props> = (props: Props) => {
     (state) => state.farms.activeBodyType,
   )
 
-  const { data, hideDetailsHeading } = props
+  const { data, hideDetailsHeading, location, userDataReady } = props
 
   const renderBody = () => {
     switch (activeBodyType) {
-      case 'claim':
-        return <></>
-      case 'stake':
-        return <FarmsStake data={data} />
-      case 'unstake':
-        return <FarmsUnStake data={data} />
+      // case 'claim':
+      //   return <></>
+      // case 'stake':
+      //   return <FarmsStake data={data} />
+      // case 'unstake':
+      //   return <FarmsUnStake data={data} />
       case 'details':
-        return <FarmDetails data={data} hideDetailsHeading={hideDetailsHeading}/>
+        return <FarmDetails userDataReady={userDataReady} location={location} data={data} hideDetailsHeading={hideDetailsHeading}/>
       default:
-        return <FarmDetails data={data} hideDetailsHeading={hideDetailsHeading}/>
+        return <FarmDetails userDataReady={userDataReady} location={location} data={data} hideDetailsHeading={hideDetailsHeading}/>
     }
   }
 

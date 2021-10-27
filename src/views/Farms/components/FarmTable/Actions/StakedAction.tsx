@@ -1,13 +1,12 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton, Text, Heading } from '@pancakeswap/uikit'
-import { useLocation } from 'react-router-dom'
+import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton, Text, Heading, Flex } from '@pancakeswap/uikit'
 import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Balance from 'components/Balance'
 import { useWeb3React } from '@web3-react/core'
 import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
-import { fetchFarmUserDataAsync } from 'state/farms'
+import { fetchFarmUserDataAsync, setActiveBodyType } from 'state/farms'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useTranslation } from 'contexts/Localization'
 import { useERC20 } from 'hooks/useContract'
@@ -31,6 +30,7 @@ interface StackedActionProps extends FarmWithStakedValue {
   userDataReady: boolean
   lpLabel?: string
   displayApr?: string
+  location?: any
 }
 
 const Staked: React.FunctionComponent<StackedActionProps> = ({
@@ -44,6 +44,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   token,
   userDataReady,
   displayApr,
+  location
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -51,7 +52,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
-  const location = useLocation()
+  // TODO: Was not able to get the location when in modal due to context
+  // const location = useLocation()
   const lpPrice = useLpTokenPrice(lpSymbol)
   const cakePrice = usePriceCakeBusd()
 
@@ -122,11 +124,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   if (!account) {
     return (
       <ActionContainer>
-        <ActionTitles>
-          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-            {t('Start Farming')}
-          </Text>
-        </ActionTitles>
+        {/* <ActionTitles> */}
+        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
+        {/*    {t('Start Farming')} */}
+        {/*  </Text> */}
+        {/* </ActionTitles> */}
         <ActionContent>
           <ConnectWalletButton width="100%" />
         </ActionContent>
@@ -138,40 +140,40 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     if (stakedBalance.gt(0)) {
       return (
         <ActionContainer>
-          <ActionTitles>
-            <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
-              {lpSymbol}
-            </Text>
-            <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-              {t('Staked')}
-            </Text>
-          </ActionTitles>
+          {/* <ActionTitles> */}
+          {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px"> */}
+          {/*    {lpSymbol} */}
+          {/*  </Text> */}
+          {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
+          {/*    {t('Staked')} */}
+          {/*  </Text> */}
+          {/* </ActionTitles> */}
           <ActionContent>
-            <div>
-              <Heading>{displayBalance()}</Heading>
-              {stakedBalance.gt(0) && lpPrice.gt(0) && (
-                <Balance
-                  fontSize="12px"
-                  color="textSubtle"
-                  decimals={2}
-                  value={getBalanceNumber(lpPrice.times(stakedBalance))}
-                  unit=" USD"
-                  prefix="~"
-                />
-              )}
-            </div>
-            <IconButtonWrapper>
-              <IconButton variant="secondary" onClick={onPresentWithdraw} mr="6px">
-                <MinusIcon color="primary" width="14px" />
-              </IconButton>
-              <IconButton
-                variant="secondary"
+            {/* <div> */}
+            {/*  <Heading>{displayBalance()}</Heading> */}
+            {/*  {stakedBalance.gt(0) && lpPrice.gt(0) && ( */}
+            {/*    <Balance */}
+            {/*      fontSize="12px" */}
+            {/*      color="textSubtle" */}
+            {/*      decimals={2} */}
+            {/*      value={getBalanceNumber(lpPrice.times(stakedBalance))} */}
+            {/*      unit=" USD" */}
+            {/*      prefix="~" */}
+            {/*    /> */}
+            {/*  )} */}
+            {/* </div> */}
+            <Flex width="100%" justifyContent="space-evenly">
+              <Button onClick={onPresentWithdraw} variant="primary" mr="6px">
+                {t("Unstake")}
+              </Button>
+              <Button
+                variant="primary"
                 onClick={onPresentDeposit}
                 disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
               >
-                <AddIcon color="primary" width="14px" />
-              </IconButton>
-            </IconButtonWrapper>
+                {t("Stake")}
+              </Button>
+            </Flex>
           </ActionContent>
         </ActionContainer>
       )
@@ -179,19 +181,19 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 
     return (
       <ActionContainer>
-        <ActionTitles>
-          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px" pr="4px">
-            {t('Stake').toUpperCase()}
-          </Text>
-          <Text bold textTransform="uppercase" color="secondary" fontSize="12px">
-            {lpSymbol}
-          </Text>
-        </ActionTitles>
+        {/* <ActionTitles> */}
+        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px" pr="4px"> */}
+        {/*    {t('Stake').toUpperCase()} */}
+        {/*  </Text> */}
+        {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px"> */}
+        {/*    {lpSymbol} */}
+        {/*  </Text> */}
+        {/* </ActionTitles> */}
         <ActionContent>
           <Button
             width="100%"
             onClick={onPresentDeposit}
-            variant="secondary"
+            variant="primary"
             disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
           >
             {t('Stake LP')}
@@ -204,11 +206,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   if (!userDataReady) {
     return (
       <ActionContainer>
-        <ActionTitles>
-          <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-            {t('Start Farming')}
-          </Text>
-        </ActionTitles>
+        {/* <ActionTitles> */}
+        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
+        {/*    {t('Start Farming')} */}
+        {/*  </Text> */}
+        {/* </ActionTitles> */}
         <ActionContent>
           <Skeleton width={180} marginBottom={28} marginTop={14} />
         </ActionContent>
@@ -218,11 +220,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 
   return (
     <ActionContainer>
-      <ActionTitles>
-        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-          {t('Enable Farm')}
-        </Text>
-      </ActionTitles>
+      {/* <ActionTitles> */}
+      {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
+      {/*    {t('Enable Farm')} */}
+      {/*  </Text> */}
+      {/* </ActionTitles> */}
       <ActionContent>
         <Button width="100%" disabled={requestedApproval} onClick={handleApprove} variant="secondary">
           {t('Enable')}

@@ -41,6 +41,14 @@
       "chainId": 80001,
       "decimals": 18,
       "logoURI": "/images/tokens/0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A.png"
+    },
+    {
+      "name": "WETH",
+      "symbol": "WETH",
+      "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+      "chainId": 80001,
+      "decimals": 18,
+      "logoURI": "/images/tokens/0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8.png"
     }
   ]
 }

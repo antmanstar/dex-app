@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@pancakeswap/sdk'
-import { Button, Text, Flex, AddIcon, CardBody, Message, useModal, Card } from '@pancakeswap/uikit'
-import { RouteComponentProps, Link } from 'react-router-dom'
+import { AddIcon, Button, Card, CardBody, Flex, Message, Text, useModal } from '@pancakeswap/uikit'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useTranslation } from 'contexts/Localization'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
@@ -16,7 +16,7 @@ import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { DoubleCurrencyLogo } from '../../components/Logo'
-import { AppHeader, AppBody } from '../../components/App'
+import { AppBody } from '../../components/App'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween } from '../../components/Layout/Row'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
@@ -93,6 +93,22 @@ const PositionCardWrapper = styled(AutoColumn)`
 
   @media screen and (max-width: 360px) {
     min-width: 0;
+  }
+`
+
+const LiquidityAmountText = styled(Text)`
+  font-size: 32px;
+  
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 48px;
+  }
+`
+
+const LiquidityPoolNameText = styled(Text)`
+  font-size: 20px;
+  
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 24px;
   }
 `
 
@@ -276,9 +292,9 @@ export default function AddLiquidity({
     ) : (
       <AutoColumn>
         <Flex alignItems="center">
-          <Text fontSize="48px" marginRight="10px">
+          <LiquidityAmountText marginRight="10px">
             {liquidityMinted?.toSignificant(6)}
-          </Text>
+          </LiquidityAmountText>
           <DoubleCurrencyLogo
             currency0={currencies[Field.CURRENCY_A]}
             currency1={currencies[Field.CURRENCY_B]}
@@ -286,9 +302,9 @@ export default function AddLiquidity({
           />
         </Flex>
         <Row>
-          <Text fontSize="24px">
+          <LiquidityPoolNameText fontSize="24px">
             {`${currencies[Field.CURRENCY_A]?.symbol}/${currencies[Field.CURRENCY_B]?.symbol} Pool Tokens`}
-          </Text>
+          </LiquidityPoolNameText>
         </Row>
         <Text small textAlign="left" my="24px">
           {t('Output is estimated. If the price changes by more than %slippage%% your transaction will revert.', {
@@ -522,7 +538,7 @@ export default function AddLiquidity({
                         !isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED
                       }
                     >
-                      {error ?? t('Supply')}
+                      {error ?? ((approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED) ?  <Dots>{t('Please Wait')}</Dots> : `${t('Supply')}`)}
                     </Button>
                   </StyledButtonsContainer>
                 )}

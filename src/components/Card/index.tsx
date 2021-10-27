@@ -22,9 +22,9 @@ export const LightCard = styled(Card)`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
-export const LightGreyCard = styled(Card)`
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  background-color: ${({ theme }) => theme.colors.background};
+export const LightGreyCard = styled(Card)<{noBorder?: boolean}>`
+  border: ${({noBorder, theme}) => noBorder ? "none" : `1px solid ${theme.colors.cardBorder}`};
+  background-color: ${({ theme }) => theme.colors.input};
 `
 
 export const GreyCard = styled(Card)`

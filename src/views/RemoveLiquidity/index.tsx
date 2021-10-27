@@ -422,7 +422,7 @@ export default function RemoveLiquidity({
           </RowFixed>
         </RowBetween>
 
-        <Text small textAlign="left" pt="12px">
+        <Text small textAlign="left" pt="12px" mb="8px">
           {t('Output is estimated. If the price changes by more than %slippage%% your transaction will revert.', {
             slippage: allowedSlippage / 100,
           })}
@@ -434,7 +434,7 @@ export default function RemoveLiquidity({
   function modalBottom() {
     return (
       <>
-        <RowBetween>
+        <RowBetween style={{ marginBottom: '8px' }}>
           <Text>
             {t('%assetA%/%assetB% Burned', { assetA: currencyA?.symbol ?? '', assetB: currencyB?.symbol ?? '' })}
           </Text>
@@ -592,11 +592,11 @@ export default function RemoveLiquidity({
                 <Text ml="8px" fontSize="14px">
                   {t('Amount')}
                 </Text>
-                <Text onClick={() => setShowDetailed(!showDetailed)}>{showDetailed ? t('Simple') : t('Detailed')}</Text>
+                <Text className="cursor-pointer" onClick={() => setShowDetailed(!showDetailed)}>{showDetailed ? t('Simple') : t('Detailed')}</Text>
               </RowBetween>
               {!showDetailed && (
                 <BorderCard>
-                  <LightGreyCard mb="16px">
+                  <LightGreyCard mb="16px" noBorder>
                     <Text fontSize="16px" bold style={{ lineHeight: 1 }}>
                       {formattedAmounts[Field.LIQUIDITY_PERCENT]}%
                     </Text>
@@ -636,7 +636,7 @@ export default function RemoveLiquidity({
                   <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
                     {t('You will receive')}
                   </Text>
-                  <LightGreyCard>
+                  <LightGreyCard noBorder>
                     <Flex justifyContent="space-between" mb="8px">
                       <Flex>
                         <CurrencyLogo currency={currencyA} />
@@ -731,7 +731,7 @@ export default function RemoveLiquidity({
                 <Text bold color="secondary" fontSize="12px" textTransform="uppercase">
                   {t('Prices')}
                 </Text>
-                <LightGreyCard>
+                <LightGreyCard noBorder>
                   <Flex justifyContent="space-between">
                     <Text small color="textSubtle">
                       1 {currencyA?.symbol} =

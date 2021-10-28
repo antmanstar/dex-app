@@ -459,9 +459,11 @@ export default function RemoveLiquidity({
             </RowBetween>
           </>
         )}
-        <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
-          {t('Confirm')}
-        </Button>
+        <Flex justifyContent="center" alignItems="center">
+          <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
+            {t('Confirm')}
+          </Button>
+        </Flex>
       </>
     )
   }

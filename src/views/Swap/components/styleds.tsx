@@ -111,16 +111,18 @@ export const SwapShowAcceptChanges = styled(AutoColumn)`
   margin-top: 8px;
 `
 
-export const StyledSwapPageGrid = styled(Grid)`
+export const StyledSwapPageGrid = styled(Grid)<{showSettings?: boolean}>`
   grid-template-columns: 100%;
   align-content: start;
   justify-items: center;
   margin-top: 16px;
+  padding-bottom: ${({showSettings}) => showSettings ? '24px' : 0};
   
   ${({ theme }) => theme.mediaQueries.md} {
     grid-template-columns: 50% 50%;
     align-content: center;
     align-items: start;
+    padding-bottom: 0;
   }
   ${({ theme }) => theme.mediaQueries.xl} {
     grid-template-columns: 60% 40%;

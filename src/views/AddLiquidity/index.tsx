@@ -281,8 +281,8 @@ export default function AddLiquidity({
 
   const modalHeader = () => {
     return noLiquidity ? (
-      <Flex alignItems="center">
-        <Text fontSize="48px" marginRight="10px">
+      <Flex alignItems="center" marginBottom="12px">
+        <Text fontSize="32px" marginRight="10px">
           {`${currencies[Field.CURRENCY_A]?.symbol}/${currencies[Field.CURRENCY_B]?.symbol}`}
         </Text>
         <DoubleCurrencyLogo

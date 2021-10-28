@@ -416,9 +416,10 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         alignContent="center"
         alignItems="center"
         justifyContent="center"
-        height="calc(100vh - 300px)"
+        height={showSettings && width < 475 ? '100%' : 'calc(100vh - 300px)'}
         minHeight="500px"
         maxWidth="1024px"
+        showSettings={showSettings}
       >
         {width >= 852 ? (
           <Flex flexDirection="column">

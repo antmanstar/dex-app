@@ -22,9 +22,9 @@ const PancakeToggleWrapper = styled.div`
   }
 `
 
-const ScrollableContainer = styled(Flex)`
+const ScrollableContainer = styled(Flex)<{noModal?: boolean}>`
   flex-direction: column;
-  max-height: 450px;
+  max-height: ${({noModal}) => noModal ? 'none' : '450px'};
   ${({ theme }) => theme.mediaQueries.sm} {
     max-height: none;
   }
@@ -70,7 +70,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal, isPop
 
   const renderModalBody = () => {
     return (
-      <ScrollableContainer>
+      <ScrollableContainer noModal={noModal}>
         <Flex pb="24px" flexDirection="column">
           <GasSettings />
         </Flex>

@@ -118,6 +118,7 @@ const TableWrapperCard = styled(Card)`
   padding-left: 8px;
   padding-right: 8px;
   background: ${({theme}) => theme.colors.backgroundAlt3};
+  margin-bottom: 32px;
   
   @media screen and (max-width: 576px) {
     background: transparent;

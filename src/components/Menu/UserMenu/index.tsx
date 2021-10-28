@@ -21,8 +21,9 @@ import WalletUserMenuItem from './WalletUserMenuItem'
 const StyledConnectWalletButton = styled(ConnectWalletButton)`
   height: 40px;
   width: 186px;
+  padding: 0 8px;
 
-  @media screen and (min-width: 576px) and (max-width: 747px) {
+  @media screen and (max-width: 1068px) {
     display: none;
   }
 `

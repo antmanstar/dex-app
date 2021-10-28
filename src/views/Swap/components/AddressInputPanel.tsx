@@ -36,14 +36,14 @@ const InputContainer = styled.div`
 `
 
 const Input = styled.input<{ error?: boolean }>`
-  font-size: 1.25rem;
+  font-size: 16px;
   outline: none;
   border: none;
   flex: 1 1 auto;
-  border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
+  //border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 10px;
   padding: 0.75rem 0.75rem 0.75rem 1rem;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.input};
   transition: color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   color: ${({ error, theme }) => (error ? theme.colors.failure : theme.colors.primary)};
   overflow: hidden;
@@ -103,7 +103,7 @@ export default function AddressInputPanel({
         <InputContainer>
           <AutoColumn gap="md">
             <RowBetween>
-              <Text>{t('Recipient')}</Text>
+              <Text fontSize="14px">{t('Recipient')}</Text>
               {address && chainId && (
                 <Link external small href={getBscScanLink(name ?? address, 'address', chainId)}>
                   ({t('View on PolygonScan')})

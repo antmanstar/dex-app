@@ -38,7 +38,7 @@ const LabelRow = styled.div<{ secondInput?: boolean }>`
   color: ${({ theme }) => theme.colors.text};
   font-size: 0.75rem;
   line-height: 1rem;
-  padding: 0.75rem 0.5rem 0.75rem 1rem;
+  padding: 0.75rem 0.5rem;
   ${({ secondInput }) => {
     if (secondInput) {
       return `

@@ -46,7 +46,7 @@ const GlobalStyle = createGlobalStyle`
       background: ${({ theme }) => theme.colors.gradients.bodyBg};
       z-index: -1;
       opacity: .5;
-      height: 100%;
+      //height: 100%;
     }
     img {
       height: auto;

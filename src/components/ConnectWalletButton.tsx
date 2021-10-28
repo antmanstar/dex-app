@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, useWalletModal } from '@pancakeswap/uikit'
+import { Button, useWalletModal, WalletFilledIcon } from '@pancakeswap/uikit'
 import useAuth from 'hooks/useAuth'
 import { useTranslation } from 'contexts/Localization'
 
@@ -10,6 +10,7 @@ const ConnectWalletButton = (props) => {
 
   return (
     <Button onClick={onPresentConnectModal} {...props} scale="md">
+      <WalletFilledIcon width="24px" color="currentColor" mr="4px"/>
       {t('Connect Wallet')}
     </Button>
   )

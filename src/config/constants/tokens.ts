@@ -40,7 +40,7 @@ export const mainnetTokens = {
   ),
   cake: new Token(
     MAINNET,
-    '0x3222818d06F63eCa9502e18e40000807893C3a46',
+    '0x2328dA75026eb55Ad26293375A8E3766cD84be5e',
     18,
     'ECO',
     'EcoSwap Token',
@@ -83,7 +83,7 @@ export const testnetTokens = {
   ),
   cake: new Token(
     TESTNET,
-    '0x3222818d06F63eCa9502e18e40000807893C3a46',
+    '0x2328dA75026eb55Ad26293375A8E3766cD84be5e',
     18,
     'ECO',
     'EcoSwap Token',

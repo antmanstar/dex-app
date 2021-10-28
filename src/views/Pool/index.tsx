@@ -1,13 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { Currency, Pair, Token } from '@pancakeswap/sdk'
+import { Currency, Token } from '@pancakeswap/sdk'
 import {
   Text,
   Flex,
   CardBody,
-  CardFooter,
   Button,
-  AddIcon,
   SubMenuItems,
   Heading,
   Table,
@@ -66,10 +64,6 @@ const TabContainer = styled(`div`)`
   align-items: center;
 `
 
-const CurrencyContainer = styled(`div`)`
-  display: flex;
-`
-
 const InputWrapper = styled(`div`)`
   width: 100%;
   max-width: 400px;
@@ -84,7 +78,7 @@ const InputWrapper = styled(`div`)`
 
 const StyledTable = styled(Table)<{ isMobile: boolean }>`
   margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : 0)};
-  margin-top: 12px;
+  //margin-top: 12px;
   border-collapse: separate;
   border-spacing: 0 0.5rem;
 `
@@ -119,6 +113,19 @@ const StyledTabContainer = styled(TabContainer)`
   }
 `
 
+const TableWrapperCard = styled(Card)`
+  margin-top: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background: ${({theme}) => theme.colors.backgroundAlt3};
+  
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+  }
+`
+
 const StyledTab = styled(Tab)`
   padding: 8px 16px;
 `
@@ -133,7 +140,7 @@ const StyledSearchInput = styled(Input)`
 const StyledTr = styled.tr`
   &:hover {
     & > td {
-      background-color: ${({ theme }) => theme.colors.backgroundAlt3};
+      background-color: ${({ theme }) => theme.colors.backgroundAlt2};
       &:last-child {
         border-bottom-right-radius: 16px;
         border-top-right-radius: 16px;
@@ -149,6 +156,10 @@ const StyledTr = styled.tr`
 
 const StyledTd = styled(Td)`
   padding: 0.75rem;
+`
+
+const StyledMobileCard = styled(Card)`
+  background: ${({theme}) => theme.colors.background};
 `
 
 const TokenList = ({
@@ -192,7 +203,7 @@ const TokenList = ({
     return (
       <tr>
         <a href={`/add/${address1}/${address2}`}>
-          <Card mt="8px">
+          <StyledMobileCard mt="8px">
             <CardBody>
               <Flex mb="12px">
                 <div>
@@ -223,7 +234,7 @@ const TokenList = ({
                 })}
               </StyledDetailsWrapper>
             </CardBody>
-          </Card>
+          </StyledMobileCard>
         </a>
       </tr>
     )
@@ -447,8 +458,8 @@ export default function Pool() {
               {t('Import')}
             </Button>
           </PoolContainer>
-          <Button id="join-pool-button" as={Link} to="/add">
-            {t('Create a Pool')}
+          <Button id="join-pool-button" variant="subtle" as={Link} to="/add">
+            {t('Create Pool')}
           </Button>
         </Header>
         {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
@@ -485,8 +496,9 @@ export default function Pool() {
               <SearchIcon />
             </InputWrapper>
           </StyledTabContainer>
-          <StyledTable isMobile={isMobile}>
-            <thead>
+          <TableWrapperCard>
+            <StyledTable isMobile={isMobile}>
+              <thead>
               {getHeaders().map((singleHeader, index) => {
                 return (
                   <Th
@@ -498,9 +510,10 @@ export default function Pool() {
                   </Th>
                 )
               })}
-            </thead>
-            <tbody>{renderTable()}</tbody>
-          </StyledTable>
+              </thead>
+              <tbody>{renderTable()}</tbody>
+            </StyledTable>
+          </TableWrapperCard>
         </Body>
       </AppBody>
     </Page>

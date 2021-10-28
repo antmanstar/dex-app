@@ -10,7 +10,7 @@ import {
   SubMenuItems,
   Grid,
   ArrowUpDownIcon,
-  PancakeTheme,
+  PancakeTheme, Flex,
 } from '@pancakeswap/uikit'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
@@ -20,7 +20,7 @@ import SwapWarningTokens from 'config/constants/swapWarningTokens'
 import { Duration } from 'date-fns'
 import { useDispatch } from 'react-redux'
 import AddressInputPanel from './components/AddressInputPanel'
-import { GreyCard } from '../../components/Card'
+import { GreyCard, LightGreyCard } from '../../components/Card'
 import Column, { AutoColumn } from '../../components/Layout/Column'
 import ConfirmSwapModal from './components/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -68,12 +68,26 @@ import ChartCard, { ChartView } from '../Info/components/InfoCharts/ChartCard'
 import { ONE_HOUR_SECONDS } from '../../config/constants/info'
 import SettingsModal from '../../components/Menu/GlobalSettings/SettingsModal'
 import { useWidth } from '../../hooks/useWidth'
+import { SwapChart } from './Chart'
 
 const Label = styled(Text)`
   font-size: 12px;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.secondary};
 `
+
+const AddSendButton = styled(Button)`
+  font-size: 14px;
+  padding-right: 0;
+  margin-right: -8px;
+`
+
+const RemoveSendButton = styled(Button)`
+  font-size: 14px;
+  padding-right: 0;
+  margin-right: -8px;
+`
+
 interface SwapPageInterface extends RouteComponentProps {
   theme: PancakeTheme
 }
@@ -403,23 +417,35 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         alignItems="center"
         justifyContent="center"
         height="calc(100vh - 300px)"
-        minHeight="600px"
+        minHeight="500px"
         maxWidth="1024px"
       >
         {width >= 852 ? (
-          <StyledSwapPageChartCard
-            variant="token"
-            tokenData={tokenData}
-            // tokenPriceData={adjustedPriceData}
-            chartData={chartData}
-            hideTabs
-            defaultTab={ChartView.PRICE}
-          />
+          <Flex flexDirection="column">
+            <Text fontSize="24px">
+              {t('THE MOST EFFICIENT DEFI PLATFORM')}
+            </Text>
+            <Text fontSize="16px" color="#7e96b8">
+              {t('Access the most liquidity, lowest slippage and best exchange rates across Ethereum, Binance Smart Chain and Polygon.')}
+            </Text>
+            <SwapChart />
+            {/* <StyledSwapPageChartCard */}
+            {/*  variant="token" */}
+            {/*  tokenData={tokenData} */}
+            {/*  // tokenPriceData={adjustedPriceData} */}
+            {/*  chartData={chartData} */}
+            {/*  hideTabs */}
+            {/*  defaultTab={ChartView.PRICE} */}
+            {/* /> */}
+          </Flex>
         ) : (
           <></>
         )}
         <>
-          <AppBody>
+          {width < 852 && <Text fontSize='18px' textAlign='center' mb='24px' fontWeight="500" pt="4px">
+            {t('THE MOST EFFICIENT DEFI PLATFORM')}
+          </Text>}
+          <AppBody maxWidth="480px">
             {showSettings ? (
               <Wrapper id="swap-page">{renderSettings()}</Wrapper>
             ) : (
@@ -472,9 +498,9 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                           />
                         </ArrowWrapper>
                         {recipient === null && !showWrap && isExpertMode ? (
-                          <Button variant="text" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                          <AddSendButton variant="text" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
                             {t('+ Add a send (optional)')}
-                          </Button>
+                          </AddSendButton>
                         ) : null}
                       </AutoRow>
                     </AutoColumn>
@@ -496,9 +522,9 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                           <ArrowWrapper clickable={false}>
                             <ArrowDownIcon width="16px" />
                           </ArrowWrapper>
-                          <Button variant="text" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
+                          <RemoveSendButton variant="text" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
                             {t('- Remove send')}
-                          </Button>
+                          </RemoveSendButton>
                         </AutoRow>
                         <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
                       </>
@@ -533,23 +559,27 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                         {t('Unsupported Asset')}
                       </Button>
                     ) : !account ? (
-                      <ConnectWalletButton width="100%" />
+                      <ConnectWalletButton width="100%" variant="subtle" />
                     ) : showWrap ? (
                       <Button width="100%" disabled={Boolean(wrapInputError)} onClick={onWrap}>
                         {wrapInputError ??
                           (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
                       </Button>
                     ) : noRoute && userHasSpecifiedInputOutput ? (
-                      <GreyCard style={{ textAlign: 'center' }}>
-                        <Text color="textSubtle" mb="4px">
-                          {t('Insufficient liquidity for this trade.')}
+                      <LightGreyCard
+                        background={theme.colors.backgroundDisabled}
+                        style={{ textAlign: 'center', padding: "10px 12px", fontSize: "16px", borderRadius: "10px" }}
+                        noBorder
+                      >
+                        <Text color="textDisabled" mb={singleHopOnly && '4px'} fontWeight="500">
+                          {t('Insufficient liquidity')}
                         </Text>
                         {singleHopOnly && (
-                          <Text color="textSubtle" mb="4px">
+                          <Text color="textDisabled" fontWeight="500">
                             {t('Try enabling multi-hop trades.')}
                           </Text>
                         )}
-                      </GreyCard>
+                      </LightGreyCard>
                     ) : showApproveFlow ? (
                       <RowBetween>
                         <Button

@@ -21,6 +21,7 @@ import WithdrawModal from '../../WithdrawModal'
 import useStakeFarms from '../../../hooks/useStakeFarms'
 import useApproveFarm from '../../../hooks/useApproveFarm'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import { useWidth } from '../../../../../hooks/useWidth'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   // const location = useLocation()
   const lpPrice = useLpTokenPrice(lpSymbol)
   const cakePrice = usePriceCakeBusd()
+  const width = useWidth()
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -100,16 +102,19 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       multiplier={multiplier}
       addLiquidityUrl={addLiquidityUrl}
       cakePrice={cakePrice}
+      isPopUp={width < 426}
     />,
     true,
     false,
-    'farm-stake-deposit-modal'
+    'farm-stake-deposit-modal',
+    width < 426
   )
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
+    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 426} />,
     true,
     false,
-    'farm-unstake-withdraw-modal'
+    'farm-unstake-withdraw-modal',
+    width < 426
   )
   const lpContract = useERC20(lpAddress)
   const dispatch = useAppDispatch()

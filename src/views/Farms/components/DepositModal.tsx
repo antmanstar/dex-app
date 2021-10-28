@@ -34,6 +34,7 @@ interface DepositModalProps {
   displayApr?: string
   addLiquidityUrl?: string
   cakePrice?: BigNumber
+  isPopUp?: boolean
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({
@@ -49,6 +50,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   apr,
   addLiquidityUrl,
   cakePrice,
+  isPopUp,
 }) => {
   const [val, setVal] = useState('')
   const { toastSuccess, toastError } = useToast()
@@ -110,7 +112,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   }
 
   return (
-    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss}>
+    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss} isPopUp={isPopUp}>
       <ModalInput
         value={val}
         onSelectMax={handleSelectMax}

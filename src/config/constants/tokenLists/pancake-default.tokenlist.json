@@ -21,10 +21,10 @@
     {
       "name": "EcoSwap Token",
       "symbol": "ECO",
-      "address": "0x2328dA75026eb55Ad26293375A8E3766cD84be5e",
+      "address": "0xdbF0Fb8499ab4dd4727fdbf96B3F9465063345f9",
       "chainId": 80001,
       "decimals": 18,
-      "logoURI": "/images/tokens/0x2328dA75026eb55Ad26293375A8E3766cD84be5e.png"
+      "logoURI": "/images/tokens/0xdbF0Fb8499ab4dd4727fdbf96B3F9465063345f9.png"
     },
     {
       "name": "ZENO",

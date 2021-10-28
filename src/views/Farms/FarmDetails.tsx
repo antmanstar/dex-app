@@ -5,11 +5,12 @@ import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 import CardHeading from './components/FarmCard/CardHeading'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { getBalanceAmount } from '../../utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber } from '../../utils/formatBalance'
 import { useFarmUser, usePriceCakeBusd } from '../../state/farms/hooks'
 import StakedAction from './components/FarmTable/Actions/StakedAction'
 import HarvestAction from './components/FarmTable/Actions/HarvestAction'
 import { BIG_ZERO } from '../../utils/bigNumber'
+import Earned from './components/FarmTable/Earned'
 
 interface IFarmDetails {
   data: any
@@ -168,7 +169,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
         <StyledSingleRow justifyContent="space-between">
         <StyledValue textAlign="left">{t('Earnings')}:</StyledValue>
           <Flex flexDirection="column">
-            <StyledValue textAlign="right">{displayEarnings}</StyledValue>
+            <Earned earnings={getBalanceNumber(new BigNumber(data.userData.earnings))} pid={data.pid} userDataReady={userDataReady} />
           </Flex>
         </StyledSingleRow>
         {renderButtons()}

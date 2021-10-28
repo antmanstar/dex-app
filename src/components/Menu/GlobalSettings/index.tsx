@@ -14,7 +14,7 @@ const GlobalSettings = (props: IGlobalSettingsInterface) => {
     <SettingsModal isPopUp={isPopUp} />,
     false,
     true,
-    "defaultNodeId",
+    "global-settings-modal",
     isPopUp
   )
 

@@ -42,6 +42,7 @@ import LiqPoolDetailsCard from './LiqPoolDetailsCard'
 import Page from '../Page'
 import useTheme from '../../hooks/useTheme'
 import GlobalSettings from '../../components/Menu/GlobalSettings'
+import { useWidth } from '../../hooks/useWidth'
 
 const Container = styled.div`
   display: grid;
@@ -123,6 +124,7 @@ export default function AddLiquidity({
   const { t } = useTranslation()
   const gasPrice = useGasPrice()
   const { theme } = useTheme()
+  const width = useWidth()
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
@@ -389,6 +391,8 @@ export default function AddLiquidity({
     'addLiquidityModal',
   )
 
+  console.log("pair", pair)
+
   return (
     <StyledPage>
       <Container>
@@ -435,7 +439,7 @@ export default function AddLiquidity({
                     {t('Remove')}
                   </Button>
                 </Flex>
-                <GlobalSettings />
+                <GlobalSettings isPopUp={width < 426}/>
               </Flex>
               <AutoColumn gap="20px">
                 <CurrencyInputPanel

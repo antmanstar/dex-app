@@ -212,7 +212,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
         {/*  </Text> */}
         {/* </ActionTitles> */}
         <ActionContent>
-          <Skeleton width={180} marginBottom={28} marginTop={14} />
+          <Skeleton width="100%" height="45px" marginBottom={28} marginTop={14} />
         </ActionContent>
       </ActionContainer>
     )

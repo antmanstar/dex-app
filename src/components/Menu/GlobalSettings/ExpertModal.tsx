@@ -83,7 +83,7 @@ const ExpertModal: React.FC<ExpertModalProps> = ({
       onBack={() => setShowConfirmExpertModal(false)}
       onDismiss={() => setShowConfirmExpertModal(false)}
       // headerBackground="gradients.cardHeader"
-      style={{ maxWidth: '360px' }}
+      style={{ maxWidth: '425px' }}
     >
       {renderModalBody()}
     </Modal>

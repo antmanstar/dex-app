@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div<{ background?: string }>`
+const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean }>`
   width: 100%;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 16px;
+  padding: ${({displayIconOnly}) => displayIconOnly ? '0px 8px': '0px 16px'};
   box-shadow: ${({ theme }) => theme.shadows.inset};
   // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
   border-radius: 8px;
@@ -35,14 +35,14 @@ const DropDownListContainer = styled.div`
   }
 `
 
-const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
+const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boolean }>`
   cursor: pointer;
   width: 100%;
   position: relative;
   background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 8px;
   height: 40px;
-  min-width: 136px;
+  min-width: ${({displayIconOnly}) => displayIconOnly ? '64' : '136px'} ;
   user-select: none;
   z-index: 20;
 
@@ -85,6 +85,7 @@ const DropDownList = styled.ul`
 
 const ListItem = styled.li`
   list-style: none;
+  display: flex;
   padding: 8px 16px;
   &:hover {
     background: ${({ theme }) => theme.colors.inputSecondary};
@@ -96,6 +97,7 @@ export interface SelectProps extends BoxProps {
   onOptionChange?: (option: OptionProps) => void
   selectedTextColor?: string
   selectedBackgroundColor?: string
+  displayIconOnly?: boolean
 }
 
 export interface OptionProps {
@@ -109,6 +111,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
   onOptionChange,
   selectedTextColor,
   selectedBackgroundColor,
+  displayIconOnly,
   ...props
 }) => {
   const dropdownRef = useRef(null)
@@ -141,8 +144,8 @@ const Select: React.FunctionComponent<SelectProps> = ({
   }, [])
 
   return (
-    <DropDownContainer isOpen={isOpen} {...props}>
-      <DropDownHeader onClick={toggling} background={selectedBackgroundColor}>
+    <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly}>
+      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly}>
         <>
           {options[selectedOptionIndex]?.icon && (
             <img
@@ -153,7 +156,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
             />
           )}
         </>
-        <Text color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>
+        {!displayIconOnly && <Text color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>}
         <ArrowDropDownIcon color={selectedTextColor || 'text'} onClick={toggling} />
       </DropDownHeader>
       <DropDownListContainer>
@@ -161,7 +164,15 @@ const Select: React.FunctionComponent<SelectProps> = ({
           {options.map((option, index) =>
             index !== selectedOptionIndex ? (
               <ListItem onClick={onOptionClicked(index)} key={option.label}>
-                <Text>{option.label}</Text>
+                {option?.icon && (
+                  <img
+                    width="24px"
+                    height="24px"
+                    src={option?.icon}
+                    alt={option.value}
+                  />
+                )}
+                <Text ml={option?.icon ? "16px" : '0'}>{option.label}</Text>
               </ListItem>
             ) : null,
           )}

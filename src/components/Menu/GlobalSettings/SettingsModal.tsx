@@ -34,7 +34,7 @@ const StyledModal = styled(Modal)`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
-const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => {
+const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal, isPopUp }) => {
   const [showConfirmExpertModal, setShowConfirmExpertModal] = useState(false)
   const [showExpertModeAcknowledgement, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgementShow()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
@@ -135,8 +135,8 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal }) => 
     <StyledModal
       title={t('Settings')}
       onDismiss={onDismiss}
-      style={{ maxWidth: '420px' }}
-      headerBackground={theme.colors.background}
+      style={{ maxWidth: '425px' }}
+      isPopUp={isPopUp}
     >
       {renderModalBody()}
     </StyledModal>

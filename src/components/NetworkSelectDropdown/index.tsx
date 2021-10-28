@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import Select from '../Select/Select'
 import { useTranslation } from '../../contexts/Localization'
+import { useWidth } from '../../hooks/useWidth'
 
 export const NetworkSelectDropdown: React.FC = () => {
   const { t } = useTranslation()
   const [network, setNetwork] = useState('polygon')
+  const width = useWidth()
 
   const handleSortOptionChange = (value) => {
     setNetwork(value)
@@ -34,6 +36,7 @@ export const NetworkSelectDropdown: React.FC = () => {
           value: 'polygon',
         },
       ]}
+      displayIconOnly={width < 768}
       onOptionChange={handleSortOptionChange}
     />
   )

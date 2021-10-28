@@ -2,8 +2,21 @@ import React from 'react'
 import { Flex, IconButton, CogIcon, useModal } from '@pancakeswap/uikit'
 import SettingsModal from './SettingsModal'
 
-const GlobalSettings = () => {
-  const [onPresentSettingsModal] = useModal(<SettingsModal />)
+interface IGlobalSettingsInterface {
+  isPopUp?: boolean
+}
+
+const GlobalSettings = (props: IGlobalSettingsInterface) => {
+
+  const { isPopUp } = props
+
+  const [onPresentSettingsModal] = useModal(
+    <SettingsModal isPopUp={isPopUp} />,
+    false,
+    true,
+    "defaultNodeId",
+    isPopUp
+  )
 
   return (
     <Flex>

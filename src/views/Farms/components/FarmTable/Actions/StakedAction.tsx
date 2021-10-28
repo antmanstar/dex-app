@@ -101,9 +101,15 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       addLiquidityUrl={addLiquidityUrl}
       cakePrice={cakePrice}
     />,
+    true,
+    false,
+    'farm-stake-deposit-modal'
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} />,
+    true,
+    false,
+    'farm-unstake-withdraw-modal'
   )
   const lpContract = useERC20(lpAddress)
   const dispatch = useAppDispatch()

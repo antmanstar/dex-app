@@ -229,7 +229,10 @@ const Farms: React.FC = () => {
       customOnDismiss={() => {setActiveFarmCard(undefined)}}
       location={location}
       userDataReady={userDataReady}
-    />
+    />,
+    true,
+    true,
+    'farm-details-modal'
   )
 
   const [stakedOnly, setStakedOnly] = useUserFarmStakedOnly(isActive)
@@ -418,16 +421,20 @@ const Farms: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatedData, activeFarmCard])
 
-  useEffect(() => {
-    if (shouldRenderModal && activeFarmCard) {
-      detailsModal()
-    }
-
-    if (!shouldRenderModal && activeFarmCard) {
-      dismissDetailsModal()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFarmCard, shouldRenderModal])
+  // useEffect(() => {
+  //   /*
+  //   * Removing the modal when width is increased and if the farm is active
+  //   * */
+  //
+  //   if (shouldRenderModal && activeFarmCard) {
+  //     detailsModal()
+  //   }
+  //
+  //   if (!shouldRenderModal && activeFarmCard) {
+  //     dismissDetailsModal()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [activeFarmCard, shouldRenderModal])
 
   const handleSelectFarm = (data: any) => {
     setActiveFarmCard(data)

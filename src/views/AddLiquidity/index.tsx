@@ -391,8 +391,6 @@ export default function AddLiquidity({
     'addLiquidityModal',
   )
 
-  console.log("pair", pair)
-
   return (
     <StyledPage>
       <Container>

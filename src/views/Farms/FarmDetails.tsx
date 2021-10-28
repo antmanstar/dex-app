@@ -82,10 +82,14 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const renderButtons = () => {
 
     return (
-      <StyledSingleRow justifyContent="center" flexDirection="column">
-        <StakedAction location={location} {...data} displayApr={data.apr?.value} />
-        {account && <HarvestAction {...data} userDataReady={userDataReady} />}
-      </StyledSingleRow>
+      <>
+        <Flex justifyContent="center" flexDirection="column" mb="12px">
+          <StakedAction location={location} {...data} displayApr={data.apr?.value} userDataReady={userDataReady} />
+        </Flex>
+        <Flex justifyContent="center" flexDirection="column">
+          {account && <HarvestAction {...data} userDataReady={userDataReady} />}
+        </Flex>
+      </>
     )
   }
 

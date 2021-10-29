@@ -9,8 +9,18 @@ const StyledInput = styled(Input)`
   margin-left: auto;
 `
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.div<{background?: string}>`
   position: relative;
+  ${({background}) => {
+    if (background) {
+      return `
+        & > input {
+          background-color: ${background};
+        }
+      `
+    }
+    return ''
+  }}
   ${({ theme }) => theme.mediaQueries.sm} {
     display: block;
   }
@@ -19,9 +29,10 @@ const InputWrapper = styled.div`
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
+  background?: string
 }
 
-const SearchInput: React.FC<Props> = ({ onChange: onChangeCallback, placeholder = 'Search' }) => {
+const SearchInput: React.FC<Props> = ({ onChange: onChangeCallback, placeholder = 'Search', background }) => {
   const [searchText, setSearchText] = useState('')
 
   const { t } = useTranslation()
@@ -37,7 +48,7 @@ const SearchInput: React.FC<Props> = ({ onChange: onChangeCallback, placeholder 
   }
 
   return (
-    <InputWrapper>
+    <InputWrapper background={background}>
       <StyledInput value={searchText} onChange={onChange} placeholder={t(placeholder)} />
     </InputWrapper>
   )

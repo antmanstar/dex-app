@@ -54,12 +54,25 @@ const ControlContainer = styled.div`
 
   justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 32px;
+  margin-bottom: 12px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 8px;
+    margin-bottom: 0;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
     padding: 16px 32px;
+  }
+`
+
+const HeaderWrapper = styled(Flex)`
+  margin-bottom: 12px;
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: auto;
     margin-bottom: 0;
   }
 `
@@ -89,6 +102,12 @@ const FilterContainer = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
     padding: 0;
+  }
+  
+  @media screen and (min-width: 480px) {
+    ${LabelWrapper}:nth-child(2) {
+      margin-left: 16px;
+    }
   }
 `
 
@@ -521,12 +540,54 @@ const Farms: React.FC = () => {
     setSortOption(option.value)
   }
 
+  const renderSortDropdown = () => {
+    return (
+      <LabelWrapper>
+        {/* <Text textTransform="uppercase">{t('Sort by')}</Text> */}
+        <Select
+          options={[
+            {
+              label: t('Hot'),
+              value: 'hot',
+            },
+            {
+              label: t('APR'),
+              value: 'apr',
+            },
+            {
+              label: t('Multiplier'),
+              value: 'multiplier',
+            },
+            {
+              label: t('Earned'),
+              value: 'earned',
+            },
+            {
+              label: t('Liquidity'),
+              value: 'liquidity',
+            },
+          ]}
+          onOptionChange={handleSortOptionChange}
+        />
+      </LabelWrapper>
+    )
+  }
+
+  const renderFarmsTabButton = () => {
+    return (
+      <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+    )
+  }
+
   return (
     <>
       <StyledPage>
         <Header>
           <ControlContainer>
-            <Heading>Farms</Heading>
+            <HeaderWrapper justifyContent="space-between" alignItems="center" marginBottom="16px">
+              <Heading>Farms</Heading>
+               {width > 480 && width < 844 && renderFarmsTabButton()}
+            </HeaderWrapper>
             <ViewControls>
               {/* <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> */}
               {/* <ToggleWrapper> */}
@@ -538,40 +599,14 @@ const Farms: React.FC = () => {
               {/*  /> */}
               {/*  <Text> {t('Staked only')}</Text> */}
               {/* </ToggleWrapper> */}
-              <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+              {(width < 481 || width > 843) && renderFarmsTabButton()}
+              {width < 481 && renderSortDropdown()}
             </ViewControls>
             <FilterContainer>
-              <LabelWrapper>
-                {/* <Text textTransform="uppercase">{t('Sort by')}</Text> */}
-                <Select
-                  options={[
-                    {
-                      label: t('Hot'),
-                      value: 'hot',
-                    },
-                    {
-                      label: t('APR'),
-                      value: 'apr',
-                    },
-                    {
-                      label: t('Multiplier'),
-                      value: 'multiplier',
-                    },
-                    {
-                      label: t('Earned'),
-                      value: 'earned',
-                    },
-                    {
-                      label: t('Liquidity'),
-                      value: 'liquidity',
-                    },
-                  ]}
-                  onOptionChange={handleSortOptionChange}
-                />
-              </LabelWrapper>
-              <LabelWrapper style={{ marginLeft: 16 }}>
+              {width > 480 && renderSortDropdown()}
+              <LabelWrapper style={{ width: "100%" }}>
                 {/* <Text textTransform="uppercase">{t('Search')}</Text> */}
-                <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
+                <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" background={theme.colors.backgroundAlt2} />
               </LabelWrapper>
             </FilterContainer>
           </ControlContainer>

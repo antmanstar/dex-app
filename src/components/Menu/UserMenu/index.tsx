@@ -19,7 +19,7 @@ import ProfileUserMenuItem from './ProfileUserMenutItem'
 import WalletUserMenuItem from './WalletUserMenuItem'
 
 const StyledConnectWalletButton = styled(ConnectWalletButton)`
-  height: 40px;
+  height: 36px;
   width: 186px;
   padding: 0 8px;
 

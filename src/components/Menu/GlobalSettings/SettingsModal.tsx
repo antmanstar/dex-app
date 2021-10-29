@@ -135,7 +135,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss, noModal, isPop
     <StyledModal
       title={t('Settings')}
       onDismiss={onDismiss}
-      style={{ maxWidth: '425px' }}
+      style={{ maxWidth: isPopUp ? '480px' : '425px' }}
       isPopUp={isPopUp}
     >
       {renderModalBody()}

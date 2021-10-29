@@ -57,6 +57,7 @@ import useTheme from '../../hooks/useTheme'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import useTotalSupply from '../../hooks/useTotalSupply'
 import GlobalSettings from '../../components/Menu/GlobalSettings'
+import { useWidth } from '../../hooks/useWidth'
 
 const BorderCard = styled.div`
   //border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -143,6 +144,7 @@ export default function RemoveLiquidity({
   const { t } = useTranslation()
   const gasPrice = useGasPrice()
   const { theme } = useTheme()
+  const width = useWidth()
 
   // burn state
   const { independentField, typedValue } = useBurnState()
@@ -587,7 +589,7 @@ export default function RemoveLiquidity({
                   {t('Remove')}
                 </Button>
               </Flex>
-              <GlobalSettings />
+              <GlobalSettings isPopUp={width < 481}/>
             </Flex>
             <StyledAutoColumn gap="0px">
               <RowBetween padding="0.75rem 0.5rem 0.75rem 0">

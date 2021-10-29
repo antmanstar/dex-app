@@ -437,7 +437,7 @@ export default function AddLiquidity({
                     {t('Remove')}
                   </Button>
                 </Flex>
-                <GlobalSettings isPopUp={width < 426}/>
+                <GlobalSettings isPopUp={width < 481}/>
               </Flex>
               <AutoColumn gap="20px">
                 <CurrencyInputPanel

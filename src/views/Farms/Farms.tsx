@@ -229,12 +229,12 @@ const Farms: React.FC = () => {
       customOnDismiss={() => {setActiveFarmCard(undefined)}}
       location={location}
       userDataReady={userDataReady}
-      isPopUp={width < 426}
+      isPopUp={width < 481}
     />,
     true,
     true,
     'farm-details-modal',
-    width < 426
+    width < 481
   )
 
   const [stakedOnly, setStakedOnly] = useUserFarmStakedOnly(isActive)

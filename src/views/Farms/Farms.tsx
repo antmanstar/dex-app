@@ -423,24 +423,11 @@ const Farms: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatedData, activeFarmCard])
 
-  useEffect(() => {
-
-    if (shouldRenderModal && activeFarmCard) {
-      detailsModal()
-    }
-
-    /*
-    * Removing the modal when width is increased and if the farm is active
-    * */
-
-    // if (!shouldRenderModal && activeFarmCard) {
-    //   dismissDetailsModal()
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFarmCard, shouldRenderModal])
-
   const handleSelectFarm = (data: any) => {
     setActiveFarmCard(data)
+    if (shouldRenderModal) {
+      detailsModal()
+    }
     dispatch(setActiveBodyType('details'))
   }
 

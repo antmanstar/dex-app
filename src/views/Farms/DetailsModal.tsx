@@ -36,7 +36,10 @@ export const DetailsModal: React.FC<IDetailsModal> = (props: IDetailsModal) => {
 
   return (
     <StyledModal title={data?.lpSymbol.toUpperCase()} onDismiss={handleDismiss} isPopUp={isPopUp}>
-      <FarmDetailsCard userDataReady={userDataReady} data={data} location={location} hideDetailsHeading/>
+      {
+        data &&
+        <FarmDetailsCard userDataReady={userDataReady} data={data} location={location} hideDetailsHeading />
+      }
     </StyledModal>
   )
 }

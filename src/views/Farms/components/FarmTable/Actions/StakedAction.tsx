@@ -141,7 +141,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
         {/*  </Text> */}
         {/* </ActionTitles> */}
         <ActionContent>
-          <ConnectWalletButton width="100%" />
+          <ConnectWalletButton width="100%" variant="subtle" />
         </ActionContent>
       </ActionContainer>
     )

@@ -488,7 +488,7 @@ export default function AddLiquidity({
                     {t('Unsupported Asset')}
                   </Button>
                 ) : !account ? (
-                  <StyledConnectWalletButton />
+                  <StyledConnectWalletButton variant="subtle" />
                 ) : (
                   <StyledButtonsContainer gap="md">
                     {(approvalA === ApprovalState.NOT_APPROVED ||

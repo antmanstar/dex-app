@@ -50,6 +50,7 @@ const Container = styled.div`
   padding-top: 16px;
   //margin-top: 48px;
   max-width: 1400px;
+  padding-bottom: 16px;
 
   grid-gap: 32px;
   grid-template-columns: minmax(0, 1fr);
@@ -87,7 +88,8 @@ const StyledButtonsContainer = styled(AutoColumn)`
   margin: 0 8px;
 `
 const PositionCardWrapper = styled(AutoColumn)`
-  margin: 2rem 0;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
   min-width: 20rem;
   width: 100%;
   max-width: 400px;

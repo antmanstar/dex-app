@@ -102,19 +102,19 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       multiplier={multiplier}
       addLiquidityUrl={addLiquidityUrl}
       cakePrice={cakePrice}
-      isPopUp={width < 426}
+      isPopUp={width < 481}
     />,
     true,
     false,
     'farm-stake-deposit-modal',
-    width < 426
+    width < 481
   )
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 426} />,
+    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 481} />,
     true,
     false,
     'farm-unstake-withdraw-modal',
-    width < 426
+    width < 481
   )
   const lpContract = useERC20(lpAddress)
   const dispatch = useAppDispatch()

@@ -226,7 +226,10 @@ const Farms: React.FC = () => {
   const [detailsModal, dismissDetailsModal] = useModal(
     <DetailsModal
       data={activeFarmCard}
-      customOnDismiss={() => {setActiveFarmCard(undefined)}}
+      customOnDismiss={() => {
+        setActiveFarmCard(undefined)
+        dismissDetailsModal()
+      }}
       location={location}
       userDataReady={userDataReady}
       isPopUp={width < 481}

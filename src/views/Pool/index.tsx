@@ -50,12 +50,33 @@ const Header = styled(`div`)`
   align-items: center;
   padding: 20px;
   border-radius: 10px;
+  flex-direction: column;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    flex-direction: row;
+  }
 `
 
 const PoolContainer = styled(`div`)`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    width: auto;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+const CreateButtonContainer = styled(Flex)`
+  width: 100%;
+  margin-top: 12px;
+  ${({theme}) => theme.mediaQueries.sm} {
+    margin-top: 0;
+    width: auto;
+  }
 `
 
 const TabContainer = styled(`div`)`
@@ -459,9 +480,11 @@ export default function Pool() {
               {t('Import')}
             </Button>
           </PoolContainer>
-          <Button id="join-pool-button" variant="subtle" as={Link} to="/add">
-            {t('Create Pool')}
-          </Button>
+          <CreateButtonContainer>
+            <Button id="join-pool-button" variant="subtle" as={Link} to="/add" width="100%">
+              {t('Create Pool')}
+            </Button>
+          </CreateButtonContainer>
         </Header>
         {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
         <Body>

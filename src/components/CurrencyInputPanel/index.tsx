@@ -10,6 +10,7 @@ import { CurrencyLogo, DoubleCurrencyLogo } from '../Logo'
 
 import { RowBetween } from '../Layout/Row'
 import { Input as NumericalInput } from './NumericalInput'
+import { useWidth } from '../../hooks/useWidth'
 
 const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
@@ -99,6 +100,7 @@ export default function CurrencyInputPanel({
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const { t } = useTranslation()
   const translatedLabel = label || t('Input')
+  const width = useWidth()
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal
@@ -106,7 +108,12 @@ export default function CurrencyInputPanel({
       selectedCurrency={currency}
       otherSelectedCurrency={otherCurrency}
       showCommonBases={showCommonBases}
+      isPopUp={width < 481}
     />,
+    true,
+    false,
+    'currency-selector-modal',
+    width < 481
   )
   return (
     <InputPanel id={id}>

@@ -16,6 +16,7 @@ import GlobalSettings from 'components/Menu/GlobalSettings'
 import Transactions from './Transactions'
 import QuestionHelper from '../QuestionHelper'
 import SwapPageSettingsButton from '../SwapPageSettingButton'
+import { useGetPopUp } from '../../hooks/useGetPopUp'
 
 interface Props {
   title: string
@@ -46,6 +47,17 @@ const AppHeaderContainer = styled(Flex)<{ padding?: string }>`
   padding: ${({ padding }) => padding || '24px 24px 0 24px'};
   width: 100%;
   //border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+`
+
+const LinkIconButton = styled(IconButton)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -6px;
+`
+
+const StyledIconButton = styled(IconButton)`
+  height: 40px;
 `
 
 const StyledHeading = styled(Heading)<{ headingFontWeight?: string; headingFontSize?: string }>`
@@ -80,6 +92,7 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
   headingFontWeight,
 }) => {
   const [expertMode] = useExpertModeManager()
+  const showPopUp = useGetPopUp()
 
   return (
     <Flex flexDirection="column">
@@ -91,9 +104,9 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
             </IconButton>
           )}
           {backTo && (
-            <IconButton as={Link} to={backTo}>
+            <LinkIconButton as={Link} to={backTo}>
               <ArrowBackIcon width="26px" />
-            </IconButton>
+            </LinkIconButton>
           )}
           <Flex flexDirection="column">
             <StyledHeading as="h2" mb="8px" headingFontSize={headingFontSize} headingFontWeight={headingFontWeight}>
@@ -112,12 +125,12 @@ const AppHeader: React.FC<AppHeaderInterface> = ({
         {!noConfig && (
           <Flex alignItems="start" marginTop="-8px">
             {refreshButton && refreshFunction && (
-              <IconButton onClick={refreshFunction} variant="text">
+              <StyledIconButton onClick={refreshFunction} variant="text">
                 <RefreshIcon width="24px" />
-              </IconButton>
+              </StyledIconButton>
             )}
-            <NotificationDot show={expertMode}>
-              {!hideSettingsIcon ? onSwapPage ? <SwapPageSettingsButton /> : <GlobalSettings /> : null}
+            <NotificationDot show={expertMode && !hideSettingsIcon}>
+              {!hideSettingsIcon ? onSwapPage ? <SwapPageSettingsButton /> : <GlobalSettings isPopUp={showPopUp} /> : null}
             </NotificationDot>
             {!hideTransactionIcon && <Transactions />}
           </Flex>

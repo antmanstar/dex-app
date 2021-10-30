@@ -53,6 +53,7 @@ export default function CurrencySearchModal({
   selectedCurrency,
   otherSelectedCurrency,
   showCommonBases = false,
+  isPopUp,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
 
@@ -90,8 +91,8 @@ export default function CurrencySearchModal({
   }
 
   return (
-    <StyledModalContainer minWidth="320px">
-      <ModalHeader background={theme.colors.background}>
+    <StyledModalContainer minWidth="320px" isPopUp={isPopUp}>
+      <ModalHeader>
         <ModalTitle>
           {config[modalView].onBack && <ModalBackButton onBack={config[modalView].onBack} />}
           <Heading>{config[modalView].title}</Heading>

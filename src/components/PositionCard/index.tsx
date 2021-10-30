@@ -36,9 +36,10 @@ const FixedHeightRow = styled(RowBetween)`
 interface PositionCardProps extends CardProps {
   pair: Pair
   showUnwrapped?: boolean
+  background?: string
 }
 
-export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCardProps) {
+export function MinimalPositionCard({ pair, showUnwrapped = false, background }: PositionCardProps) {
   const { account } = useActiveWeb3React()
 
   const { t } = useTranslation()
@@ -71,7 +72,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
   return (
     <>
       {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
-        <Card>
+        <Card background={background}>
           <CardBody>
             <AutoColumn gap="16px">
               <FixedHeightRow>

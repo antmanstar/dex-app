@@ -116,6 +116,7 @@ export const StyledSwapPageGrid = styled(Grid)<{showSettings?: boolean}>`
   align-content: start;
   justify-items: center;
   margin-top: 16px;
+  margin-bottom: 36px;
   padding-bottom: ${({showSettings}) => showSettings ? '24px' : 0};
   
   ${({ theme }) => theme.mediaQueries.md} {
@@ -129,6 +130,10 @@ export const StyledSwapPageGrid = styled(Grid)<{showSettings?: boolean}>`
   }
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 48px;
+  }
+  
+  @media screen and (max-width: 330px) {
+    margin-bottom: 46px;
   }
 `
 

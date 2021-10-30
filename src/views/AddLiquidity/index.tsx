@@ -11,7 +11,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { AppDispatch } from '../../state'
-import { LightCard } from '../../components/Card'
+import { BasicCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -69,7 +69,7 @@ const Container = styled.div`
   }
 `
 
-const StyledLightCard = styled(LightCard)`
+const StyledLightCard = styled(BasicCard)`
   @media screen and (max-width: 576px) {
     padding: 12px;
   }
@@ -399,7 +399,7 @@ export default function AddLiquidity({
         <Card p="4px">
           <CardBody p="0">
             <ColumnCenter>
-              <LightCard padding="0px" border="none !important">
+              <BasicCard padding="0px" border="none !important">
                 <LiqPoolDetailsCard
                   currencies={currencies}
                   poolTokenPercentage={poolTokenPercentage}
@@ -415,7 +415,7 @@ export default function AddLiquidity({
                     price={price}
                   />
                 </StyledLightCard>
-              </LightCard>
+              </BasicCard>
             </ColumnCenter>
           </CardBody>
         </Card>
@@ -455,7 +455,7 @@ export default function AddLiquidity({
                   showCommonBases
                 />
                 <ColumnCenter>
-                  <AddIcon width="16px" />
+                  <AddIcon width="32px" height="32px" />
                 </ColumnCenter>
                 <CurrencyInputPanel
                   value={formattedAmounts[Field.CURRENCY_B]}

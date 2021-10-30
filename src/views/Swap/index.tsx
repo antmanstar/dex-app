@@ -88,6 +88,14 @@ const RemoveSendButton = styled(Button)`
   margin-right: -8px;
 `
 
+const StyledText = styled(Text)`
+  margin-bottom: 24px;
+  
+  @media screen and (max-width: 330px) {
+    margin-bottom: 48px;
+  }
+`
+
 interface SwapPageInterface extends RouteComponentProps {
   theme: PancakeTheme
 }
@@ -416,7 +424,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         alignContent="center"
         alignItems="center"
         justifyContent="center"
-        height={showSettings && width < 475 ? '100%' : 'calc(100vh - 300px)'}
+        height={(showSettings || isExpertMode) && width < 852 ? '100%' : 'calc(100vh - 300px)'}
         minHeight="500px"
         maxWidth="1024px"
         showSettings={showSettings}
@@ -443,9 +451,9 @@ function SwapPage({ history, theme }: SwapPageInterface) {
           <></>
         )}
         <>
-          {width < 852 && <Text fontSize='18px' textAlign='center' mb='24px' fontWeight="500" pt="4px">
+          {width < 852 && <StyledText fontSize='18px' textAlign='center' mb='24px' fontWeight="500" pt="4px">
             {t('THE MOST EFFICIENT DEFI PLATFORM')}
-          </Text>}
+          </StyledText>}
           <AppBody maxWidth="480px">
             {showSettings ? (
               <Wrapper id="swap-page">{renderSettings()}</Wrapper>
@@ -521,7 +529,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       <>
                         <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>
                           <ArrowWrapper clickable={false}>
-                            <ArrowDownIcon width="16px" />
+                            <ArrowDownIcon width="24px" />
                           </ArrowWrapper>
                           <RemoveSendButton variant="text" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
                             {t('- Remove send')}

@@ -6,6 +6,7 @@ import { setShowSettings } from '../../state/swap/actions'
 
 const StyledIconButton = styled(IconButton)`
   width: 28px;
+  height: 40px;
 `
 
 const SwapPageSettingsButton = () => {

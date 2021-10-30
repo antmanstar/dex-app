@@ -31,7 +31,7 @@ interface WalletModalProps extends InjectedModalProps {
 export const LOW_BNB_BALANCE = parseUnits('2', 'gwei')
 
 const ModalHeader = styled(UIKitModalHeader)`
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const Tabs = styled.div`
@@ -43,13 +43,14 @@ const Tabs = styled.div`
 const StyledButtonMenuContainer = styled(ButtonMenu)`
   border: none;
   background: ${({ theme }) => theme.colors.background};
+  border-radius: 10px;
 `
 
 const StyledButtonMenu = styled(ButtonMenuItem)`
-  border-radius: 16px;
+  border-radius: 10px;
 `
 
-const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALLET_INFO, onDismiss }) => {
+const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALLET_INFO, onDismiss, isPopUp }) => {
   const [view, setView] = useState(initialView)
   const { t } = useTranslation()
   const { balance, fetchStatus } = useGetBnbBalance()
@@ -61,7 +62,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALL
   }
 
   return (
-    <ModalContainer title={t('Welcome!')} minWidth="320px">
+    <ModalContainer title={t('Welcome!')} minWidth="320px" isPopUp={isPopUp}>
       <ModalHeader>
         <ModalTitle>
           <Heading fontSize="22px !important">{t('Your Wallet')}</Heading>
@@ -76,7 +77,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ initialView = WalletView.WALL
           <StyledButtonMenu>{t('Transactions')}</StyledButtonMenu>
         </StyledButtonMenuContainer>
       </Tabs>
-      <ModalBody p="24px" maxWidth="400px" width="100%" background={theme.colors.backgroundAlt}>
+      <ModalBody p="24px" maxWidth="480px" width="100%" background={theme.colors.backgroundAlt}>
         {view === WalletView.WALLET_INFO && <WalletInfo hasLowBnbBalance={hasLowBnbBalance} onDismiss={onDismiss} />}
         {view === WalletView.TRANSACTIONS && <WalletTransactions />}
       </ModalBody>

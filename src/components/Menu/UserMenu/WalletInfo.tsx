@@ -1,5 +1,15 @@
 import React from 'react'
-import { Box, Button, Flex, InjectedModalProps, LinkExternal, Message, Skeleton, Text } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  Flex,
+  InjectedModalProps,
+  LinkExternal,
+  LogoutIcon,
+  Message,
+  Skeleton,
+  Text,
+} from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import useTokenBalance, { FetchStatus, useGetBnbBalance } from 'hooks/useTokenBalance'
 import useAuth from 'hooks/useAuth'
@@ -60,6 +70,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
         <LinkExternal href={getBscScanLink(account, 'address')}>{t('View on PolygonScan')}</LinkExternal>
       </Flex>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
+        <LogoutIcon marginRight="8px" color="currentColor" />
         {t('Disconnect Wallet')}
       </Button>
     </>

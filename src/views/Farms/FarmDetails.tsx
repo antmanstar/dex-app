@@ -84,7 +84,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
 
     return (
       <>
-        <Flex justifyContent="center" flexDirection="column" mb="12px">
+        <Flex justifyContent="center" flexDirection="column">
           <StakedAction location={location} {...data} displayApr={data.apr?.value} userDataReady={userDataReady} />
         </Flex>
         <Flex justifyContent="center" flexDirection="column">

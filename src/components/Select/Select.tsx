@@ -42,7 +42,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
   background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 8px;
   height: 36px;
-  min-width: ${({displayIconOnly}) => displayIconOnly ? '64px' : '136px'} ;
+  min-width: ${({displayIconOnly}) => displayIconOnly ? '64px' : '130px'} ;
   user-select: none;
   z-index: 20;
 

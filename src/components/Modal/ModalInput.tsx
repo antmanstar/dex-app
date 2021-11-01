@@ -4,6 +4,7 @@ import { Text, Button, Input, InputProps, Flex, Link } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { parseUnits } from 'ethers/lib/utils'
 import { formatBigNumber } from 'utils/formatBalance'
+import { useWidth } from '../../hooks/useWidth'
 
 interface ModalInputProps {
   max: string
@@ -38,7 +39,7 @@ const StyledTokenInput = styled.div<InputProps>`
 
 const StyledInput = styled(Input)`
   box-shadow: none;
-  width: 60px;
+  width: 100px;
   margin: 0 8px;
   padding: 0 8px;
   border: none;
@@ -71,6 +72,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   decimals = 18,
 }) => {
   const { t } = useTranslation()
+  const width = useWidth()
   const isBalanceZero = max === '0' || !max
 
   const displayBalance = (balance: string) => {
@@ -86,10 +88,12 @@ const ModalInput: React.FC<ModalInputProps> = ({
     <div style={{ position: 'relative' }}>
       <StyledTokenInput isWarning={isBalanceZero}>
         <Flex justifyContent="space-between" pl="16px">
-          <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
+          <Text fontSize="14px" textAlign="left">
+            {inputTitle}
+          </Text>
+          <Text fontSize="14px" textAlign="right">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
         </Flex>
-        <Flex alignItems="flex-end" justifyContent="space-around">
+        <Flex alignItems="center" justifyContent="space-between">
           <StyledInput
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode="decimal"
@@ -98,11 +102,14 @@ const ModalInput: React.FC<ModalInputProps> = ({
             onChange={onChange}
             placeholder="0"
             value={value}
+            width="100%"
           />
-          <Button scale="sm" onClick={onSelectMax} mr="8px">
-            {t('Max')}
-          </Button>
-          <Text fontSize="16px">{symbol}</Text>
+          <Flex alignItems="center" justifyContent="end">
+            <Button scale="sm" onClick={onSelectMax} mr="8px">
+              {t('Max')}
+            </Button>
+            {width > 480 ? <Text fontSize='16px'>{symbol}</Text> : <Text fontSize='16px'>{t('LP Tokens')}</Text>}
+          </Flex>
         </Flex>
       </StyledTokenInput>
       {isBalanceZero && (

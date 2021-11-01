@@ -137,8 +137,12 @@ const Header = styled(`div`)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 16px;
   border-radius: 10px;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    padding: 20px;
+  } 
 `
 
 const StyledImage = styled(Image)`

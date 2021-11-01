@@ -79,8 +79,9 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
             }
             dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
           }}
-          ml="4px"
-          mt="8px"
+          // ml="4px"
+          // mt="4px"
+          width="100%"
         >
           {t('Harvest')}
         </Button>

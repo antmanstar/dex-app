@@ -174,12 +174,13 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
             {/*  )} */}
             {/* </div> */}
             <Flex width="100%" justifyContent="space-evenly">
-              <Button onClick={onPresentWithdraw} variant="primary" mr="6px">
+              <Button onClick={onPresentWithdraw} variant="primary" mr="6px" width="100%">
                 {t("Unstake")}
               </Button>
               <Button
                 variant="primary"
                 onClick={onPresentDeposit}
+                width="100%"
                 disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
               >
                 {t("Stake")}
@@ -223,7 +224,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
         {/*  </Text> */}
         {/* </ActionTitles> */}
         <ActionContent>
-          <Skeleton width="100%" height="45px" marginBottom={28} marginTop={14} />
+          <Skeleton width="100%" height="45px" marginBottom="8px" marginTop="12px" />
         </ActionContent>
       </ActionContainer>
     )

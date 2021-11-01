@@ -47,7 +47,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
   z-index: 20;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    min-width: 168px;
+    min-width: 150px;
   }
 
   ${(props) =>
@@ -68,7 +68,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
         // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         border-top-width: 0;
         border-radius: 0 0 8px 8px;
-        box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
+        box-shadow: ${({theme}) => theme.colors.shadow.default};
       }
     `}
 
@@ -88,7 +88,7 @@ const ListItem = styled.li`
   display: flex;
   padding: 8px 16px;
   &:hover {
-    background: ${({ theme }) => theme.colors.inputSecondary};
+    background: ${({ theme }) => theme.colors.hover};
   }
 `
 
@@ -156,7 +156,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
             />
           )}
         </>
-        {!displayIconOnly && <Text color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>}
+        {!displayIconOnly && <Text marginLeft={options[selectedOptionIndex]?.icon ? '8px' : '0'} color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>}
         <ArrowDropDownIcon color={selectedTextColor || 'text'} onClick={toggling} />
       </DropDownHeader>
       <DropDownListContainer>

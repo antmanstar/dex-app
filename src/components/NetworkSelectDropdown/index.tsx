@@ -1,41 +1,66 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import Select from '../Select/Select'
 import { useTranslation } from '../../contexts/Localization'
 import { useWidth } from '../../hooks/useWidth'
+import useTheme from '../../hooks/useTheme'
+import { networkList } from '../../config/constants/networks'
+
+interface IActiveNetworkInterface {
+  icon?: string,
+  label: string,
+  value: string
+}
+
+const StyledSelect = styled(Select)`
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  
+  & > div:first-child {
+    padding: 0 8px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  
+  & > div:last-child {
+    min-width: 180px;
+    margin-top: 4px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+`
 
 export const NetworkSelectDropdown: React.FC = () => {
   const { t } = useTranslation()
-  const [network, setNetwork] = useState('polygon')
   const width = useWidth()
+  const { theme } = useTheme()
+  const [network, setNetwork] = useState<IActiveNetworkInterface>(networkList(t)[0])
 
   const handleSortOptionChange = (value) => {
     setNetwork(value)
     console.log('selected value', value)
   }
 
-  const getSelectedBG = (value: string) => {
-    switch (value) {
-      // TODO: Add these colors in toolkit
+  const getMaxWidth = (value: IActiveNetworkInterface) => {
+    switch (value.value) {
       case 'polygon':
-        return 'linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)'
+        return '150px'
+      case 'ethereum':
+        return '150px'
+      case 'bscMainnet':
+        return '175px'
       default:
-        return 'linear-gradient(73.28deg,#8247e5 6.51%,#6027c0 88.45%)'
+        return '175px'
     }
   }
 
   return (
-    <Select
-      maxWidth="175px"
+    <StyledSelect
+      maxWidth={getMaxWidth(network)}
       mr="24px"
-      selectedBackgroundColor={getSelectedBG(network)}
+      selectedBackgroundColor={theme.colors.networkGrad[network.value]}
       selectedTextColor="white"
-      options={[
-        {
-          label: t('Polygon'),
-          icon: '/images/tokens/matic.png',
-          value: 'polygon',
-        },
-      ]}
+      options={networkList(t)}
       displayIconOnly={width < 768}
       onOptionChange={handleSortOptionChange}
     />

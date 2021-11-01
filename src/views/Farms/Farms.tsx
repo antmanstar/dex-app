@@ -160,6 +160,7 @@ const FarmsContainer = styled(Card)`
 
 const StyledFlexLayout = styled(FlexLayout)`
   justify-content: center;
+  min-height: 150px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     justify-content: flex-start;
@@ -457,6 +458,16 @@ const Farms: React.FC = () => {
     dispatch(setActiveBodyType('details'))
   }
 
+  const renderNoDataFound = () => {
+    return (
+      <Flex justifyContent="center" alignItems="center" width="100%" height="120px">
+        <Text>
+          {t('No farms to show')}
+        </Text>
+      </Flex>
+    )
+  }
+
   const renderContent = (): JSX.Element => {
     // if (viewMode === ViewMode.TABLE && rowData.length) {
     //   const columnSchema = DesktopColumnSchema
@@ -492,6 +503,7 @@ const Farms: React.FC = () => {
         <FarmsContainer>
           <StyledFlexLayout>
             <Route exact path={`${path}`}>
+              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
               {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}
@@ -506,6 +518,7 @@ const Farms: React.FC = () => {
               ))}
             </Route>
             <Route exact path={`${path}/history`}>
+              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
               {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}
@@ -520,6 +533,7 @@ const Farms: React.FC = () => {
               ))}
             </Route>
             <Route exact path={`${path}/archived`}>
+              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
               {chosenFarmsMemoized.map((farm) => (
                 <FarmCard
                   isCardActive={activeFarmCard?.pid === farm.pid}

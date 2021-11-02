@@ -11,7 +11,7 @@ import { SinglePriceCard } from './SinglePriceCard'
 
 const StyledSection = styled.div`
   display: grid;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 8px;

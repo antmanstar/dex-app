@@ -11,7 +11,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { AppDispatch } from '../../state'
-import { BasicCard } from '../../components/Card'
+import { BasicCard, TransparentCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -70,6 +70,7 @@ const Container = styled.div`
 `
 
 const StyledLightCard = styled(BasicCard)`
+  background: transparent;
   @media screen and (max-width: 576px) {
     padding: 12px;
   }
@@ -113,6 +114,10 @@ const LiquidityPoolNameText = styled(Text)`
   ${({ theme }) => theme.mediaQueries.md} {
     font-size: 24px;
   }
+`
+
+const StyledTransparentCard = styled(TransparentCard)`
+  padding: 4px;
 `
 
 export default function AddLiquidity({
@@ -396,29 +401,27 @@ export default function AddLiquidity({
   return (
     <StyledPage>
       <Container>
-        <Card p="4px">
-          <CardBody p="0">
-            <ColumnCenter>
-              <BasicCard padding="0px" border="none !important">
-                <LiqPoolDetailsCard
+        <StyledTransparentCard>
+          <ColumnCenter>
+            <TransparentCard padding="0" noBorder>
+              <LiqPoolDetailsCard
+                currencies={currencies}
+                poolTokenPercentage={poolTokenPercentage}
+                noLiquidity={noLiquidity}
+                price={price}
+                pair={pair}
+              />
+              <StyledLightCard padding="24px" border="none !important">
+                <PoolPriceBar
                   currencies={currencies}
                   poolTokenPercentage={poolTokenPercentage}
                   noLiquidity={noLiquidity}
                   price={price}
-                  pair={pair}
                 />
-                <StyledLightCard padding="24px" border="none !important">
-                  <PoolPriceBar
-                    currencies={currencies}
-                    poolTokenPercentage={poolTokenPercentage}
-                    noLiquidity={noLiquidity}
-                    price={price}
-                  />
-                </StyledLightCard>
-              </BasicCard>
-            </ColumnCenter>
-          </CardBody>
-        </Card>
+              </StyledLightCard>
+            </TransparentCard>
+          </ColumnCenter>
+        </StyledTransparentCard>
         <AppBody>
           {/* <AppHeader */}
           {/*  title={t('Add Liquidity')} */}

@@ -28,7 +28,7 @@ const MultiplierTag = styled(Tag)`
 
 const StyledHeading = styled(Heading)<{ isCardActive?: boolean }>`
   font-size: 20px;
-  color: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.primaryButtonText : theme.colors.text)};
+  //color: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.primaryButtonText : theme.colors.text)};
 `
 
 const CardHeading: React.FC<ExpandableSectionProps> = ({

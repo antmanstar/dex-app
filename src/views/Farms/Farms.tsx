@@ -59,12 +59,12 @@ const ControlContainer = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 8px;
+    //padding: 8px;
     margin-bottom: 0;
   }
 
   ${({ theme }) => theme.mediaQueries.md} {
-    padding: 16px 32px;
+    //padding: 16px 32px;
   }
 `
 
@@ -133,15 +133,17 @@ const ViewControls = styled.div`
 `
 
 const Header = styled(`div`)`
-  background: ${({ theme }) => theme.colors.backgroundAlt3};
+  background: transparent;
+  border: 1px solid #59f3;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 16px;
+  margin-top: 48px;
   border-radius: 10px;
   
   ${({theme}) => theme.mediaQueries.sm} {
-    padding: 20px;
+    //padding: 20px;
   } 
 `
 
@@ -152,9 +154,14 @@ const StyledImage = styled(Image)`
 `
 
 const FarmsContainer = styled(Card)`
-  background: ${({ theme }) => theme.colors.backgroundAlt};
+  background: ${({theme}) => theme.colors.background};
+  border: 1px solid ${({theme}) => theme.colors.cardBorder2};
   padding: 12px 8px;
   width: 100%;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    background: transparent;
+  }
   //min-height: calc(100vh - 500px);
 `
 
@@ -202,6 +209,13 @@ const StyledPage = styled(Page)`
 const DesktopFarmsDetails = styled.div`
   @media screen and (max-width: 968px) {
     display: none;
+  }
+`
+
+const StyledSelect = styled(Select)`
+  & > div:first-child {
+    background-color: ${({theme}) => theme.colors.headerInputBg};
+    box-shadow: none;
   }
 `
 
@@ -562,7 +576,7 @@ const Farms: React.FC = () => {
     return (
       <LabelWrapper>
         {/* <Text textTransform="uppercase">{t('Sort by')}</Text> */}
-        <Select
+        <StyledSelect
           options={[
             {
               label: t('Hot'),
@@ -624,7 +638,7 @@ const Farms: React.FC = () => {
               {width > 480 && renderSortDropdown()}
               <LabelWrapper style={{ width: "100%" }}>
                 {/* <Text textTransform="uppercase">{t('Search')}</Text> */}
-                <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" background={theme.colors.backgroundAlt2} />
+                <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" background={theme.colors.headerInputBg} />
               </LabelWrapper>
             </FilterContainer>
           </ControlContainer>

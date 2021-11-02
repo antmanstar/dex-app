@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardBody, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import useTheme from '../../hooks/useTheme'
+import { LightCard } from '../../components/Card'
 
 const StyledCardWrapper = styled.div`
   min-width: 300px;
@@ -39,22 +40,19 @@ interface ISinglePriceCard {
 }
 
 export const SinglePriceCard = (props: ISinglePriceCard) => {
-  const { theme } = useTheme()
 
   const { title, data } = props
 
   return (
     <StyledCardWrapper>
-      <Card padding="0" background={theme.colors.background}>
-        <CardBody>
-          <Text color="textSubtle2" textTransform="capitalize" fontSize="14px" mb="12px">
-            {title}
-          </Text>
-          <StyledValueText color="text" textTransform="capitalize" fontSize="20px">
-            {data}
-          </StyledValueText>
-        </CardBody>
-      </Card>
+      <LightCard padding="24px">
+        <Text color="textSubtle2" textTransform="capitalize" fontSize="14px" mb="12px">
+          {title}
+        </Text>
+        <StyledValueText color="text" textTransform="capitalize" fontSize="20px">
+          {data}
+        </StyledValueText>
+      </LightCard>
     </StyledCardWrapper>
   )
 }

@@ -44,7 +44,8 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background: ${({ theme }) => theme.colors.backgroundAlt3};
+  background: transparent;
+  border: 1px solid #59f3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -138,7 +139,8 @@ const TableWrapperCard = styled(Card)`
   margin-top: 12px;
   padding-left: 8px;
   padding-right: 8px;
-  background: ${({theme}) => theme.colors.backgroundAlt3};
+  background-color: transparent;
+  // background: ${({theme}) => theme.colors.backgroundAlt3};
   margin-bottom: 32px;
   
   @media screen and (max-width: 576px) {
@@ -159,18 +161,63 @@ const StyledSearchInput = styled(Input)`
   }
 `
 
+const PoolNameText = styled(Text)`
+`
+
+const StyledDetailsContainer = styled(Flex)`
+  border-radius: 10px;
+  padding: 12px;
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  justify-content: space-between;
+  min-width: 400px;
+  ${({theme}) => theme.mediaQueries.md} {
+    min-width: 500px;
+  }
+`
+
+const SingleDetailWrapper = styled(Flex)`
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  padding: 12px 24px;
+  
+`
+
+const SinglePoolButton = styled(Button)`
+  justify-content: flex-start;
+  width: 100%;
+`
+
 const StyledTr = styled.tr`
+  //border: 1px solid ${({theme}) => theme.colors.cardBorder2};
+  border-radius: 10px;
+  & > td {
+    //background-color: ${({ theme }) => theme.colors.backgroundAlt2};
+    height: 100px;
+    &:last-child {
+      border-bottom-right-radius: 16px;
+      border-top-right-radius: 16px;
+      border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
+      border-right: 1px solid ${({theme}) => theme.colors.cardBorder2};
+      border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2} !important;
+    }
+
+    &:first-child {
+      border-bottom-left-radius: 16px;
+      border-top-left-radius: 16px;
+      border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
+      border-left: 1px solid ${({theme}) => theme.colors.cardBorder2};
+      border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2};
+    }
+  }
   &:hover {
     & > td {
-      background-color: ${({ theme }) => theme.colors.backgroundAlt2};
-      &:last-child {
-        border-bottom-right-radius: 16px;
-        border-top-right-radius: 16px;
+      background: ${({ theme }) => theme.colors.gradients.poolHover};
+      ${Text} {
+        color: white;
       }
-
-      &:first-child {
-        border-bottom-left-radius: 16px;
-        border-top-left-radius: 16px;
+      ${StyledDetailsContainer} {
+        background: rgba(3, 3, 3, 0.1);
       }
     }
   }
@@ -200,6 +247,7 @@ const TokenList = ({
   apr: number
 }) => {
   const { isMobile } = useMatchBreakpoints()
+  const { t } = useTranslation()
 
   const [token1, token2] = tokens
   let currency1: Token | Currency = token1
@@ -227,13 +275,13 @@ const TokenList = ({
         <a href={`/add/${address1}/${address2}`}>
           <StyledMobileCard mt="8px">
             <CardBody>
-              <Flex mb="12px">
+              <Flex mb="12px" alignItems="center">
                 <div>
                   <CurrencyLogo currency={currency1} />
                   <CurrencyLogo currency={currency2} />
                 </div>
-                <Text ml="10px">
-                  {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
+                <Text ml="10px" fontSize="20px" bold>
+                  {currency1?.symbol?.toUpperCase()} - {currency2?.symbol?.toUpperCase()}
                 </Text>
               </Flex>
               <StyledDetailsWrapper>
@@ -265,36 +313,56 @@ const TokenList = ({
   return (
     <StyledTr>
       <StyledTd>
-        <Button
+        <SinglePoolButton
           id={`pool-${address1}-${address2}`}
           as={Link}
           scale="xxs"
           variant="text"
+          width="100%"
           to={`/add/${address1}/${address2}`}
           pl="0"
         >
-          <div>
-            <CurrencyLogo currency={currency1} />
-            <CurrencyLogo currency={currency2} />
-          </div>
-          <Text ml="10px" fontSize="14px" fontWeight="bold">
-            {currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}
-          </Text>
-        </Button>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="14px">${liquidity}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="14px">${volume}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="14px">${fees}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Text textAlign="right" fontSize="14px">
-          {apr}%
-        </Text>
+          <Flex justifyContent="space-between">
+            <Flex flexDirection="column" justifyContent="center" alignItems="start" paddingLeft="12px">
+              <div>
+                <CurrencyLogo currency={currency1} />
+                <CurrencyLogo currency={currency2} />
+              </div>
+              <PoolNameText fontSize="20px" fontWeight="bold">
+                {currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}
+              </PoolNameText>
+              <Text fontSize="12px" color="textSubtle2" bold>
+                Liquidity Pool
+              </Text>
+            </Flex>
+            <StyledDetailsContainer>
+              <SingleDetailWrapper>
+                <Text fontSize="20px" bold>${liquidity}</Text>
+                <Text fontSize="14px">
+                  {t('Liquidity')}
+                </Text>
+              </SingleDetailWrapper>
+              <SingleDetailWrapper>
+                <Text fontSize="20px" bold>${volume}</Text>
+                <Text fontSize="14px">
+                  {t('Volume')}
+                </Text>
+              </SingleDetailWrapper>
+              <SingleDetailWrapper>
+                <Text fontSize="20px" bold>${fees}</Text>
+                <Text fontSize="14px">
+                  {t('Fees')}
+                </Text>
+              </SingleDetailWrapper>
+              <SingleDetailWrapper>
+                <Text fontSize="20px" bold>{apr}%</Text>
+                <Text fontSize="14px">
+                  {t('APR')}
+                </Text>
+              </SingleDetailWrapper>
+            </StyledDetailsContainer>
+          </Flex>
+        </SinglePoolButton>
       </StyledTd>
     </StyledTr>
   )
@@ -445,26 +513,26 @@ export default function Pool() {
     }
 
     return [
-      {
-        id: 'name',
-        title: 'name',
-      },
-      {
-        id: 'liquidity',
-        title: 'liquidity',
-      },
-      {
-        id: 'volume',
-        title: 'volume',
-      },
-      {
-        id: 'fees',
-        title: 'fees',
-      },
-      {
-        id: 'apr',
-        title: 'APR',
-      },
+      // {
+      //   id: 'name',
+      //   title: 'name',
+      // },
+      // {
+      //   id: 'liquidity',
+      //   title: 'liquidity',
+      // },
+      // {
+      //   id: 'volume',
+      //   title: 'volume',
+      // },
+      // {
+      //   id: 'fees',
+      //   title: 'fees',
+      // },
+      // {
+      //   id: 'apr',
+      //   title: 'APR',
+      // },
     ]
   }
 

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Box } from '@pancakeswap/uikit'
 
 const Card = styled(Box)<{
@@ -33,4 +33,9 @@ export const LightGreyCard = styled(Card)<{noBorder?: boolean, background?: stri
 
 export const GreyCard = styled(Card)`
   background-color: ${({ theme }) => theme.colors.dropdown};
+`
+
+export const TransparentCard = styled(Card)<{noBorder?: boolean}>`
+  background-color: transparent;
+  border: ${({theme, noBorder}) => noBorder ? 'none' : css`1px solid ${theme.colors.cardBorder2}`};
 `

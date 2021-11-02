@@ -48,9 +48,14 @@ const AddressText = styled(Text)`
 `
 
 const StyledCardBody = styled(CardBody)`
+  background: transparent;
   @media screen and (max-width: 360px) {
     padding: 16px;
   }
+`
+
+const StyledCard = styled(Card)`
+  background: transparent;
 `
 
 const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqPoolDetailsCardInterface) => {
@@ -72,7 +77,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
   }
 
   return (
-    <Card background={theme.colors.background}>
+    <StyledCard background="transparent">
       <StyledCardBody>
         <div>
           <FlexContainer>
@@ -101,7 +106,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
           <AutoColumn justify="start">{renderSingleData(t('APR'), '0%')}</AutoColumn>
         </StyledRow>
       </StyledCardBody>
-    </Card>
+    </StyledCard>
   )
 }
 

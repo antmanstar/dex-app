@@ -28,7 +28,7 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
   cursor: pointer;
   transition: all 0.25s ease;
   border: 2px solid ${({ isActive , theme}) => (isActive ? 'transparent' : theme.colors.cardBorder)};
-  background-color: ${({ isActive , theme }) => (isActive ? theme.colors.primary : 'transparent')};;
+  background-color: ${({ isActive , theme }) => (isActive ? "#59F3" : 'transparent')};;
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary};
@@ -57,7 +57,7 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
 
   ${StyledCardSummary} {
     ${Text} {
-      color: ${({ theme, isActive }) => (isActive ? theme.colors.primaryButtonText : theme.colors.text)};
+      //color: ${({ theme, isActive }) => (isActive ? theme.colors.primaryButtonText : theme.colors.text)};
     }
   }
 `

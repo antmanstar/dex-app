@@ -28,7 +28,7 @@ import { MinimalPositionCard } from '../../components/PositionCard'
 import { AppHeader, AppBody } from '../../components/App'
 import { RowBetween, RowFixed } from '../../components/Layout/Row'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
-import { LightCard, LightGreyCard } from '../../components/Card'
+import { LightCard, LightGreyCard, TransparentCard } from '../../components/Card'
 
 import { CurrencyLogo, DoubleCurrencyLogo } from '../../components/Logo'
 import { ROUTER_ADDRESS } from '../../config/constants'
@@ -557,27 +557,25 @@ export default function RemoveLiquidity({
   return (
     <StyledPage>
       <Container>
-        <Card p="4px">
-          <CardBody p="0">
-            <ColumnCenter>
-              {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
-                <>
-                  <LightCard padding="0px" border="none !important">
-                    <LiqPoolDetailsCard currencies={currencies} pair={pair} />
-                    <StyledLightCard padding="24px" border="none !important">
-                      <PoolPriceBar
-                        currencies={currencies}
-                        poolTokenPercentage={poolTokenPercentage}
-                        // noLiquidity={noLiquidity}
-                        price={price}
-                      />
-                    </StyledLightCard>
-                  </LightCard>
-                </>
-              )}
-            </ColumnCenter>
-          </CardBody>
-        </Card>
+        <TransparentCard padding="4px">
+          <ColumnCenter>
+            {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
+              <>
+                <TransparentCard padding="0px" noBorder>
+                  <LiqPoolDetailsCard currencies={currencies} pair={pair} />
+                  <TransparentCard padding="24px" noBorder>
+                    <PoolPriceBar
+                      currencies={currencies}
+                      poolTokenPercentage={poolTokenPercentage}
+                      // noLiquidity={noLiquidity}
+                      price={price}
+                    />
+                  </TransparentCard>
+                </TransparentCard>
+              </>
+            )}
+          </ColumnCenter>
+        </TransparentCard>
         <AppBody>
           <CardBody p="12px">
             <Flex justifyContent="space-between">

@@ -180,7 +180,6 @@ const SingleDetailWrapper = styled(Flex)`
   justify-content: center;
   align-items: start;
   padding: 12px 24px;
-  
 `
 
 const SinglePoolButton = styled(Button)`
@@ -195,16 +194,16 @@ const StyledTr = styled.tr`
     //background-color: ${({ theme }) => theme.colors.backgroundAlt2};
     height: 100px;
     &:last-child {
-      border-bottom-right-radius: 16px;
-      border-top-right-radius: 16px;
+      border-bottom-right-radius: 10px;
+      border-top-right-radius: 10px;
       border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
       border-right: 1px solid ${({theme}) => theme.colors.cardBorder2};
       border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2} !important;
     }
 
     &:first-child {
-      border-bottom-left-radius: 16px;
-      border-top-left-radius: 16px;
+      border-bottom-left-radius: 10px;
+      border-top-left-radius: 10px;
       border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
       border-left: 1px solid ${({theme}) => theme.colors.cardBorder2};
       border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2};

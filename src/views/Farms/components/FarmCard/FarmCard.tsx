@@ -13,6 +13,9 @@ import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
+import { useWidth } from '../../../../hooks/useWidth'
+import { TransparentCard } from '../../../../components/Card'
+import { CurrencyLogo } from '../../../../components/Logo'
 
 export interface FarmWithStakedValue extends DeserializedFarm {
   apr?: number
@@ -74,6 +77,61 @@ const ExpandingWrapper = styled.div<{ isCardActive?: boolean }>`
   overflow: hidden;
 `
 
+const StyledDetailsContainer = styled(Flex)`
+  border-radius: 10px;
+  padding: 12px;
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  justify-content: space-between;
+  min-width: 400px;
+  ${({theme}) => theme.mediaQueries.md} {
+    min-width: 500px;
+  }
+`
+
+const SingleDetailWrapper = styled(Flex)`
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  padding: 12px 24px;
+`
+
+const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  
+  ${({isActive, theme}) => {
+    if (isActive) {
+      return `
+        background: ${theme.colors.gradients.poolHover};
+        
+        ${StyledDetailsContainer} {
+          background: rgba(3, 3, 3, 0.1);
+        }
+        ${Text} {
+          color: white
+        }
+      `
+    }
+    
+    return ''
+  }}
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.gradients.poolHover};
+    ${StyledDetailsContainer} {
+      background: rgba(3, 3, 3, 0.1);
+    }
+    ${Text} {
+      color: white
+    }
+  }
+`
+
 interface FarmCardProps {
   farm: FarmWithStakedValue
   displayApr: string
@@ -94,7 +152,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   isCardActive,
 }) => {
   const { t } = useTranslation()
-  const { isMobile, isTablet } = useMatchBreakpoints()
+  const width = useWidth()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
@@ -113,6 +171,60 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
   // const isPromotedFarm = farm.token.symbol === 'ECO'
+
+  if (width > 968) {
+    return (
+      <StyledDesktopCard isActive={isCardActive} onClick={onClick}>
+        <Flex flexDirection="column" justifyContent="center" alignItems="start" paddingLeft="12px">
+          <div>
+            <CurrencyLogo currency={farm.token} />
+            <CurrencyLogo currency={farm.quoteToken} />
+          </div>
+          <Text fontSize="20px" fontWeight="bold">
+            {farm.token?.symbol?.toUpperCase()}-{farm.quoteToken?.symbol?.toUpperCase()}
+          </Text>
+          <Text fontSize="12px" color="textSubtle2" bold>
+            {t('Farm')}
+          </Text>
+        </Flex>
+        <StyledDetailsContainer>
+          <SingleDetailWrapper>
+            {totalValueFormatted ?
+              <Text fontSize='20px' bold>${totalValueFormatted}</Text>
+              : <Skeleton height={24} width={80} />
+            }
+            <Text fontSize="14px" mt="4px" bold>
+              {t('Liquidity')}
+            </Text>
+          </SingleDetailWrapper>
+          <SingleDetailWrapper>
+            <Text fontSize="20px" bold>{earnLabel}</Text>
+            <Text fontSize="14px" mt="2px" bold>{t('Earn')}:</Text>
+          </SingleDetailWrapper>
+          <SingleDetailWrapper>
+            {farm.apr ? (
+              <ApyButton
+                variant="text-and-button"
+                pid={farm.pid}
+                lpSymbol={farm.lpSymbol}
+                multiplier={farm.multiplier}
+                lpLabel={lpLabel}
+                addLiquidityUrl={addLiquidityUrl}
+                cakePrice={cakePrice}
+                apr={farm.apr}
+                displayApr={displayApr}
+              />
+            ) : (
+              <Skeleton height={24} width={80} />
+            )}
+            <Text fontSize="14px" mt="4px" bold>
+              {t('APR')}
+            </Text>
+          </SingleDetailWrapper>
+        </StyledDetailsContainer>
+      </StyledDesktopCard>
+    )
+  }
 
   return (
     <StyledCard isActive={isCardActive} onClick={onClick}>

@@ -153,32 +153,46 @@ const StyledImage = styled(Image)`
   margin-top: 58px;
 `
 
+const StyledFlexLayout = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  min-width: 280px;
+  width: 100%;
+  //margin: 0 8px;
+  margin-bottom: 32px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content: flex-start;
+  }
+  
+  @media screen and (max-width: 967px) {
+    min-height: 150px;
+    & > * {
+      max-width: 240px;
+      min-width: 0;
+      margin: 12px 8px;
+      //max-width: 31.5%;
+    }
+  }
+`
+
 const FarmsContainer = styled(Card)`
   background: ${({theme}) => theme.colors.background};
   border: 1px solid ${({theme}) => theme.colors.cardBorder2};
   padding: 12px 8px;
   width: 100%;
   
+  @media screen and (min-width: 968px) {
+    border: none;
+    padding: 0;
+  }
+  
   ${({theme}) => theme.mediaQueries.sm} {
     background: transparent;
   }
   //min-height: calc(100vh - 500px);
-`
-
-const StyledFlexLayout = styled(FlexLayout)`
-  justify-content: center;
-  min-height: 150px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    justify-content: flex-start;
-  }
-  
-  & > * {
-    max-width: 240px;
-    min-width: 0;
-    margin: 12px 8px;
-    //max-width: 31.5%;
-  }
 `
 
 const FarmsWithDetailsContainer = styled.div`
@@ -249,7 +263,7 @@ const Farms: React.FC = () => {
   const location = useLocation()
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
   const width = useWidth()
-  const shouldRenderModal = width < 968
+  const shouldRenderModal = width < 969
 
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')

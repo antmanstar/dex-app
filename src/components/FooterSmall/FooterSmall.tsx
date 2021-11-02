@@ -40,6 +40,11 @@ const StyledContainer = styled(Flex)`
   height: 56px;
   border-top: 1px solid ${({ theme }) => theme.colors.tertiary};
   padding: 0 16px;
+  //background-color: ${({ theme }) => theme.colors.overlay};
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  backdrop-filter: blur( 4px );
 `
 
 const StyledImages = styled.img`

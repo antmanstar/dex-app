@@ -110,7 +110,7 @@ const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
         background: ${theme.colors.gradients.poolHover};
         
         ${StyledDetailsContainer} {
-          background: rgba(3, 3, 3, 0.1);
+          background: rgba(3, 3, 3, 0.2);
         }
         ${Text} {
           color: white
@@ -124,7 +124,7 @@ const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
   &:hover {
     background: ${({ theme }) => theme.colors.gradients.poolHover};
     ${StyledDetailsContainer} {
-      background: rgba(3, 3, 3, 0.1);
+      background: rgba(3, 3, 3, 0.2);
     }
     ${Text} {
       color: white

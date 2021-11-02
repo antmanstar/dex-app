@@ -216,7 +216,7 @@ const StyledTr = styled.tr`
         color: white;
       }
       ${StyledDetailsContainer} {
-        background: rgba(3, 3, 3, 0.1);
+        background: rgba(3, 3, 3, 0.2);
       }
     }
   }

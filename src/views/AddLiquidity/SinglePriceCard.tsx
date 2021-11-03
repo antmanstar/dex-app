@@ -34,6 +34,12 @@ const StyledValueText = styled(Text)`
   }
 `
 
+const StyledLightCard = styled(LightCard)`
+  @media screen and (max-width: 576px) {
+    background: transparent;
+  }
+`
+
 interface ISinglePriceCard {
   title: string
   data: string
@@ -45,14 +51,14 @@ export const SinglePriceCard = (props: ISinglePriceCard) => {
 
   return (
     <StyledCardWrapper>
-      <LightCard padding="24px">
+      <StyledLightCard padding="24px">
         <Text color="textSubtle2" textTransform="capitalize" fontSize="14px" mb="12px">
           {title}
         </Text>
         <StyledValueText color="text" textTransform="capitalize" fontSize="20px">
           {data}
         </StyledValueText>
-      </LightCard>
+      </StyledLightCard>
     </StyledCardWrapper>
   )
 }

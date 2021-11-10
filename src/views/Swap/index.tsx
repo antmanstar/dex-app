@@ -324,6 +324,17 @@ function SwapPage({ history, theme }: SwapPageInterface) {
     [onCurrencySelection],
   )
 
+  const allTokens = useAllTokens()
+  const defaultSecondToken = Object.values(allTokens).filter(single => single.symbol.toLowerCase() === "weth")[0]
+
+  useEffect(() => {
+    if (defaultSecondToken) {
+      handleOutputSelect(defaultSecondToken)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultSecondToken])
+
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
   const [onPresentImportTokenWarningModal] = useModal(

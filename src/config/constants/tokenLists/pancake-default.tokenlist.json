@@ -37,10 +37,10 @@
     {
       "name": "Tether",
       "symbol": "USDT",
-      "address": "0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A",
+      "address": "0x65B1A7066D51499DC6F5284c81645d6051D2ca67",
       "chainId": 80001,
       "decimals": 18,
-      "logoURI": "/images/tokens/0x2A11874a690f6f2Fe2CB969F5Fc246B784dd4B0A.png"
+      "logoURI": "/images/tokens/0x65B1A7066D51499DC6F5284c81645d6051D2ca67.png"
     },
     {
       "name": "WETH",

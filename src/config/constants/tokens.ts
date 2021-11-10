@@ -47,11 +47,19 @@ export const mainnetTokens = {
     'https://pancakeswap.finance/',
   ),
   weth: new Token(
-    TESTNET,
+    MAINNET,
     '0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8',
     18,
     'WETH',
     'Wrapped ETH',
+    'https://www.binance.com/',
+  ),
+  usdt: new Token(
+    MAINNET,
+    '0x65B1A7066D51499DC6F5284c81645d6051D2ca67',
+    18,
+    'USDT',
+    'US Doller Tether',
     'https://www.binance.com/',
   ),
 }
@@ -88,6 +96,14 @@ export const testnetTokens = {
     'ECO',
     'EcoSwap Token',
     'https://pancakeswap.finance/',
+  ),
+  usdt: new Token(
+    TESTNET,
+    '0x65B1A7066D51499DC6F5284c81645d6051D2ca67',
+    18,
+    'USDT',
+    'US Doller Tether',
+    'https://www.binance.com/',
   ),
 }
 

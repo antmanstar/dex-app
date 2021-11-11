@@ -16,7 +16,7 @@ import {
   Input,
   useMatchBreakpoints,
   Card,
-  SearchIcon,
+  SearchIcon, MinusIcon, AddIcon, IconButton, useModal,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -31,6 +31,8 @@ import { useCurrency } from '../../hooks/Tokens'
 import { CurrencyLogo } from '../../components/Logo'
 import useDebounce from '../../hooks/useDebounce'
 import { isAddress } from '../../utils'
+// eslint-disable-next-line import/named
+import { AddLiquidityCard } from '../AddLiquidity/AddLiquidityCard'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -249,6 +251,11 @@ const TokenList = ({
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
 
+  const [selectedPool, setSelectedPool] = useState({
+    currencyIdA: null,
+    currencyIdB: null,
+  })
+
   let address1 = token1.address
   let address2 = token2.address
 
@@ -263,6 +270,21 @@ const TokenList = ({
     currency1 = matic
     // address2 = 'MATIC'
     // currency2 = matic
+  }
+
+  const [handleAddButton] = useModal(
+    <AddLiquidityCard
+      currencyIdA={selectedPool?.currencyIdA}
+      currencyIdB={selectedPool?.currencyIdB}
+    />
+  )
+
+  const handleAddClick = (currencyIdA, currencyIdB) => {
+    setSelectedPool({
+      currencyIdA,
+      currencyIdB
+    })
+    handleAddButton()
   }
 
   if (isMobile) {
@@ -336,9 +358,23 @@ const TokenList = ({
         <Text fontSize="14px">${fees}</Text>
       </StyledTd>
       <StyledTd>
-        <Text textAlign="right" fontSize="14px">
+        <Text fontSize="14px">
           {apr}%
         </Text>
+      </StyledTd>
+      <StyledTd>
+        <Flex justifyContent="flex-end" alignItems="center">
+          <IconButton
+            scale="sm"
+            variant="secondary"
+            onClick={() => handleAddClick(address1, address2)}
+          >
+            <AddIcon color="currentColor" />
+          </IconButton>
+          <IconButton scale="sm" variant="secondary" marginLeft="8px">
+            <MinusIcon color="currentColor" />
+          </IconButton>
+        </Flex>
       </StyledTd>
     </StyledTr>
   )
@@ -508,6 +544,10 @@ export default function Pool() {
       {
         id: 'apr',
         title: 'APR',
+      },
+      {
+        id: 'my',
+        title: 'My Liquidity',
       },
     ]
   }

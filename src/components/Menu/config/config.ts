@@ -4,61 +4,61 @@ import { ContextApi } from 'contexts/Localization/types'
 export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
 
 const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
-  {
-    label: t('Home'),
-    // icon: 'Dashboard',
-    href: '/home',
-    hideSubNav: true,
-    showItemsOnMobile: false,
-    // items: [
-    //   {
-    //     label: t('Exchange'),
-    //     href: '/swap',
-    //   },
-    //   {
-    //     label: t('Liquidity'),
-    //     href: '/liquidity',
-    //   },
-    // ],
-  },
-  {
-    label: t('Swap'),
-    // icon: 'Swap',
-    href: '/swap',
-    hideSubNav: true,
-    showItemsOnMobile: false,
-    // items: [
-    //   {
-    //     label: t('Exchange'),
-    //     href: '/swap',
-    //   },
-    //   {
-    //     label: t('Liquidity'),
-    //     href: '/liquidity',
-    //   },
-    // ],
-  },
-  {
-    label: t('Pools'),
-    href: '/liquidity',
-    // icon: 'Pool',
-    hideSubNav: true,
-    showItemsOnMobile: false,
-  },
-  {
-    label: t('Farms'),
-    href: '/farms',
-    // icon: 'Farms',
-    hideSubNav: true,
-    showItemsOnMobile: false,
-  },
-  {
-    label: t('Stake'),
-    href: '/stake',
-    // icon: 'Stake',
-    hideSubNav: true,
-    showItemsOnMobile: false,
-  },
+  // {
+  //   label: t('Home'),
+  //   // icon: 'Dashboard',
+  //   href: '/home',
+  //   hideSubNav: true,
+  //   showItemsOnMobile: false,
+  //   // items: [
+  //   //   {
+  //   //     label: t('Exchange'),
+  //   //     href: '/swap',
+  //   //   },
+  //   //   {
+  //   //     label: t('Liquidity'),
+  //   //     href: '/liquidity',
+  //   //   },
+  //   // ],
+  // },
+  // {
+  //   label: t('Swap'),
+  //   // icon: 'Swap',
+  //   href: '/swap',
+  //   hideSubNav: true,
+  //   showItemsOnMobile: false,
+  //   // items: [
+  //   //   {
+  //   //     label: t('Exchange'),
+  //   //     href: '/swap',
+  //   //   },
+  //   //   {
+  //   //     label: t('Liquidity'),
+  //   //     href: '/liquidity',
+  //   //   },
+  //   // ],
+  // },
+  // {
+  //   label: t('Pools'),
+  //   href: '/liquidity',
+  //   // icon: 'Pool',
+  //   hideSubNav: true,
+  //   showItemsOnMobile: false,
+  // },
+  // {
+  //   label: t('Farms'),
+  //   href: '/farms',
+  //   // icon: 'Farms',
+  //   hideSubNav: true,
+  //   showItemsOnMobile: false,
+  // },
+  // {
+  //   label: t('Stake'),
+  //   href: '/stake',
+  //   // icon: 'Stake',
+  //   hideSubNav: true,
+  //   showItemsOnMobile: false,
+  // },
   // {
   //   label: t('NFT'),
   //   href: '/collectibles',
@@ -84,6 +84,62 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   //     },
   //   ],
   // },
+  {
+    label: t('Stats'),
+    href: "/dashboard",
+    icon: "Dashboard",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Swap'),
+    href: "/swap",
+    icon: "Swap",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Bridge'),
+    href: "/bridge",
+    icon: "Bridge",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Pools'),
+    href: "/liquidity",
+    icon: "Pools",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Farms'),
+    href: "/farms",
+    icon: "Farms",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Vault'),
+    href: "/vault",
+    icon: "Vault",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Stake'),
+    href: "/stake",
+    icon: "Stake",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('Lend'),
+    href: "/lending",
+    icon: "Lending",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
 ]
 
 export default config

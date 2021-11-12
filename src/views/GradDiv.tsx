@@ -5,7 +5,7 @@ const StyledGradDiv = styled.div`
   max-height: 100%;
   max-width: 100%;
   position: absolute;
-  height: calc(100vh - 56px);
+  height: calc(100vh - 100px);
   width: 100vw;
 
   // background-image: ${({ theme }) => theme.colors.gradients.radialLeft}, ${({ theme }) =>

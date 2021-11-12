@@ -20,8 +20,8 @@ import WalletUserMenuItem from './WalletUserMenuItem'
 import { useWidth } from '../../../hooks/useWidth'
 
 const StyledConnectWalletButton = styled(ConnectWalletButton)`
-  height: 36px;
-  width: 186px;
+  height: 35px;
+  width: 93px;
   padding: 0 8px;
 
   @media screen and (max-width: 1068px) {
@@ -43,7 +43,7 @@ const UserMenu = () => {
   const hasLowBnbBalance = fetchStatus === FetchStatus.SUCCESS && balance.lte(LOW_BNB_BALANCE)
 
   if (!account) {
-    return <StyledConnectWalletButton />
+    return <StyledConnectWalletButton onHeader/>
   }
 
   return (

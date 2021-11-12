@@ -9,11 +9,12 @@ const ConnectWalletButton = (props) => {
   const { login, logout } = useAuth()
   const width = useWidth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
+  const { onHeader } = props
 
   return (
     <Button onClick={onPresentConnectModal} {...props} scale="md">
-      <WalletFilledIcon width="24px" color="currentColor" mr="4px"/>
-      {t('Connect Wallet')}
+      {!onHeader && <WalletFilledIcon width='24px' color='currentColor' mr='4px' />}
+      {t(onHeader ? 'Wallet' : 'Connect Wallet')}
     </Button>
   )
 }

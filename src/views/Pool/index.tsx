@@ -370,7 +370,7 @@ const TokenList = ({
           <IconButton
             scale="sm"
             variant="secondary"
-            onClick={() => handleAddClick(address1, address2)}
+            // onClick={() => handleAddClick(address1, address2)}
           >
             <AddIcon color="currentColor" />
           </IconButton>

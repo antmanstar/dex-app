@@ -44,13 +44,15 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background: transparent;
-  border: 1px solid #59f3;
+  background-color: #131823;
+  // border: 1px solid #59f3;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding-left: 6px;
+  padding-top: 16px;
   border-radius: 10px;
+  padding-bottom: 16px;
   flex-direction: column;
   
   ${({theme}) => theme.mediaQueries.sm} {
@@ -60,9 +62,10 @@ const Header = styled(`div`)`
 
 const PoolContainer = styled(`div`)`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
+  flex-direction: column;
   
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
@@ -71,14 +74,58 @@ const PoolContainer = styled(`div`)`
   }
 `
 
-const CreateButtonContainer = styled(Flex)`
+const LockedValueContainer = styled(`div`)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  margin-top: 12px;
+  flex-direction: column;
+  
   ${({theme}) => theme.mediaQueries.sm} {
-    margin-top: 0;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+const LockedValueCard = styled(Flex)`
+  width: 100%;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  margin-top: ${props => (props.id === "eco_loc" ? `0` : `18px`)};
+  margin-bottom: ${props => (props.id === "user_loc" ? `0` : `18px`)};
+`
+
+const TotalPoolContainer = styled(`div`)`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding-right: 50px;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
   }
 `
+
+const StyledButton = styled(Button)`
+  width: 93px;
+  height: 35px;
+  border-radius: 5px;
+  background-image: ${props => (props.id === "p_btn" ? `linear-gradient(to top, #28144a 0%, #723fcb 99%, #723fcb 100%)` : `linear-gradient(to top, #2e82e6 0%, #00feff 99%, #00feff 100%)`)};
+  align-items: center;
+  margin-top: 7px;
+  margin-bottom:7px;
+  margin-left: ${props => (props.id === "p_btn" ? `7px` : `14px`)};
+  margin-right: ${props => (props.id === "p_btn" ? `7px` : `14px`)};
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  padding-top: 9px;
+  font-weight: 500;
+`;
+
 
 const TabContainer = styled(`div`)`
   display: flex;
@@ -517,18 +564,38 @@ export default function Pool() {
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>
+        <Heading marginLeft="1">Pools</Heading>
         <Header>
           <PoolContainer>
-            <Heading>Pool</Heading>
-            <Button id="import-pool-link" variant="text" scale="sm" as={Link} to="/find">
-              {t('Import')}
-            </Button>
+            <StyledButton id="p_btn" as={Link} to="/zap" >
+              {t('Zap')}
+            </StyledButton>
+            <Flex>
+              <StyledButton id="b_btn" as={Link} to="/add" >
+                {t('Create')}
+              </StyledButton>
+              <StyledButton id="b_btn" as={Link} to="/find">
+                {t('Import')}
+              </StyledButton>
+            </Flex>
+            {/* <StyledButton id="p_btn" as={Link} to="/migrate">
+              {t('Migrate')}
+            </StyledButton> */}
           </PoolContainer>
-          <CreateButtonContainer>
-            <Button id="join-pool-button" variant="subtle" as={Link} to="/add" width="100%">
-              {t('Create Pool')}
-            </Button>
-          </CreateButtonContainer>
+          <LockedValueContainer>
+            <LockedValueCard id="eco_loc">
+              <Text color="#c8c8c8" fontWeight="500" fontSize="14px">{t('Total Value Locked (ECOSWAP)')}</Text>
+              <Text color="#28d250" fontSize="22px" fontWeight="700">31,787,112</Text>
+            </LockedValueCard>
+            <LockedValueCard id="user_loc">
+              <Text color="#c8c8c8" fontWeight="500">{t('Total Value Locked (User)')}</Text>
+              <Text color="#efd600" fontSize="22px" fontWeight="700">31,787,112</Text>
+            </LockedValueCard>
+          </LockedValueContainer>
+          <TotalPoolContainer>
+            <Text color="#b376ff" fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
+            <Text color="#c8c8c8" fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
+          </TotalPoolContainer>
         </Header>
         {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
         <Body>

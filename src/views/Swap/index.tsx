@@ -69,6 +69,8 @@ import { ONE_HOUR_SECONDS } from '../../config/constants/info'
 import SettingsModal from '../../components/Menu/GlobalSettings/SettingsModal'
 import { useWidth } from '../../hooks/useWidth'
 import { SwapChart } from './Chart'
+import { CurrencyLogo } from '../../components/Logo'
+import DoubleCurrencyLogo from '../../components/Logo/DoubleLogo'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -429,6 +431,14 @@ function SwapPage({ history, theme }: SwapPageInterface) {
       <ProtocolUpdater />
       <PoolUpdater />
       <TokenUpdater />
+      <div style={{textAlign: 'center', marginTop: '50px'}}>
+        <Text fontSize="24px">
+          {t('THE MOST EFFICIENT DEFI PLATFORM')}
+        </Text>
+        <Text fontSize="16px" color="#7e96b8">
+          {t('Access the most liquidity, lowest slippage and best exchange rates across Ethereum, Binance Smart Chain and Polygon.')}
+        </Text>
+      </div>
       <StyledSwapPageGrid
         width="100%"
         gridColumnGap="8px"
@@ -441,30 +451,31 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         showSettings={showSettings}
       >
         {width >= 852 ? (
-          <Flex flexDirection="column">
-            <Text fontSize="24px">
-              {t('THE MOST EFFICIENT DEFI PLATFORM')}
-            </Text>
-            <Text fontSize="16px" color="#7e96b8">
-              {t('Access the most liquidity, lowest slippage and best exchange rates across Ethereum, Binance Smart Chain and Polygon.')}
-            </Text>
-            {/* <SwapChart /> */}
-             <StyledSwapPageChartCard 
-              variant="token" 
-              tokenData={tokenData} 
-              tokenPriceData={adjustedPriceData}
-              chartData={chartData} 
-              hideTabs 
-              defaultTab={ChartView.PRICE} 
-             /> 
-          </Flex>
+          <div>
+            <Flex flexDirection="column">
+              {/* <SwapChart /> */}
+              <div>
+                <DoubleCurrencyLogo
+                  currency0={currencies[Field.INPUT]}
+                  currency1={currencies[Field.OUTPUT]}
+                  withSymbol
+                  size={30}
+                  alignment='start' />
+              </div>
+              <StyledSwapPageChartCard
+                variant="token"
+                tokenData={tokenData}
+                tokenPriceData={adjustedPriceData}
+                chartData={chartData}
+                hideTabs
+                defaultTab={ChartView.PRICE}
+              />
+            </Flex>
+          </div>
         ) : (
           <></>
         )}
         <>
-          {width < 852 && <StyledText fontSize='18px' textAlign='center' mb='24px' fontWeight="500" pt="4px">
-            {t('THE MOST EFFICIENT DEFI PLATFORM')}
-          </StyledText>}
           <AppBody maxWidth="480px">
             {showSettings ? (
               <Wrapper id="swap-page">{renderSettings()}</Wrapper>

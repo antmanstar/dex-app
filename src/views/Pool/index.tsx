@@ -33,6 +33,9 @@ import useDebounce from '../../hooks/useDebounce'
 import { isAddress } from '../../utils'
 // eslint-disable-next-line import/named
 import { AddLiquidityCard } from '../AddLiquidity/AddLiquidityCard'
+import { PoolUpdater, TokenUpdater } from '../../state/info/updaters'
+import { useAllPoolData } from '../../state/info/hooks'
+import { PoolData } from '../../state/info/types'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -181,7 +184,7 @@ const SingleDetailWrapper = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  padding: 12px 24px;
+  padding: 0px 24px;
 `
 
 const SinglePoolButton = styled(Button)`
@@ -398,19 +401,25 @@ export default function Pool() {
 
   const debouncedQuery = useDebounce(searchQuery, 200)
 
+  const allPoolData = useAllPoolData()
+
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
     () =>
-      trackedTokenPairs.map((tokens, index) => ({
-        liquidityToken: toV2LiquidityToken(tokens),
-        tokens,
-        volume: Math.floor(index * 1000) + 1,
-        fees: Math.floor(index * 10) + 1,
-        liquidity: Math.floor(index * 1000) + 1,
-        apr: Math.floor(index * 10) + 1,
-      })),
-    [trackedTokenPairs],
+      trackedTokenPairs.map((tokens, index) => {
+        const lpToken = toV2LiquidityToken(tokens);
+        const pool = allPoolData[lpToken.address]?.data
+        return {
+          liquidityToken: lpToken,
+          tokens,
+          volume: pool?.volumeUSD || 0,
+          fees: pool?.totalFees24h || 0,
+          liquidity: pool?.liquidityUSD || 0,
+          apr: pool?.lpApr7d || 0,
+        };
+      }),
+    [trackedTokenPairs, allPoolData],
   )
 
   const liquidityTokens = useMemo(
@@ -554,6 +563,8 @@ export default function Pool() {
 
   return (
     <Page>
+      <PoolUpdater />
+      <TokenUpdater />
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>

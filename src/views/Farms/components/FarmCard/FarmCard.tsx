@@ -92,7 +92,7 @@ const SingleDetailWrapper = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  padding: 12px 24px;
+  padding: 0px 24px;
 `
 
 const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
@@ -180,7 +180,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
             <CurrencyLogo currency={farm.token} />
             <CurrencyLogo currency={farm.quoteToken} />
           </div>
-          <Text fontSize="20px" fontWeight="bold">
+          <Text fontSize="20px" fontWeight="600">
             {farm.token?.symbol?.toUpperCase()}-{farm.quoteToken?.symbol?.toUpperCase()}
           </Text>
           <Text fontSize="12px" color="textSubtle2" bold>

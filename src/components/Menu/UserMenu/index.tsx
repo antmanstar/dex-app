@@ -24,9 +24,9 @@ const StyledConnectWalletButton = styled(ConnectWalletButton)`
   width: 93px;
   padding: 0 8px;
 
-  @media screen and (max-width: 1068px) {
-    display: none;
-  }
+  //@media screen and (max-width: 1068px) {
+  //  display: none;
+  //}
 `
 
 const UserMenu = () => {

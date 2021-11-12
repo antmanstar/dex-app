@@ -13,20 +13,20 @@ interface IActiveNetworkInterface {
 }
 
 const StyledSelect = styled(Select)`
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
   
   & > div:first-child {
     padding: 0 8px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
   
   & > div:last-child {
     min-width: 180px;
     margin-top: 4px;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
   }
 `
 
@@ -43,26 +43,27 @@ export const NetworkSelectDropdown: React.FC = () => {
 
   const getMaxWidth = (value: IActiveNetworkInterface) => {
     switch (value.value) {
-      case 'polygon':
-        return '150px'
-      case 'ethereum':
-        return '150px'
-      case 'bscMainnet':
-        return '175px'
+      // case 'polygon':
+      //   return '169px'
+      // case 'ethereum':
+      //   return '169px'
+      // case 'bscMainnet':
+      //   return '169px'
       default:
-        return '175px'
+        return '168px'
     }
   }
 
   return (
     <StyledSelect
       maxWidth={getMaxWidth(network)}
-      mr="24px"
       selectedBackgroundColor={theme.colors.networkGrad[network.value]}
       selectedTextColor="white"
       options={networkList(t)}
       displayIconOnly={width < 768}
       onOptionChange={handleSortOptionChange}
+      minWidth="168px"
+      height="30px"
     />
   )
 }

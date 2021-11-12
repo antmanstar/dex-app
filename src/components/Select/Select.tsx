@@ -2,16 +2,16 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean }>`
+const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean, height?: any }>`
   width: 100%;
-  height: 36px;
+  height: ${({height}) => height || "36px"};
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: ${({displayIconOnly}) => displayIconOnly ? '0px 8px': '0px 16px'};
   box-shadow: ${({ theme }) => theme.shadows.inset};
   // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-  border-radius: 8px;
+  border-radius: 5px;
   background: ${({ theme, background }) => background || theme.colors.backgroundAlt};
   transition: border-radius 0.15s;
 `
@@ -40,14 +40,14 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
   width: 100%;
   position: relative;
   background: ${({ theme }) => theme.colors.tertiary};
-  border-radius: 8px;
-  height: 36px;
-  min-width: ${({displayIconOnly}) => displayIconOnly ? '64px' : '130px'} ;
+  border-radius: 5px;
+  height: ${({height}) => height || "36px"};
+  min-width: ${({displayIconOnly, minWidth}) => minWidth || displayIconOnly ? '64px' : '130px'} ;
   user-select: none;
   z-index: 20;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    min-width: 150px;
+    min-width: ${({minWidth}) => minWidth || "150px"};
   }
 
   ${(props) =>
@@ -56,10 +56,10 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
       ${DropDownHeader} {
         //border-bottom: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         box-shadow: ${({ theme }) => theme.tooltip.boxShadow};
-        border-radius: 8px 8px 0 0;
+        border-radius: 5px 5px 0 0;
       }
 
-      border-radius: 8px 8px 0 0;
+      border-radius: 5px 5px 0 0;
 
       ${DropDownListContainer} {
         height: auto;
@@ -67,7 +67,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
         opacity: 1;
         // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
         border-top-width: 0;
-        border-radius: 0 0 8px 8px;
+        border-radius: 0 0 5px 5px;
         box-shadow: ${({theme}) => theme.colors.shadow.default};
       }
     `}
@@ -145,7 +145,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
 
   return (
     <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly}>
-      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly}>
+      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly} height={props.height}>
         <>
           {options[selectedOptionIndex]?.icon && (
             <img

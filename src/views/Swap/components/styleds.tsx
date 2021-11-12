@@ -129,7 +129,7 @@ export const StyledSwapPageGrid = styled(Grid)<{showSettings?: boolean}>`
     grid-template-columns: 60% 40%;
   }
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-top: 48px;
+    margin-top: 15px;
   }
   
   @media screen and (max-width: 330px) {

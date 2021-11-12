@@ -65,7 +65,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
   }, [chartData])
 
   const getLatestValueDisplay = () => {
-    let valueToDisplay = null
+    let valueToDisplay = 0
     if (hoverValue) {
       valueToDisplay = formatAmount(hoverValue)
     } else if (view === ChartView.VOLUME && formattedVolumeData.length > 0) {
@@ -76,12 +76,10 @@ const ChartCard: React.FC<ChartCardProps> = ({
       valueToDisplay = formatAmount(tokenData.priceUSD)
     }
 
-    return valueToDisplay ? (
-      <Text fontSize="24px" bold>
-        ${valueToDisplay}
+    return (
+      <Text fontSize="48px" bold>
+        {valueToDisplay}
       </Text>
-    ) : (
-      <Skeleton height="36px" width="128px" />
     )
   }
 
@@ -103,11 +101,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
         </TabToggleGroup>
       )}
 
-      <Flex flexDirection="column" px="24px" pt="24px">
+      <Flex flexDirection="column" px="0" pt="0">
         {getLatestValueDisplay()}
-        <Text small color="secondary">
-          {hoverDate || currentDate}
-        </Text>
+        {/* <Text small color="secondary"> */}
+        {/*  {hoverDate || currentDate} */}
+        {/* </Text> */}
       </Flex>
 
       <Box px="24px" height={variant === 'token' ? '370px' : '335px'}>

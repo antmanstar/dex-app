@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
       position: absolute;
       right: 0;
       left: 0;
-      top: -56px;
+      top: -100px;
       bottom: 0;
       background: ${({ theme }) => theme.colors.gradients.bodyBg};
       z-index: -1;

@@ -10,6 +10,13 @@
   "logoURI": "/logo.png",
   "keywords": ["pancake", "default"],
   "tokens": [
-
+    {
+      "name": "EcoSwap 2",
+      "symbol": "ECO2",
+      "address": "0xD52E9dF0792ec399efE3cd29677C87e96B8D4372",
+      "chainId": 80001,
+      "decimals": 18,
+      "logoURI": "/images/tokens/0xD52E9dF0792ec399efE3cd29677C87e96B8D4372.png"
+    },
   ]
 }

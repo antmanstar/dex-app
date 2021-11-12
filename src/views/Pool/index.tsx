@@ -16,7 +16,7 @@ import {
   Input,
   useMatchBreakpoints,
   Card,
-  SearchIcon,
+  SearchIcon, MinusIcon, AddIcon, IconButton, useModal,
 } from '@pancakeswap/uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
@@ -31,6 +31,11 @@ import { useCurrency } from '../../hooks/Tokens'
 import { CurrencyLogo } from '../../components/Logo'
 import useDebounce from '../../hooks/useDebounce'
 import { isAddress } from '../../utils'
+// eslint-disable-next-line import/named
+import { AddLiquidityCard } from '../AddLiquidity/AddLiquidityCard'
+import { PoolUpdater, TokenUpdater } from '../../state/info/updaters'
+import { useAllPoolData } from '../../state/info/hooks'
+import { PoolData } from '../../state/info/types'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -226,7 +231,7 @@ const SingleDetailWrapper = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  padding: 12px 24px;
+  padding: 0px 24px;
 `
 
 const SinglePoolButton = styled(Button)`
@@ -296,6 +301,11 @@ const TokenList = ({
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
 
+  const [selectedPool, setSelectedPool] = useState({
+    currencyIdA: null,
+    currencyIdB: null,
+  })
+
   let address1 = token1.address
   let address2 = token2.address
 
@@ -310,6 +320,21 @@ const TokenList = ({
     currency1 = matic
     // address2 = 'MATIC'
     // currency2 = matic
+  }
+
+  const [handleAddButton] = useModal(
+    <AddLiquidityCard
+      currencyIdA={selectedPool?.currencyIdA}
+      currencyIdB={selectedPool?.currencyIdB}
+    />
+  )
+
+  const handleAddClick = (currencyIdA, currencyIdB) => {
+    setSelectedPool({
+      currencyIdA,
+      currencyIdB
+    })
+    handleAddButton()
   }
 
   if (isMobile) {
@@ -383,9 +408,23 @@ const TokenList = ({
         <Text fontSize="14px">${fees}</Text>
       </StyledTd>
       <StyledTd>
-        <Text textAlign="right" fontSize="14px">
+        <Text fontSize="14px">
           {apr}%
         </Text>
+      </StyledTd>
+      <StyledTd>
+        <Flex justifyContent="flex-end" alignItems="center">
+          <IconButton
+            scale="sm"
+            variant="secondary"
+            // onClick={() => handleAddClick(address1, address2)}
+          >
+            <AddIcon color="currentColor" />
+          </IconButton>
+          <IconButton scale="sm" variant="secondary" marginLeft="8px">
+            <MinusIcon color="currentColor" />
+          </IconButton>
+        </Flex>
       </StyledTd>
     </StyledTr>
   )
@@ -409,19 +448,25 @@ export default function Pool() {
 
   const debouncedQuery = useDebounce(searchQuery, 200)
 
+  const allPoolData = useAllPoolData()
+
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
   const tokenPairsWithLiquidityTokens = useMemo(
     () =>
-      trackedTokenPairs.map((tokens, index) => ({
-        liquidityToken: toV2LiquidityToken(tokens),
-        tokens,
-        volume: Math.floor(index * 1000) + 1,
-        fees: Math.floor(index * 10) + 1,
-        liquidity: Math.floor(index * 1000) + 1,
-        apr: Math.floor(index * 10) + 1,
-      })),
-    [trackedTokenPairs],
+      trackedTokenPairs.map((tokens, index) => {
+        const lpToken = toV2LiquidityToken(tokens);
+        const pool = allPoolData[lpToken.address]?.data
+        return {
+          liquidityToken: lpToken,
+          tokens,
+          volume: pool?.volumeUSD || 0,
+          fees: pool?.totalFees24h || 0,
+          liquidity: pool?.liquidityUSD || 0,
+          apr: pool?.lpApr7d || 0,
+        };
+      }),
+    [trackedTokenPairs, allPoolData],
   )
 
   const liquidityTokens = useMemo(
@@ -556,11 +601,17 @@ export default function Pool() {
         id: 'apr',
         title: 'APR',
       },
+      {
+        id: 'my',
+        title: 'My Liquidity',
+      },
     ]
   }
 
   return (
     <Page>
+      <PoolUpdater />
+      <TokenUpdater />
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>

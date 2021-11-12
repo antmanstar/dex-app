@@ -43,14 +43,14 @@ export const NetworkSelectDropdown: React.FC = () => {
 
   const getMaxWidth = (value: IActiveNetworkInterface) => {
     switch (value.value) {
-      case 'polygon':
-        return '150px'
-      case 'ethereum':
-        return '150px'
-      case 'bscMainnet':
-        return '175px'
+      // case 'polygon':
+      //   return '169px'
+      // case 'ethereum':
+      //   return '169px'
+      // case 'bscMainnet':
+      //   return '169px'
       default:
-        return '175px'
+        return '168px'
     }
   }
 
@@ -63,6 +63,8 @@ export const NetworkSelectDropdown: React.FC = () => {
       options={networkList(t)}
       displayIconOnly={width < 768}
       onOptionChange={handleSortOptionChange}
+      minWidth="168px"
+      height="30px"
     />
   )
 }

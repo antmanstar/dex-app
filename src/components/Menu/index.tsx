@@ -26,7 +26,7 @@ const Menu = (props) => {
   return (
     <UikitMenu
       userMenu={<UserMenu />}
-      // globalMenu={<GlobalSettings />}
+      globalMenu={<GlobalSettings />}
       networkMenu={<NetworkSelectDropdown />}
       isDark={isDark}
       toggleTheme={toggleTheme}

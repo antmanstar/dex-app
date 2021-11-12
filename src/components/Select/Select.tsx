@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean }>`
+const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean, height?: any }>`
   width: 100%;
-  height: 36px;
+  height: ${({height}) => height || "36px"};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,13 +41,13 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
   position: relative;
   background: ${({ theme }) => theme.colors.tertiary};
   border-radius: 8px;
-  height: 36px;
-  min-width: ${({displayIconOnly}) => displayIconOnly ? '64px' : '130px'} ;
+  height: ${({height}) => height || "36px"};
+  min-width: ${({displayIconOnly, minWidth}) => minWidth || displayIconOnly ? '64px' : '130px'} ;
   user-select: none;
   z-index: 20;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    min-width: 150px;
+    min-width: ${({minWidth}) => minWidth || "150px"};
   }
 
   ${(props) =>
@@ -145,7 +145,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
 
   return (
     <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly}>
-      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly}>
+      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly} height={props.height}>
         <>
           {options[selectedOptionIndex]?.icon && (
             <img

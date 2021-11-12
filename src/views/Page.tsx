@@ -27,7 +27,7 @@ const StyledPage = styled.div`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     //padding-top: 32px;
-    min-height: calc(100vh - 112px);
+    min-height: calc(100vh - 156px);
   }
 
   @media screen and (max-width: 360px) {

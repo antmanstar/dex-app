@@ -36,6 +36,8 @@ import { AddLiquidityCard } from '../AddLiquidity/AddLiquidityCard'
 import { PoolUpdater, TokenUpdater } from '../../state/info/updaters'
 import { useAllPoolData } from '../../state/info/hooks'
 import { PoolData } from '../../state/info/types'
+import Select, { OptionProps } from '../../components/Select/Select'
+import { useWidth } from '../../hooks/useWidth'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -49,7 +51,7 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background-color: #131823;
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
   // border: 1px solid #59f3;
   display: flex;
   justify-content: space-between;
@@ -103,6 +105,10 @@ const LockedValueCard = styled(Flex)`
   flex-direction: column;
   margin-top: 10px;
   margin-bottom: 10px;
+  
+  ${Text}:first-child {
+    color: ${({theme}) => theme.colors.headerSubtleText}
+  }
 
   margin-top: ${props => (props.id === "eco_loc" ? `0` : `18px`)};
   margin-bottom: ${props => (props.id === "user_loc" ? `0` : `18px`)};
@@ -125,6 +131,10 @@ const TotalPoolContainer = styled(`div`)`
   
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
+  }
+  
+  ${Text}:last-child {
+    color: ${({theme}) => theme.colors.headerSubtleText}
   }
 
   @media screen and (max-width: 576px) {
@@ -177,9 +187,14 @@ const StyledTabContainer = styled(TabContainer)`
 
   & > div {
     margin-top: 16px;
+    padding-left: 0;
+    
+    button:first-child {
+      padding-left: 0;
+    }
   }
 
-  margin-left: -30px;
+  //margin-left: -30px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
@@ -275,6 +290,13 @@ const StyledTd = styled(Td)`
 
 const StyledMobileCard = styled(Card)`
   background: ${({theme}) => theme.colors.background};
+`
+
+const StyledSelect = styled(Select)`
+  & > div:first-child {
+    background-color: ${({theme}) => theme.colors.headerInputBg};
+    box-shadow: none;
+  }
 `
 
 const TokenList = ({
@@ -387,10 +409,12 @@ const TokenList = ({
           to={`/add/${address1}/${address2}`}
           pl="0"
         >
-          <div>
+          <Flex>
             <CurrencyLogo currency={currency1} />
-            <CurrencyLogo currency={currency2} />
-          </div>
+            <Flex marginLeft="-8px">
+              <CurrencyLogo currency={currency2} />
+            </Flex>
+          </Flex>
           <Text ml="10px" fontSize="12px">
             {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
           </Text>
@@ -406,8 +430,8 @@ const TokenList = ({
         <Text fontSize="12px">${fees}</Text>
       </StyledTd>
       <StyledTd>
-        <Flex background="#feeeee" display="flex" justifyContent="center" borderRadius="5px" width="52px">
-          <Text fontSize="12px" mt="4px" mb="4px" color="#00c853" textAlign="center">
+        <Flex background="#28d250" display="flex" justifyContent="center" borderRadius="5px" width="52px">
+          <Text fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="600">
             {apr}%
           </Text>
         </Flex>
@@ -446,6 +470,7 @@ export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
+  const width = useWidth()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>('none')
@@ -515,10 +540,25 @@ export default function Pool() {
     }
     return tokenPairsWithLiquidityTokens.filter((pairss) => {
       const [pair1, pair2] = pairss.tokens
-      return (
-        ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) &&
-        (tab === 'my' ? v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0') : true)
-      )
+
+      switch (tab) {
+        case 'my': return (
+          ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) &&
+          (v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0'))
+        )
+        case 'eco': return (
+          ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) &&
+          (pair1.symbol.toLowerCase() === 'eco' || pair2.symbol.toLowerCase() === 'eco')
+        )
+        default: return (
+          ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol)))
+        )
+      }
+
+      // return (
+      //   ((pair1 && matchesSearch(pair1.symbol)) || (pair2 && matchesSearch(pair2.symbol))) &&
+      //   (tab === 'my' ? v2PairsBalances[pairss.liquidityToken.address]?.greaterThan('0') : true)
+      // )
     })
   }, [tokenPairsWithLiquidityTokens, debouncedQuery, v2PairsBalances, tab])
 
@@ -623,30 +663,34 @@ export default function Pool() {
   const getPoolTypeTabs = () => {
     return [
       {
-        id: 'all',
-        title: 'All',
+        value: 'all',
+        label: 'All',
       },
       {
-        id: 'top',
-        title: 'Top',
+        value: 'top',
+        label: 'Top',
       },
       {
-        id: 'eco',
-        title: 'Eco Pools',
+        value: 'eco',
+        label: 'Eco',
       },
       {
-        id: 'block',
-        title: 'Block Pools',
+        value: 'block',
+        label: 'Block',
       },
       {
-        id: 'stable',
-        title: 'Stable Pools',
+        value: 'stable',
+        label: 'Stable',
       },
       {
-        id: 'my',
-        title: 'My Pools',
+        value: 'my',
+        label: 'My',
       },
     ]
+  }
+
+  const handleSortOptionChange = (option): void => {
+    setTab(option.value)
   }
 
   return (
@@ -676,38 +720,43 @@ export default function Pool() {
           </PoolContainer>
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
-              <Text color="#c8c8c8" fontWeight="500" fontSize="14px">{t('Total Value Locked (ECOSWAP)')}</Text>
+              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (ECOSWAP)')}</Text>
               <Text color="#28d250" fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">
-              <Text color="#c8c8c8" fontWeight="500" fontSize="14px">{t('Total Value Locked (User)')}</Text>
+              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (User)')}</Text>
               <Text color="#efd600" fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>
             <Text color="#b376ff" fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
-            <Text color="#c8c8c8" fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
+            <Text fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
           </TotalPoolContainer>
         </Header>
         {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
         <Body>
           {/* {renderBody()} */}
           <StyledTabContainer>
-            <TabMenu
-              activeIndex={getPoolTypeTabs().map( (tt) => { return tt.id; }).indexOf(tab)}
-              onItemClick={(index) => { 
-                setTab(getPoolTypeTabs()[index].id)
+            {width > 768 ? <TabMenu
+              activeIndex={getPoolTypeTabs().map( (tt) => { return tt.value; }).indexOf(tab)}
+              onItemClick={(index) => {
+                setTab(getPoolTypeTabs()[index].value)
               }}
               normalVariant
             >
               {getPoolTypeTabs().map((singleTab, index) => {
                 return (
-                  <StyledTab color={tab === singleTab.id ? 'primary' : ''} onClick={() => setTab(singleTab.id)}>
-                    {singleTab.title}
+                  <StyledTab color={tab === singleTab.value ? 'primary' : ''} onClick={() => setTab(singleTab.value)}>
+                    {singleTab.label}
                   </StyledTab>
                 )
               })}
-            </TabMenu>
+            </TabMenu> : <Flex width="150px">
+              <StyledSelect
+                options={getPoolTypeTabs()}
+                onOptionChange={handleSortOptionChange}
+              />
+            </Flex>}
             <InputWrapper>
               <StyledSearchInput
                 id="token-search-input"

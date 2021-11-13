@@ -12,6 +12,7 @@ import GlobalSettings from './GlobalSettings'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { footerLinks } from './config/footerConfig'
 import { NetworkSelectDropdown } from '../NetworkSelectDropdown'
+import { useWidth } from '../../hooks/useWidth'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
@@ -19,6 +20,7 @@ const Menu = (props) => {
   const { profile } = useProfile()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useLocation()
+  const width = useWidth()
 
   const activeMenuItem = getActiveMenuItem({ menuConfig: config(t), pathname })
   const activeSubMenuItem = activeMenuItem?.items && getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
@@ -26,7 +28,7 @@ const Menu = (props) => {
   return (
     <UikitMenu
       userMenu={<UserMenu />}
-      globalMenu={<GlobalSettings />}
+      globalMenu={<GlobalSettings isPopUp={width < 481} />}
       networkMenu={<NetworkSelectDropdown />}
       isDark={isDark}
       toggleTheme={toggleTheme}

@@ -445,7 +445,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
         alignContent="center"
         alignItems="center"
         justifyContent="center"
-        height={(showSettings || isExpertMode) && width < 852 ? '100%' : 'calc(100vh - 300px)'}
+        height={(showSettings || isExpertMode) && width < 852 ? '100%' : 'calc(100vh - 400px)'}
         minHeight="500px"
         maxWidth="1024px"
         showSettings={showSettings}

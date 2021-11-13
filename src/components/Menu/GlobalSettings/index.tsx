@@ -5,6 +5,7 @@ import SettingsModal from './SettingsModal'
 
 interface IGlobalSettingsInterface {
   isPopUp?: boolean
+  modalId?: string
 }
 
 const StyledIconButton = styled(Flex)`
@@ -15,13 +16,13 @@ const StyledIconButton = styled(Flex)`
 
 const GlobalSettings = (props: IGlobalSettingsInterface) => {
 
-  const { isPopUp } = props
+  const { isPopUp, modalId } = props
 
   const [onPresentSettingsModal] = useModal(
     <SettingsModal isPopUp={isPopUp} />,
     false,
     true,
-    "global-settings-modal",
+    modalId || "global-settings-modal",
     isPopUp
   )
 

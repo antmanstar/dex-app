@@ -5,3 +5,11 @@
     font-weight: 800;
     font-style: normal;
   }
+
+@font-face {
+    font-family: 'Futura BT';
+    src: local('futura medium bt'), local('futura medium bt'),
+    url('/fonts/futura medium bt.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}

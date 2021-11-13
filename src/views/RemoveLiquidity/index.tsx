@@ -587,7 +587,7 @@ export default function RemoveLiquidity({
                   {t('Remove')}
                 </Button>
               </Flex>
-              <GlobalSettings isPopUp={width < 481}/>
+              <GlobalSettings isPopUp={width < 481} modalId="global-settings__pools-page"/>
             </Flex>
             <StyledAutoColumn gap="0px">
               <RowBetween padding="0.75rem 0.5rem 0.75rem 0">

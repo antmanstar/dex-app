@@ -38,6 +38,7 @@ import { useAllPoolData } from '../../state/info/hooks'
 import { PoolData } from '../../state/info/types'
 import Select, { OptionProps } from '../../components/Select/Select'
 import { useWidth } from '../../hooks/useWidth'
+import useTheme from '../../hooks/useTheme'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -316,6 +317,7 @@ const TokenList = ({
 }) => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const [token1, token2] = tokens
   let currency1: Token | Currency = token1
@@ -430,8 +432,8 @@ const TokenList = ({
         <Text fontSize="12px">${fees}</Text>
       </StyledTd>
       <StyledTd>
-        <Flex background="#28d250" display="flex" justifyContent="center" borderRadius="5px" width="52px">
-          <Text fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="600">
+        <Flex background={theme.colors.green} display="flex" justifyContent="center" borderRadius="5px" width="52px">
+          <Text color="white" fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="600">
             {apr}%
           </Text>
         </Flex>
@@ -471,6 +473,7 @@ export default function Pool() {
   const { t } = useTranslation()
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
   const width = useWidth()
+  const { theme } = useTheme()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>('none')
@@ -721,15 +724,15 @@ export default function Pool() {
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
               <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (ECOSWAP)')}</Text>
-              <Text color="#28d250" fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text color={theme.colors.green} fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">
               <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (User)')}</Text>
-              <Text color="#efd600" fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text color={theme.colors.yellow} fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>
-            <Text color="#b376ff" fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
+            <Text color={theme.colors.purple} fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
             <Text fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
           </TotalPoolContainer>
         </Header>

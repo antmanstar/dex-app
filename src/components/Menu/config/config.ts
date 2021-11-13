@@ -94,7 +94,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   {
     label: t('Swap'),
     href: "/swap",
-    icon: "Swap",
+    icon: "SwapAlt",
     hideSubNav: true,
     showItemsOnMobile: false,
   },

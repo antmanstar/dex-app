@@ -113,6 +113,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     showItemsOnMobile: false,
   },
   {
+    label: t('Tanks'),
+    href: "/tanks",
+    icon: "Tanks",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
     label: t('Farms'),
     href: "/farms",
     icon: "Farms",
@@ -137,6 +144,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     label: t('Lend'),
     href: "/lending",
     icon: "Lending",
+    hideSubNav: true,
+    showItemsOnMobile: false,
+  },
+  {
+    label: t('NFT'),
+    href: "/nft",
+    icon: "Boxes",
     hideSubNav: true,
     showItemsOnMobile: false,
   },

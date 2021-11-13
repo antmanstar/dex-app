@@ -60,10 +60,9 @@ export const NetworkSelectDropdown: React.FC = () => {
       selectedBackgroundColor={theme.colors.networkGrad[network.value]}
       selectedTextColor="white"
       options={networkList(t)}
-      displayIconOnly={width < 768}
       onOptionChange={handleSortOptionChange}
       minWidth="168px"
-      height="30px"
+      height={width < 768 ? "36px" : "30px"}
     />
   )
 }

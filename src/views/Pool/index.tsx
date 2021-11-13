@@ -45,7 +45,7 @@ const AppBody = styled(`div`)`
 
 const Body = styled(`div`)`
   border-radius: 10px;
-  margin-top: 2rem;
+  margin-top: 55px;
 `
 
 const Header = styled(`div`)`
@@ -91,6 +91,11 @@ const LockedValueContainer = styled(`div`)`
     justify-content: center;
     align-items: center;
   }
+
+  @media screen and (max-width: 576px) {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
 `
 
 const LockedValueCard = styled(Flex)`
@@ -101,6 +106,15 @@ const LockedValueCard = styled(Flex)`
 
   margin-top: ${props => (props.id === "eco_loc" ? `0` : `18px`)};
   margin-bottom: ${props => (props.id === "user_loc" ? `0` : `18px`)};
+
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 `
 
 const TotalPoolContainer = styled(`div`)`
@@ -112,25 +126,12 @@ const TotalPoolContainer = styled(`div`)`
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
   }
+
+  @media screen and (max-width: 576px) {
+    padding-right: 0;
+    align-items: center;
+  }
 `
-
-const StyledButton = styled(Button)`
-  width: 93px;
-  height: 35px;
-  border-radius: 5px;
-  background-image: ${props => (props.id === "p_btn" ? `linear-gradient(to top, #28144a 0%, #723fcb 99%, #723fcb 100%)` : `linear-gradient(to top, #2e82e6 0%, #00feff 99%, #00feff 100%)`)};
-  align-items: center;
-  margin-top: 7px;
-  margin-bottom:7px;
-  margin-left: ${props => (props.id === "p_btn" ? `7px` : `14px`)};
-  margin-right: ${props => (props.id === "p_btn" ? `7px` : `14px`)};
-  justify-content: center;
-  text-align: center;
-  color: #ffffff;
-  padding-top: 9px;
-  font-weight: 500;
-`;
-
 
 const TabContainer = styled(`div`)`
   display: flex;
@@ -178,6 +179,8 @@ const StyledTabContainer = styled(TabContainer)`
     margin-top: 16px;
   }
 
+  margin-left: -30px;
+
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
 
@@ -189,8 +192,8 @@ const StyledTabContainer = styled(TabContainer)`
 
 const TableWrapperCard = styled(Card)`
   margin-top: 12px;
-  padding-left: 8px;
-  padding-right: 8px;
+  // padding-left: 8px;
+  // padding-right: 8px;
   background-color: transparent;
   // background: ${({theme}) => theme.colors.backgroundAlt3};
   margin-bottom: 32px;
@@ -240,39 +243,34 @@ const SinglePoolButton = styled(Button)`
 `
 
 const StyledTr = styled.tr`
-  //border: 1px solid ${({theme}) => theme.colors.cardBorder2};
   border-radius: 10px;
-  & > td {
-    //background-color: ${({ theme }) => theme.colors.backgroundAlt2};
-    //height: 100px;
-    &:last-child {
-      border-bottom-right-radius: 10px;
-      border-top-right-radius: 10px;
-      // border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
-      //border-right: 1px solid ${({theme}) => theme.colors.cardBorder2};
-      // border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2} !important;
-    }
 
-    &:first-child {
-      border-bottom-left-radius: 10px;
-      border-top-left-radius: 10px;
-      // border-top: 1px solid ${({theme}) => theme.colors.cardBorder2};
-      //border-left: 1px solid ${({theme}) => theme.colors.cardBorder2};
-      // border-bottom: 1px solid ${({theme}) => theme.colors.cardBorder2};
-    }
-  }
   &:hover {
     & > td {
       background-color: ${({ theme }) => theme.colors.backgroundAlt2};
       ${StyledDetailsContainer} {
         background: rgba(3, 3, 3, 0.2);
       }
+
+      &:last-child {
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      &:first-child {
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+      }
     }
   }
 `
 
 const StyledTd = styled(Td)`
-  padding: 0.75rem;
+  padding-top: 10px;
+  padding-right: 16px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  border-bottom: 1px solid #1c1f2b;
 `
 
 const StyledMobileCard = styled(Card)`
@@ -393,36 +391,50 @@ const TokenList = ({
             <CurrencyLogo currency={currency1} />
             <CurrencyLogo currency={currency2} />
           </div>
-          <Text ml="10px" fontSize="14px" fontWeight="bold">
-            {currency1?.symbol?.toUpperCase()}-{currency2?.symbol?.toUpperCase()}
+          <Text ml="10px" fontSize="12px">
+            {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
           </Text>
         </Button>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="14px">${liquidity}</Text>
+        <Text fontSize="12px">${liquidity}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="14px">${volume}</Text>
+        <Text fontSize="12px">${volume}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="14px">${fees}</Text>
+        <Text fontSize="12px">${fees}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="14px">
-          {apr}%
-        </Text>
+        <Flex background="#feeeee" display="flex" justifyContent="center" borderRadius="5px" width="52px">
+          <Text fontSize="12px" mt="4px" mb="4px" color="#00c853" textAlign="center">
+            {apr}%
+          </Text>
+        </Flex>
       </StyledTd>
       <StyledTd>
         <Flex justifyContent="flex-end" alignItems="center">
+          <Text fontSize="12px" mr="10px">${volume}</Text>
           <IconButton
             scale="sm"
             variant="secondary"
+            size="16px"
+            borderColor="#28d250"
+            borderRadius="50%"
+            borderWidth="1px"
             // onClick={() => handleAddClick(address1, address2)}
           >
-            <AddIcon color="currentColor" />
+            <AddIcon color="#28d250" />
           </IconButton>
-          <IconButton scale="sm" variant="secondary" marginLeft="8px">
-            <MinusIcon color="currentColor" />
+          <IconButton 
+            scale="sm"
+            size="16px" 
+            variant="secondary"
+            borderColor="#fb8e8e"
+            borderRadius="50%"
+            borderWidth="1px" 
+            marginLeft="8px">
+            <MinusIcon color="#fb8e8e" />
           </IconButton>
         </Flex>
       </StyledTd>
@@ -433,12 +445,12 @@ const TokenList = ({
 export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>('none')
   const [reverseOrder, setReversOrder] = useState<boolean>(false)
-  const [tab, setTab] = useState<'all' | 'my'>('all')
+  const [tab, setTab] = useState<string>('all')
 
   const handleInput = useCallback((event) => {
     const input = event.target.value
@@ -521,7 +533,7 @@ export default function Pool() {
       if (!account) {
         return (
           <tr>
-            <Td colSpan={4}>
+            <Td colSpan={6}>
               <Text color="textSubtle" textAlign="center">
                 {t('Connect to a wallet to view your liquidity.')}
               </Text>
@@ -532,7 +544,7 @@ export default function Pool() {
       if (v2IsLoading) {
         return (
           <tr>
-            <Td colSpan={4}>
+            <Td colSpan={6}>
               <Text color="textSubtle" textAlign="center">
                 <Dots>{t('Loading')}</Dots>
               </Text>
@@ -554,7 +566,7 @@ export default function Pool() {
     }
     return (
       <tr>
-        <Td colSpan={4}>
+        <Td colSpan={6}>
           <Text color="textSubtle" textAlign="center">
             {t('No liquidity found.')}
           </Text>
@@ -591,11 +603,11 @@ export default function Pool() {
       },
       {
         id: 'volume',
-        title: 'volume',
+        title: 'volume (24H)',
       },
       {
         id: 'fees',
-        title: 'fees',
+        title: 'fees (24H)',
       },
       {
         id: 'apr',
@@ -608,6 +620,35 @@ export default function Pool() {
     ]
   }
 
+  const getPoolTypeTabs = () => {
+    return [
+      {
+        id: 'all',
+        title: 'All',
+      },
+      {
+        id: 'top',
+        title: 'Top',
+      },
+      {
+        id: 'eco',
+        title: 'Eco Pools',
+      },
+      {
+        id: 'block',
+        title: 'Block Pools',
+      },
+      {
+        id: 'stable',
+        title: 'Stable Pools',
+      },
+      {
+        id: 'my',
+        title: 'My Pools',
+      },
+    ]
+  }
+
   return (
     <Page>
       <PoolUpdater />
@@ -615,23 +656,23 @@ export default function Pool() {
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>
-        <Heading marginLeft="1">Pools</Heading>
+        <Heading marginLeft="1" marginBottom="2">Pools</Heading>
         <Header>
           <PoolContainer>
-            <StyledButton id="p_btn" as={Link} to="/zap" >
+            <Button variant="primary" scale="sm" as={Link} to="/zap" width="93px" margin="10px">
               {t('Zap')}
-            </StyledButton>
+            </Button>
             <Flex>
-              <StyledButton id="b_btn" as={Link} to="/add" >
+              <Button variant="light" scale="sm" as={Link} to="/add" width="93px" margin="10px">
                 {t('Create')}
-              </StyledButton>
-              <StyledButton id="b_btn" as={Link} to="/find">
+              </Button>
+              <Button variant="light" scale="sm" as={Link} to="/find" width="93px" margin="10px">
                 {t('Import')}
-              </StyledButton>
+              </Button>
             </Flex>
-            {/* <StyledButton id="p_btn" as={Link} to="/migrate">
+            {/* <Button variant="primary" scale="sm" as={Link} to="/migrate" width="93px" height="35px" margin="10px">
               {t('Migrate')}
-            </StyledButton> */}
+            </Button> */}
           </PoolContainer>
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
@@ -639,7 +680,7 @@ export default function Pool() {
               <Text color="#28d250" fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">
-              <Text color="#c8c8c8" fontWeight="500">{t('Total Value Locked (User)')}</Text>
+              <Text color="#c8c8c8" fontWeight="500" fontSize="14px">{t('Total Value Locked (User)')}</Text>
               <Text color="#efd600" fontSize="22px" fontWeight="700">31,787,112</Text>
             </LockedValueCard>
           </LockedValueContainer>
@@ -653,33 +694,30 @@ export default function Pool() {
           {/* {renderBody()} */}
           <StyledTabContainer>
             <TabMenu
-              activeIndex={tab === 'all' ? 0 : 1}
-              onItemClick={(index) => {
-                if (index === 0) {
-                  setTab('all')
-                } else {
-                  setTab('my')
-                }
+              activeIndex={getPoolTypeTabs().map( (tt) => { return tt.id; }).indexOf(tab)}
+              onItemClick={(index) => { 
+                setTab(getPoolTypeTabs()[index].id)
               }}
-              switchVariant
+              normalVariant
             >
-              <StyledTab color={tab === 'all' ? 'primary' : ''} onClick={() => setTab('all')}>
-                All
-              </StyledTab>
-              <StyledTab color={tab === 'my' ? 'primary' : ''} onClick={() => setTab('my')}>
-                My Pools
-              </StyledTab>
+              {getPoolTypeTabs().map((singleTab, index) => {
+                return (
+                  <StyledTab color={tab === singleTab.id ? 'primary' : ''} onClick={() => setTab(singleTab.id)}>
+                    {singleTab.title}
+                  </StyledTab>
+                )
+              })}
             </TabMenu>
             <InputWrapper>
               <StyledSearchInput
                 id="token-search-input"
-                placeholder={t('Search name or paste address')}
-                scale="lg"
+                placeholder={t('Search by Name')}
+                scale="md"
                 autoComplete="off"
                 value={searchQuery}
                 onChange={handleInput}
               />
-              <SearchIcon />
+              <SearchIcon width="20px" />
             </InputWrapper>
           </StyledTabContainer>
           <TableWrapperCard>
@@ -692,7 +730,7 @@ export default function Pool() {
                     textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
                     onClick={() => handleHeaderClick(singleHeader.id)}
                   >
-                    {singleHeader.title}
+                    <Text fontSize="12px" color='grey'>{singleHeader.title}</Text>
                   </Th>
                 )
               })}

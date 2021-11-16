@@ -49,11 +49,15 @@ const AppBody = styled(`div`)`
 const Body = styled(`div`)`
   border-radius: 10px;
   margin-top: 55px;
+
+  @media screen and (max-width: 576px) {
+    margin-top: 30px;
+  }
 `
 
 const Header = styled(`div`)`
   background-color: ${({theme}) => theme.colors.backgroundAlt};
-  // border: 1px solid #59f3;
+  border: 1px solid #131823;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -174,6 +178,7 @@ const StyledDetailsWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  grid-row-gap: 20px;
 
   grid-template-columns: 1fr 1fr 1fr;
 
@@ -194,8 +199,6 @@ const StyledTabContainer = styled(TabContainer)`
       padding-left: 0;
     }
   }
-
-  //margin-left: -30px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
@@ -226,13 +229,11 @@ const StyledTab = styled(Tab)`
 `
 
 const StyledSearchInput = styled(Input)`
+  background: ${({ theme }) => theme.colors.backgroundAlt};
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSubtle2};
     font-size: 14px;
   }
-`
-
-const PoolNameText = styled(Text)`
 `
 
 const StyledDetailsContainer = styled(Flex)`
@@ -379,7 +380,7 @@ const TokenList = ({
                   { title: 'volume', value: `$${volume}` },
                   { title: 'liquidity', value: `$${liquidity}` },
                   { title: 'fees', value: `$${fees}` },
-                  // { title: "apr", value: `${apr}%` }
+                  { title: "apr", value: `${apr}%` }
                 ].map((singleValue) => {
                   return (
                     <Flex alignItems="start" flexDirection="column">
@@ -392,6 +393,35 @@ const TokenList = ({
                     </Flex>
                   )
                 })}
+                <Flex alignItems="start" flexDirection="column">
+                  <Text color="textSubtle2" textTransform="capitalize" fontSize="12px" mb="2px">
+                    {t('my liquidity')}:
+                  </Text>
+                  <Flex justifyContent="flex-end" alignItems="center">
+                    <Text fontSize="16px" mr="10px">${volume}</Text>
+                    <IconButton
+                      scale="sm"
+                      variant="secondary"
+                      size="16px"
+                      borderColor="#28d250"
+                      borderRadius="50%"
+                      borderWidth="1px"
+                      // onClick={() => handleAddClick(address1, address2)}
+                    >
+                      <AddIcon color="#28d250" />
+                    </IconButton>
+                    <IconButton 
+                      scale="sm"
+                      size="16px" 
+                      variant="secondary"
+                      borderColor="#fb8e8e"
+                      borderRadius="50%"
+                      borderWidth="1px" 
+                      marginLeft="8px">
+                      <MinusIcon color="#fb8e8e" />
+                    </IconButton>
+                  </Flex>
+                </Flex>
               </StyledDetailsWrapper>
             </CardBody>
           </StyledMobileCard>
@@ -476,7 +506,7 @@ export default function Pool() {
   const { theme } = useTheme()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [sortBy, setSortBy] = useState<string>('none')
+  const [sortBy, setSortBy] = useState<string>('all')
   const [reverseOrder, setReversOrder] = useState<boolean>(false)
   const [tab, setTab] = useState<string>('all')
 
@@ -703,7 +733,7 @@ export default function Pool() {
       {/* @ts-ignore */}
       <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
       <AppBody>
-        <Heading marginLeft="1" marginBottom="2">Pools</Heading>
+        <Heading ml="1" mb="2">{t('Pools')}</Heading>
         <Header>
           <PoolContainer>
             <Button variant="primary" scale="sm" as={Link} to="/zap" width="93px" margin="10px">

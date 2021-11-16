@@ -12,12 +12,18 @@ import {
   ArrowForwardIcon,
   Flex,
   Card,
+  SearchIcon,
+  SubMenuItems,
+  Tab,
+  TabMenu,
+  Input,
   useMatchBreakpoints, useModal,
 } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
 import FlexLayout from 'components/Layout/Flex'
-import Page from 'components/Layout/Page'
+import Page from 'views/Page'
+// import Page from 'components/Layout/Page'
 import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd } from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { DeserializedFarm } from 'state/types'
@@ -40,50 +46,195 @@ import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
+import config from '../../components/Menu/config/config'
 import RowDataJSON from '../../config/constants/DummyFarmsData.json'
-import { FarmDetailsCard } from './FarmDetailsCard'
-import { DetailsModal } from './DetailsModal'
 import { setActiveBodyType } from '../../state/farms'
 import { useWidth } from '../../hooks/useWidth'
 
-const ControlContainer = styled.div`
+const StyledPage = styled(`div`)`
+  max-width: 1024px;
+  width: 100%;
+  z-index: 1;
+  padding-top: 57px;
+`
+
+const Header = styled(`div`)`
+  margin-top: 8px;
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  border: 1px solid #131823;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 27px;
+  padding-top: 7px;
+  border-radius: 10px;
+  padding-bottom: 7px;
+  flex-direction: column;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    flex-direction: row;
+  } 
+`
+
+const InfoContainer = styled(`div`)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    width: auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 576px) {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+`
+
+const StyledLabelCard = styled(Flex)`
+  width: 100%;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+  ${Text}:first-child {
+    color: ${({theme}) => theme.colors.headerSubtleText}
+  }
+
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+`
+
+const StyledButtonCard = styled(Flex)`
+  width: 100%;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+  ${Text}:first-child {
+    color: ${({theme}) => theme.colors.headerSubtleText}
+  }
+  
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+`
+
+const TotalFarmContainer = styled(`div`)`
   display: flex;
   width: 100%;
+  flex-direction: column;
+  padding-right: 50px;
+  
+  ${({theme}) => theme.mediaQueries.sm} {
+    width: auto;
+  }
+  
+  ${Text}:last-child {
+    color: ${({theme}) => theme.colors.headerSubtleText}
+  }
+
+  @media screen and (max-width: 576px) {
+    padding-right: 0;
+    align-items: center;
+  }
+`
+
+const Body = styled(`div`)`
+  border-radius: 10px;
+  margin-top: 55px;
+
+  @media screen and (max-width: 576px) {
+    margin-top: 30px;
+  }
+`
+
+const TabContainer = styled(`div`)`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+`
+
+const StyledTabContainer = styled(TabContainer)`
+  display: flex;
+  flex-direction: column-reverse;
+
+  & > div {
+    margin-top: 16px;
+    padding-left: 0;
+    
+    button:first-child {
+      padding-left: 0;
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+
+    & > div {
+      margin-top: 0;
+    }
+  }
+`
+
+const StyledSortTabContainer = styled(TabContainer)`
+  display: flex;
+  justify-content: center;
+
+  & > div {
+    margin-top: 16px;
+    padding-left: 0;
+    
+    button:first-child {
+      padding-left: 0;
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 30px;
+    justify-content: flex-start;
+    & > div {
+      margin-top: 0;
+    }
+  }
+`
+
+const StyledTab = styled(Tab)`
+  padding: 8px 16px;
+`
+
+const InputWrapper = styled(`div`)`
+  width: 100%;
+  max-width: 400px;
   position: relative;
 
-  justify-content: space-between;
-  flex-direction: column;
-  margin-bottom: 12px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex-direction: row;
-    flex-wrap: wrap;
-    //padding: 8px;
-    margin-bottom: 0;
-  }
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    //padding: 16px 32px;
+  & > svg {
+    position: absolute;
+    right: 12px;
+    top: 14px;
   }
 `
 
-const HeaderWrapper = styled(Flex)`
-  margin-bottom: 12px;
-  width: 100%;
-  ${({ theme }) => theme.mediaQueries.md} {
-    width: auto;
-    margin-bottom: 0;
-  }
-`
-
-const ToggleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-
-  ${Text} {
-    margin-left: 8px;
+const StyledSearchInput = styled(Input)`
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textSubtle2};
+    font-size: 14px;
   }
 `
 
@@ -111,42 +262,6 @@ const FilterContainer = styled.div`
   }
 `
 
-const ViewControls = styled.div`
-  flex-wrap: wrap;
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
-  width: 100%;
-
-  > div {
-    padding: 8px 0px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    justify-content: flex-start;
-    width: auto;
-
-    > div {
-      padding: 0;
-    }
-  }
-`
-
-const Header = styled(`div`)`
-  background: transparent;
-  border: 1px solid #59f3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 16px;
-  margin-top: 48px;
-  border-radius: 10px;
-  
-  ${({theme}) => theme.mediaQueries.sm} {
-    //padding: 20px;
-  } 
-`
-
 const StyledImage = styled(Image)`
   margin-left: auto;
   margin-right: auto;
@@ -154,70 +269,20 @@ const StyledImage = styled(Image)`
 `
 
 const StyledFlexLayout = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 100%;
-  min-width: 280px;
-  width: 100%;
-  //margin: 0 8px;
-  margin-bottom: 32px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    justify-content: flex-start;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 34px;
+  grid-row-gap: 34px;
+  padding-top: 5px;
   
-  @media screen and (max-width: 967px) {
-    min-height: 150px;
-    & > * {
-      max-width: 240px;
-      min-width: 0;
-      margin: 12px 8px;
-      //max-width: 31.5%;
-    }
+   @media screen and (max-width: 763px) {
+    grid-template-columns: 1fr;
   }
 `
 
 const FarmsContainer = styled(Card)`
-  background: ${({theme}) => theme.colors.background};
-  border: 1px solid ${({theme}) => theme.colors.cardBorder2};
-  padding: 12px 8px;
+  background: #00000000;
   width: 100%;
-  
-  @media screen and (min-width: 968px) {
-    border: none;
-    padding: 0;
-  }
-  
-  ${({theme}) => theme.mediaQueries.sm} {
-    background: transparent;
-  }
-  //min-height: calc(100vh - 500px);
-`
-
-const FarmsWithDetailsContainer = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  margin-top: 24px;
-  grid-column-gap: 24px;
-  
-  @media screen and (max-width: 1024px) {
-    grid-column-gap: 16px;
-  }
-
-  @media screen and (max-width: 968px) {
-    //grid-template-columns: 1fr 1fr;
-    padding-left: 8px;
-    padding-right: 8px;
-
-    display: flex;
-    width: 100%;
-    //flex-direction: column;
-  }
-`
-
-const StyledPage = styled(Page)`
-  padding: 16px 0;
 `
 
 const DesktopFarmsDetails = styled.div`
@@ -227,6 +292,13 @@ const DesktopFarmsDetails = styled.div`
 `
 
 const StyledSelect = styled(Select)`
+  & > div:first-child {
+    background-color: ${({theme}) => theme.colors.headerInputBg};
+    box-shadow: none;
+  }
+`
+
+const StyledSortSelect = styled(Select)`
   & > div:first-child {
     background-color: ${({theme}) => theme.colors.headerInputBg};
     box-shadow: none;
@@ -254,7 +326,7 @@ const Farms: React.FC = () => {
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
-  const [sortOption, setSortOption] = useState('hot')
+  const [sortOption, setSortOption] = useState('liquidity')
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
   const { isTablet, isMobile } = useMatchBreakpoints()
@@ -264,6 +336,7 @@ const Farms: React.FC = () => {
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
   const width = useWidth()
   const shouldRenderModal = width < 969
+  const [tab, setTab] = useState<string>('all')
 
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
@@ -274,23 +347,6 @@ const Farms: React.FC = () => {
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
   const userDataReady = !account || (!!account && userDataLoaded)
-
-  const [detailsModal, dismissDetailsModal] = useModal(
-    <DetailsModal
-      data={activeFarmCard}
-      customOnDismiss={() => {
-        setActiveFarmCard(undefined)
-        dismissDetailsModal()
-      }}
-      location={location}
-      userDataReady={userDataReady}
-      isPopUp={width < 481}
-    />,
-    true,
-    true,
-    'farm-details-modal',
-    width < 481
-  )
 
   const [stakedOnly, setStakedOnly] = useUserFarmStakedOnly(isActive)
 
@@ -339,6 +395,56 @@ const Farms: React.FC = () => {
     setQuery(event.target.value)
   }
 
+  const getFarmsTypeTabs = () => {
+    return [
+      {
+        value: 'all',
+        label: 'All',
+      },
+      {
+        value: 'top',
+        label: 'Top',
+      },
+      {
+        value: 'eco',
+        label: 'Eco',
+      },
+      {
+        value: 'block',
+        label: 'Block',
+      },
+      {
+        value: 'stable',
+        label: 'Stable',
+      },
+      {
+        value: 'my',
+        label: 'My',
+      },
+    ]
+  }
+
+  const getSortByTabs = () => {
+    return [
+      {
+        value: 'liquidity',
+        label: 'Liquidity',
+      },
+      {
+        value: 'pool',
+        label: 'Pool',
+      },
+      {
+        value: 'weight',
+        label: 'Weight',
+      },
+      {
+        value: 'apr',
+        label: 'APR',
+      }
+    ]
+  }
+
   const [numberOfFarmsVisible, setNumberOfFarmsVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
 
   const chosenFarmsMemoized = useMemo(() => {
@@ -348,13 +454,13 @@ const Farms: React.FC = () => {
       switch (sortOption) {
         case 'apr':
           return orderBy(farms, (farm: FarmWithStakedValue) => farm.apr + farm.lpRewardsApr, 'desc')
-        case 'multiplier':
+        case 'pool':
           return orderBy(
             farms,
             (farm: FarmWithStakedValue) => (farm.multiplier ? Number(farm.multiplier.slice(0, -1)) : 0),
             'desc',
           )
-        case 'earned':
+        case 'weight':
           return orderBy(
             farms,
             (farm: FarmWithStakedValue) => (farm.userData ? Number(farm.userData.earnings) : 0),
@@ -447,8 +553,6 @@ const Farms: React.FC = () => {
     return row
   })
 
-  // const dummyRowData = RowDataJSON
-
   useEffect(() => {
     if (chosenFarmsMemoized && !shouldRenderModal) {
       setActiveFarmCard(chosenFarmsMemoized[0])
@@ -478,14 +582,6 @@ const Farms: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatedData, activeFarmCard])
 
-  const handleSelectFarm = (data: any) => {
-    setActiveFarmCard(data)
-    if (shouldRenderModal) {
-      detailsModal()
-    }
-    dispatch(setActiveBodyType('details'))
-  }
-
   const renderNoDataFound = () => {
     return (
       <Flex justifyContent="center" alignItems="center" width="100%" height="120px">
@@ -496,127 +592,99 @@ const Farms: React.FC = () => {
     )
   }
 
-  const renderContent = (): JSX.Element => {
-    // if (viewMode === ViewMode.TABLE && rowData.length) {
-    //   const columnSchema = DesktopColumnSchema
-    //
-    //   const columns = columnSchema.map((column) => ({
-    //     id: column.id,
-    //     name: column.name,
-    //     label: column.label,
-    //     sort: (a: RowType<RowProps>, b: RowType<RowProps>) => {
-    //       switch (column.name) {
-    //         case 'farm':
-    //           return b.id - a.id
-    //         case 'apr':
-    //           if (a.original.apr.value && b.original.apr.value) {
-    //             return Number(a.original.apr.value) - Number(b.original.apr.value)
-    //           }
-    //
-    //           return 0
-    //         case 'earned':
-    //           return a.original.earned.earnings - b.original.earned.earnings
-    //         default:
-    //           return 1
-    //       }
-    //     },
-    //     sortable: column.sortable,
-    //   }))
-    //
-    //   return <Table data={rowData} columns={columns} userDataReady={userDataReady} />
-    // }
-
+  const renderFarmsTab = (): JSX.Element => {
     return (
-      <FarmsWithDetailsContainer>
+      <StyledTabContainer>
+        {width > 768 ? <TabMenu
+          activeIndex={getFarmsTypeTabs().map( (tt) => { return tt.value; }).indexOf(tab)}
+          onItemClick={(index) => {
+            setTab(getFarmsTypeTabs()[index].value)
+          }}
+          normalVariant
+        >
+          {getFarmsTypeTabs().map((singleTab, index) => {
+            return (
+              <StyledTab color={tab === singleTab.value ? 'primary' : ''} onClick={() => setTab(singleTab.value)}>
+                {singleTab.label}
+              </StyledTab>
+            )
+          })}
+        </TabMenu> : <Flex width="150px">
+          <StyledSelect
+            options={getFarmsTypeTabs()}
+            onOptionChange={handleSortOptionChange}
+          />
+        </Flex>}
+        <InputWrapper>
+          <StyledSearchInput
+            id="token-search-input"
+            placeholder={t('Search by Name')}
+            scale="md"
+            autoComplete="off"
+            onChange={handleChangeQuery}
+          />
+          <SearchIcon width="20px" />
+        </InputWrapper>
+      </StyledTabContainer>
+    )
+  }
+
+  const renderSortByTab = (): JSX.Element => {
+    return (
+        <StyledSortTabContainer>        
+        <Text mr="2">{t('Sort by :')}</Text>
+          {width > 768 ? <TabMenu
+            activeIndex={getSortByTabs().map( (tt) => { return tt.value; }).indexOf(sortOption)}
+            onItemClick={(index) => {
+              setSortOption(getSortByTabs()[index].value)
+            }}
+            normalVariant
+          >
+            {getSortByTabs().map((singleTab, index) => {
+              return (
+                <StyledTab color={sortOption === singleTab.value ? 'primary' : ''} onClick={() => setSortOption(singleTab.value)}>
+                  {singleTab.label}
+                </StyledTab>
+              )
+            })}
+          </TabMenu> : <Flex width="150px">
+            <StyledSortSelect
+              options={getSortByTabs()}
+              onOptionChange={handleSortOptionChange}
+              zindex="10"
+            />
+          </Flex>}
+        </StyledSortTabContainer>
+    )
+  }
+
+  const renderContent = (): JSX.Element => {
+    return (
         <FarmsContainer>
           <StyledFlexLayout>
-            <Route exact path={`${path}`}>
               {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
               {chosenFarmsMemoized.map((farm) => (
-                <FarmCard
-                  isCardActive={activeFarmCard?.pid === farm.pid}
-                  key={farm.pid}
-                  farm={farm}
-                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-                  cakePrice={cakePrice}
-                  account={account}
-                  onClick={() => handleSelectFarm(farm)}
-                  removed={false}
-                />
+                <Link to={{
+                  pathname: `${path}/${farm.pid}`,
+                }} >
+                  <FarmCard
+                    isCardActive={activeFarmCard?.pid === farm.pid}
+                    key={farm.pid}
+                    farm={farm}
+                    displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                    cakePrice={cakePrice}
+                    account={account}
+                    removed={false}
+                  />
+                </Link>
               ))}
-            </Route>
-            <Route exact path={`${path}/history`}>
-              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
-              {chosenFarmsMemoized.map((farm) => (
-                <FarmCard
-                  isCardActive={activeFarmCard?.pid === farm.pid}
-                  key={farm.pid}
-                  farm={farm}
-                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-                  cakePrice={cakePrice}
-                  account={account}
-                  onClick={() => handleSelectFarm(farm)}
-                  removed
-                />
-              ))}
-            </Route>
-            <Route exact path={`${path}/archived`}>
-              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
-              {chosenFarmsMemoized.map((farm) => (
-                <FarmCard
-                  isCardActive={activeFarmCard?.pid === farm.pid}
-                  key={farm.pid}
-                  farm={farm}
-                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-                  cakePrice={cakePrice}
-                  account={account}
-                  onClick={() => handleSelectFarm(farm)}
-                  removed
-                />
-              ))}
-            </Route>
           </StyledFlexLayout>
         </FarmsContainer>
-        <DesktopFarmsDetails>{activeFarmCard && <FarmDetailsCard userDataReady={userDataReady} location={location} data={activeFarmCard} />}</DesktopFarmsDetails>
-      </FarmsWithDetailsContainer>
     )
   }
 
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
-  }
-
-  const renderSortDropdown = () => {
-    return (
-      <LabelWrapper>
-        {/* <Text textTransform="uppercase">{t('Sort by')}</Text> */}
-        <StyledSelect
-          options={[
-            {
-              label: t('Hot'),
-              value: 'hot',
-            },
-            {
-              label: t('APR'),
-              value: 'apr',
-            },
-            {
-              label: t('Multiplier'),
-              value: 'multiplier',
-            },
-            {
-              label: t('Earned'),
-              value: 'earned',
-            },
-            {
-              label: t('Liquidity'),
-              value: 'liquidity',
-            },
-          ]}
-          onOptionChange={handleSortOptionChange}
-        />
-      </LabelWrapper>
-    )
   }
 
   const renderFarmsTabButton = () => {
@@ -626,46 +694,48 @@ const Farms: React.FC = () => {
   }
 
   return (
-    <>
+    <Page>
       <StyledPage>
+        <Heading ml="1" mb="2">{t('Farms')}</Heading>
         <Header>
-          <ControlContainer>
-            <HeaderWrapper justifyContent="space-between" alignItems="center" marginBottom="16px">
-              <Heading>Farms</Heading>
-               {width > 480 && width < 844 && renderFarmsTabButton()}
-            </HeaderWrapper>
-            <ViewControls>
-              {/* <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} /> */}
-              {/* <ToggleWrapper> */}
-              {/*  <Toggle */}
-              {/*    id="staked-only-farms" */}
-              {/*    checked={stakedOnly} */}
-              {/*    onChange={() => setStakedOnly(!stakedOnly)} */}
-              {/*    scale="sm" */}
-              {/*  /> */}
-              {/*  <Text> {t('Staked only')}</Text> */}
-              {/* </ToggleWrapper> */}
-              {(width < 481 || width > 843) && renderFarmsTabButton()}
-              {width < 481 && renderSortDropdown()}
-            </ViewControls>
-            <FilterContainer>
-              {width > 480 && renderSortDropdown()}
-              <LabelWrapper style={{ width: "100%" }}>
-                {/* <Text textTransform="uppercase">{t('Search')}</Text> */}
-                <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" background={theme.colors.headerInputBg} />
-              </LabelWrapper>
-            </FilterContainer>
-          </ControlContainer>
+          <InfoContainer>
+            <StyledLabelCard>
+              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (USER)')}</Text>
+              <Text color={theme.colors.green} fontSize="22px" fontWeight="700">31,787,112</Text>
+            </StyledLabelCard>
+            <StyledButtonCard>
+              <Text fontWeight="500" fontSize="14px">{t('Eco to Harvest')}</Text>
+              <Button variant="primary" scale="sm" width="125px" height="35px" mt="10px">{t('Harvest All')}</Button>
+            </StyledButtonCard>
+          </InfoContainer>
+          <InfoContainer>
+            <StyledLabelCard>
+              <Text fontWeight="500" fontSize="14px">{t('Blockchain Price')}</Text>
+              <Text color={theme.colors.yellow} fontSize="22px" fontWeight="700">31,787,112</Text>
+            </StyledLabelCard>
+            <StyledButtonCard>
+              <Text fontWeight="500" fontSize="14px">{t('Farm with Highest APR')}</Text>
+              <Button variant="primary" scale="sm" width="125px" height="35px" mt="10px">{t('Farm Now')}</Button>
+            </StyledButtonCard>
+          </InfoContainer>
+          <TotalFarmContainer>
+            <Text color={theme.colors.purple} fontSize="46px" fontWeight="700">{farmsLP.length}</Text>
+            <Text fontSize="14px" fontWeight="500">{t('# of Farms')}</Text>
+          </TotalFarmContainer>
         </Header>
-        {renderContent()}
-        {account && !userDataLoaded && stakedOnly && (
-          <Flex justifyContent="center">
-            <Loading />
-          </Flex>
-        )}
-        <div ref={observerRef} />
+        <Body>
+          {renderFarmsTab()}
+          {renderSortByTab()}
+          {renderContent()}
+          {account && !userDataLoaded && stakedOnly && (
+            <Flex justifyContent="center">
+              <Loading />
+            </Flex>
+          )}
+          <div ref={observerRef} />
+        </Body>
       </StyledPage>
-    </>
+    </Page>
   )
 }
 

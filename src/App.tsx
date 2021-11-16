@@ -34,6 +34,7 @@ import { useTranslation } from './contexts/Localization'
 // Only pool is included in the main bundle because of it's the most visited page
 // const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
+const FarmManage = lazy(() => import('./views/Farms/FarmManage'))
 // const FarmAuction = lazy(() => import('./views/FarmAuction'))
 // const Lottery = lazy(() => import('./views/Lottery'))
 // const Ifos = lazy(() => import('./views/Ifos'))
@@ -84,8 +85,11 @@ const App: React.FC = () => {
             {/* <Route exact path="/farms/auction"> */}
             {/*  <FarmAuction /> */}
             {/* </Route> */}
-            <Route path="/farms">
+            <Route exact strict path="/farms">
               <Farms />
+            </Route>
+            <Route path="/farms/:fid">
+              <FarmManage />
             </Route>
             <Route path="/pools">
               <Pools />

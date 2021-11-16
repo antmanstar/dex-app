@@ -21,8 +21,8 @@ import {
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
-import { usePairs } from '../../hooks/usePairs'
+import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
+import { usePair, usePairs } from '../../hooks/usePairs'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import Dots from '../../components/Loader/Dots'
 import Page from '../Page'
@@ -39,6 +39,9 @@ import { PoolData } from '../../state/info/types'
 import Select, { OptionProps } from '../../components/Select/Select'
 import { useWidth } from '../../hooks/useWidth'
 import useTheme from '../../hooks/useTheme'
+import { useDerivedMintInfo } from '../../state/mint/hooks'
+import useTotalSupply from '../../hooks/useTotalSupply'
+import { Field } from '../../state/mint/actions'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -308,13 +311,15 @@ const TokenList = ({
   fees,
   liquidity,
   apr,
+  userLiquidity,
 }: {
   tokens: [Token, Token]
   matic: Currency
   volume: number
   fees: number
   liquidity: number
-  apr: number
+  apr: number,
+  userLiquidity: any,
 }) => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -447,37 +452,37 @@ const TokenList = ({
               <CurrencyLogo currency={currency2} />
             </Flex>
           </Flex>
-          <Text ml="10px" fontSize="12px">
+          <Text ml="10px" fontSize="12px" fontWeight="500">
             {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
           </Text>
         </Button>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="12px">${liquidity}</Text>
+        <Text fontSize="12px" fontWeight="500">${liquidity}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="12px">${volume}</Text>
+        <Text fontSize="12px" fontWeight="500">${volume}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="12px">${fees}</Text>
+        <Text fontSize="12px" fontWeight="500">${fees}</Text>
       </StyledTd>
       <StyledTd>
         <Flex background={theme.colors.green} display="flex" justifyContent="center" borderRadius="5px" width="52px">
-          <Text color="white" fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="600">
+          <Text color="white" fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="500">
             {apr}%
           </Text>
         </Flex>
       </StyledTd>
       <StyledTd>
         <Flex justifyContent="flex-end" alignItems="center">
-          <Text fontSize="12px" mr="10px">${volume}</Text>
+          <Text fontSize="12px" fontWeight="500" mr="10px">{userLiquidity || "0.000"} LP</Text>
           <IconButton
             scale="sm"
             variant="secondary"
             size="16px"
             borderColor="#28d250"
             borderRadius="50%"
-            borderWidth="1px"
+            borderWidth="2px"
             // onClick={() => handleAddClick(address1, address2)}
           >
             <AddIcon color="#28d250" />
@@ -488,7 +493,7 @@ const TokenList = ({
             variant="secondary"
             borderColor="#fb8e8e"
             borderRadius="50%"
-            borderWidth="1px" 
+            borderWidth="2px"
             marginLeft="8px">
             <MinusIcon color="#fb8e8e" />
           </IconButton>
@@ -635,7 +640,12 @@ export default function Pool() {
 
       sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
 
-      return sortedOrder.map((arr) => <TokenList tokens={arr.tokens} matic={matic} {...arr} />)
+      return sortedOrder.map((arr) => {
+
+        const userLiquidity = v2PairsBalances[arr.liquidityToken.address]?.toFixed(3)
+
+        return <TokenList tokens={arr.tokens} matic={matic} userLiquidity={userLiquidity} {...arr} />
+      })
     }
     return (
       <tr>
@@ -812,7 +822,7 @@ export default function Pool() {
                     textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
                     onClick={() => handleHeaderClick(singleHeader.id)}
                   >
-                    <Text fontSize="12px" color='grey'>{singleHeader.title}</Text>
+                    <Text fontSize="12px" color='grey' fontWeight="500">{singleHeader.title}</Text>
                   </Th>
                 )
               })}

@@ -63,7 +63,7 @@ const Body = styled(`div`)`
 
 const Header = styled(`div`)`
   background-color: ${({theme}) => theme.colors.backgroundAlt};
-  border: 1px solid #131823;
+  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,6 +139,8 @@ const TotalPoolContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   padding-right: 50px;
+  justify-content: center;
+  align-items: center;
   
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
@@ -844,7 +846,7 @@ export default function Pool() {
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>
-            <Text color={theme.colors.purple} fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
+            <Text fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
             <Text fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
           </TotalPoolContainer>
         </Header>

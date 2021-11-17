@@ -162,14 +162,6 @@ export const AddLiquidityCard = ({
     }
   }, [dispatch, currencyIdA, currencyIdB])
 
-  useEffect(() => {
-    console.log("mounted the modal")
-
-    return () => {
-      console.log("unmounted the modal")
-    }
-  }, [])
-
   // Dismiss the modal
   const handleDismiss = useCallback(() => {
     if (customOnDismiss) {

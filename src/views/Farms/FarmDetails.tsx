@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Flex, Heading, Skeleton, Text } from '@pancakeswap/uikit'
+import { Flex, Heading, Skeleton, Text, Button, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
@@ -11,6 +11,7 @@ import StakedAction from './components/FarmTable/Actions/StakedAction'
 import HarvestAction from './components/FarmTable/Actions/HarvestAction'
 import { BIG_ZERO } from '../../utils/bigNumber'
 import Earned from './components/FarmTable/Earned'
+import useTheme from '../../hooks/useTheme'
 
 interface IFarmDetails {
   data: any
@@ -19,30 +20,63 @@ interface IFarmDetails {
   userDataReady: boolean
 }
 
-const StyledSingleRow = styled(Flex)`
-  margin-bottom: 20px;
-`
-
-const StyledValue = styled(Text)`
-  font-size: 14px;
-`
-
-const StyledHeading = styled(Heading)`
-  font-size: 20px;
-  font-weight: 500;
-`
-
-const StyledPoolName = styled(Flex)`
-  padding: 18px;
-  padding-bottom: 9px;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
+const StyledFarmName = styled(Flex)`
+  padding: 20px;
   & > div {
     width: 100%;
   }
 `
 
-const StyledDetailsWrapper = styled(Flex)`
-  padding: 18px;
+const StyledDtailFlex = styled(Flex)`
+  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  border-radius: 10px;
+  & > div {
+    width: 100%;
+  }
+`
+
+const StyledCardSummary = styled.div`
+  padding:25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 34px;
+  grid-row-gap: 10px;
+  padding-top: 10px;
+  
+  @media screen and (max-width: 1024px) {
+    grid-column-gap: 26px;
+  }
+
+  @media screen and (max-width: 567px) {
+    grid-column-gap: 26px;
+    grid-template-columns: 1fr 1fr;
+  }
+  border-bottom: 1px solid #363636;
+`
+
+const StyledCardInfoWrapper = styled(Flex)`
+  padding:20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 10px;
+  padding-top: 10px;
+
+  @media screen and (max-width: 567px) {
+    grid-template-columns: 1fr;
+  }
+`
+
+const StyledCardInfo = styled(Flex)`  
+  margin-top: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const StyledControlFlex = styled(Flex)`  
+  padding-left: 10px;
+  flex-direction: column;
+  justify-content: space-between;
 `
 
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
@@ -50,6 +84,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { data, hideDetailsHeading, location, userDataReady } = props
   const { account } = useActiveWeb3React()
   const { stakedBalance } = useFarmUser(data.pid)
+  const { theme } = useTheme()
 
   const displayBalance = useCallback(() => {
     const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
@@ -81,7 +116,6 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
       : ''
 
   const renderButtons = () => {
-
     return (
       <>
         <Flex justifyContent="center" flexDirection="column">
@@ -95,85 +129,75 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   }
 
   return (
-    <Flex flexDirection="column">
-      {!hideDetailsHeading && <StyledPoolName>
+    <StyledDtailFlex flexDirection="column" >
+      {!hideDetailsHeading && <StyledFarmName>
         <CardHeading
           token={data.token}
           quoteToken={data.quoteToken}
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('ECO', 'ECO')}
         />
-      </StyledPoolName>}
-      <StyledDetailsWrapper flexDirection="column">
-        <StyledHeading mb="24px" fontSize="20px">
-          {t('Pool Info')}
-        </StyledHeading>
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Total Staked')}:</StyledValue>
-          {totalValueFormatted ? (
-            <Flex flexDirection="column">
-              <StyledValue textAlign="right">
-                {totalValueFormatted ?
-                  `${(Number(totalValueFormatted) / 2) || '0.00000000'  } ${data.token}`
-                  : <Skeleton height={24} width={80} />
-                }
-              </StyledValue>
-              <StyledValue textAlign="right">
-                {
-                  // TODO: Convert into ECO
-                  totalValueFormatted ?
-                    `${(Number(totalValueFormatted) / 2) || '0.00000000'  } ${data.quoteToken}`
-                    : <Skeleton height={24} width={80} />
-                }
-              </StyledValue>
-              <StyledValue textAlign="right">
-                {
-                  // TODO: Convert into USDT
-                  totalValueFormatted ?
-                  `≅ ${totalValueFormatted || '0.00000000'} USDT`
-                  : <Skeleton height={24} width={80} />
-                }
-              </StyledValue>
-            </Flex>
-          ) : <Flex flexDirection="column">
-            <StyledValue textAlign="right">
-              <Skeleton height={24} width={80} />
-            </StyledValue>
-          </Flex>}
-        </StyledSingleRow>
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Staked')}:</StyledValue>
-          <Flex flexDirection="column">
-            {
-              // TODO: Convert tokens
-              displayBalance() ? (
-              <>
-                <StyledValue textAlign="right">≅ {displayBalance()} {t("LP")} {t("Tokens")}</StyledValue>
-              </>
-            ) : (
-              <StyledValue textAlign="right">
-                <Skeleton height={24} width={80} />
-              </StyledValue>
-            )}
+      </StyledFarmName>}
+      <StyledCardSummary>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Liquidity')}</Text>
+            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">$35,256,822</Text>
           </Flex>
-        </StyledSingleRow>
-        <StyledSingleRow justifyContent="space-between">
-          <StyledValue textAlign="left">{t('Pool Share')}:</StyledValue>
-          <StyledValue textAlign="right">
+          <Flex justifyContent="flex-start" flexDirection="column" mt="3px" mb="3px">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Rewards')}</Text>
             {
-              totalValueFormatted && displayBalance() ?
-                `${(Number(displayBalance()) / Number(totalValueFormatted)).toFixed(8)} %`
-                : <Skeleton height={24} width={80} />
+              getBalanceNumber(new BigNumber(data.userData.earnings)) ? 
+                <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{getBalanceNumber(new BigNumber(data.userData.earnings))}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px"/>
             }
-          </StyledValue>
-        </StyledSingleRow>
-        <StyledSingleRow justifyContent="space-between">
-        <StyledValue textAlign="left">{t('Earnings')}:</StyledValue>
-          <Flex flexDirection="column">
-            <Earned earnings={getBalanceNumber(new BigNumber(data.userData.earnings))} pid={data.pid} userDataReady={userDataReady} />
           </Flex>
-        </StyledSingleRow>
-        {renderButtons()}
-      </StyledDetailsWrapper>
-    </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily Rol')}</Text>
+            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">2.586%</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column" mt="3px" mb="3px">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('APR')}</Text>
+            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">6.25%</Text>
+          </Flex>
+        </ StyledCardSummary>  
+        <StyledCardInfoWrapper>
+          <StyledCardInfo>
+            <Flex justifyContent="flex-start" flexDirection="column" mb="20px" alignItems="center">
+              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Staked')}</Text>
+              {
+                displayBalance() ? 
+                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{displayBalance()}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+              }            
+              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
+            </Flex>
+            <Flex justifyContent="flex-start" flexDirection="column" alignItems="center">
+              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Your Share')}</Text>
+              {
+                totalValueFormatted && displayBalance() ? 
+                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{`${(Number(displayBalance()) / Number(totalValueFormatted)).toFixed(8)} %`}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+              }            
+            </Flex>
+          </StyledCardInfo>
+          <StyledControlFlex>
+            <Flex justifyContent="space-between">
+              <Link external small href="localhost:3000" fontSize="14px" fontWeight="400" fontFamily="Myriad Pro">
+                {t('Add Liquidity')}
+              </Link>
+              <Link external small href="localhost:3000" fontSize="14px" fontWeight="400" fontFamily="Myriad Pro">
+                {t('Remove Liquidity')}
+              </Link>
+            </Flex>
+            <Flex justifyContent="flex-start" flexDirection="column" mb="30px" mt="30px" alignItems="center">
+              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Pending Rewards')}</Text>
+              {
+                displayBalance() ? 
+                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">0 Joe</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+              }            
+              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
+            </Flex>
+            <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center">
+              <Button variant="primary" scale="md" width="125px" height="35px" mt="10px">{t('Harvest')}</Button>
+            </Flex>
+          </StyledControlFlex>
+        </StyledCardInfoWrapper>
+    </StyledDtailFlex>
   )
 }

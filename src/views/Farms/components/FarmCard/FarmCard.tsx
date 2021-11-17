@@ -14,6 +14,7 @@ import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
 import { useWidth } from '../../../../hooks/useWidth'
+import useTheme from '../../../../hooks/useTheme'
 import { TransparentCard } from '../../../../components/Card'
 import { CurrencyLogo } from '../../../../components/Logo'
 
@@ -23,28 +24,19 @@ export interface FarmWithStakedValue extends DeserializedFarm {
   liquidity?: BigNumber
 }
 
-const StyledCardSummary = styled(Flex)``
-
 const StyledCard = styled(Card)<{ isActive?: boolean }>`
   align-self: baseline;
-  //max-height: 105px;
   cursor: pointer;
   transition: all 0.25s ease;
-  border: 2px solid ${({ isActive , theme}) => (isActive ? 'transparent' : theme.colors.cardBorder)};
-  background-color: ${({ isActive , theme }) => (isActive ? "#59F3" : 'transparent')};;
+  border: 1px solid #131823;
+  background-color: ${({ isActive , theme }) => theme.colors.backgroundAlt};;
 
   &:hover {
     background: ${({ theme }) => theme.colors.primary};
-    transform: translateY(-5px) scale(1.02);
+    transform: translateY(-5px);
     box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
-    border: 2px solid transparent;
-    
-    ${StyledCardSummary} {
-      ${Text} {
-        color: ${({ theme }) => theme.colors.primaryButtonText };
-      }
-    }
-    
+    border: px solid transparent;
+        
     h2 {
       color: ${({ theme }) => theme.colors.primaryButtonText };
     }
@@ -56,12 +48,6 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
   
   svg {
     fill: ${({ theme, isActive }) => isActive ? theme.colors.primaryButtonText : theme.colors.text };
-  }
-
-  ${StyledCardSummary} {
-    ${Text} {
-      //color: ${({ theme, isActive }) => (isActive ? theme.colors.primaryButtonText : theme.colors.text)};
-    }
   }
 `
 
@@ -132,6 +118,25 @@ const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
   }
 `
 
+const StyledCardSummary = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 34px;
+  grid-row-gap: 26px;
+  padding-top: 10px;
+  margin-top: 10px;
+  
+  @media screen and (max-width: 1024px) {
+    grid-column-gap: 26px;
+  }
+
+  @media screen and (max-width: 567px) {
+    grid-column-gap: 26px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+`
+
 interface FarmCardProps {
   farm: FarmWithStakedValue
   displayApr: string
@@ -153,6 +158,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
 }) => {
   const { t } = useTranslation()
   const width = useWidth()
+  const { theme } = useTheme()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
@@ -170,61 +176,6 @@ const FarmCard: React.FC<FarmCardProps> = ({
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
-  // const isPromotedFarm = farm.token.symbol === 'ECO'
-
-  if (width > 968) {
-    return (
-      <StyledDesktopCard isActive={isCardActive} onClick={onClick}>
-        <Flex flexDirection="column" justifyContent="center" alignItems="start" paddingLeft="12px">
-          <div>
-            <CurrencyLogo currency={farm.token} />
-            <CurrencyLogo currency={farm.quoteToken} />
-          </div>
-          <Text fontSize="20px" fontWeight="600">
-            {farm.token?.symbol?.toUpperCase()}-{farm.quoteToken?.symbol?.toUpperCase()}
-          </Text>
-          <Text fontSize="12px" color="textSubtle2" bold>
-            {t('Farm')}
-          </Text>
-        </Flex>
-        <StyledDetailsContainer>
-          <SingleDetailWrapper>
-            {totalValueFormatted ?
-              <Text fontSize='20px' bold>${totalValueFormatted}</Text>
-              : <Skeleton height={24} width={80} />
-            }
-            <Text fontSize="14px" mt="4px" bold>
-              {t('Liquidity')}
-            </Text>
-          </SingleDetailWrapper>
-          <SingleDetailWrapper>
-            <Text fontSize="20px" bold>{earnLabel}</Text>
-            <Text fontSize="14px" mt="2px" bold>{t('Earn')}:</Text>
-          </SingleDetailWrapper>
-          <SingleDetailWrapper>
-            {farm.apr ? (
-              <ApyButton
-                variant="text-and-button"
-                pid={farm.pid}
-                lpSymbol={farm.lpSymbol}
-                multiplier={farm.multiplier}
-                lpLabel={lpLabel}
-                addLiquidityUrl={addLiquidityUrl}
-                cakePrice={cakePrice}
-                apr={farm.apr}
-                displayApr={displayApr}
-              />
-            ) : (
-              <Skeleton height={24} width={80} />
-            )}
-            <Text fontSize="14px" mt="4px" bold>
-              {t('APR')}
-            </Text>
-          </SingleDetailWrapper>
-        </StyledDetailsContainer>
-      </StyledDesktopCard>
-    )
-  }
 
   return (
     <StyledCard isActive={isCardActive} onClick={onClick}>
@@ -237,60 +188,33 @@ const FarmCard: React.FC<FarmCardProps> = ({
           quoteToken={farm.quoteToken}
           isCardActive={isCardActive}
         />
-        <Flex justifyContent="space-between">
-          {!removed && (
-            <StyledCardSummary justifyContent="flex-start" alignItems="start" flexDirection="column">
-              <Text fontWeight="400">{t('APR')}:</Text>
-              <Text fontWeight="400" style={{ display: 'flex', alignItems: 'center' }}>
-                {farm.apr ? (
-                  <ApyButton
-                    variant="text-and-button"
-                    pid={farm.pid}
-                    lpSymbol={farm.lpSymbol}
-                    multiplier={farm.multiplier}
-                    lpLabel={lpLabel}
-                    addLiquidityUrl={addLiquidityUrl}
-                    cakePrice={cakePrice}
-                    apr={farm.apr}
-                    displayApr={displayApr}
-                  />
-                ) : (
-                  <Skeleton height={24} width={80} />
-                )}
-              </Text>
-            </StyledCardSummary>
-          )}
-          <StyledCardSummary justifyContent="flex-start" flexDirection="column">
-            <Text fontWeight="400">{t('Earn')}:</Text>
-            <Text fontWeight="400">{earnLabel}</Text>
-          </StyledCardSummary>
-        </Flex>
-        {/* <CardActionsContainer */}
-        {/*  farm={farm} */}
-        {/*  lpLabel={lpLabel} */}
-        {/*  account={account} */}
-        {/*  cakePrice={cakePrice} */}
-        {/*  addLiquidityUrl={addLiquidityUrl} */}
-        {/* /> */}
+        <StyledCardSummary>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="500">{t('Daily Rol')}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.purple}>2.53%</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="400">{t('Liquidity')}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>$35,256,822</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="400">{t('Rewards')}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>652 ECO</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="400">{t('APR')}</Text>
+            <Text fontSize="22px" fontWeight="700" color={theme.colors.purple}>2.53%</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="400">{t('Staked')}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>$35,256,822</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column">
+            <Text fontSize="14px" fontWeight="400">{t('Share')}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>5.3%</Text>
+          </Flex>
+        </StyledCardSummary>
       </FarmCardInnerContainer>
-
-      {/* <ExpandingWrapper isCardActive={isCardActive}> */}
-      {/*  <ExpandableSectionButton */}
-      {/*    onClick={() => setShowExpandableSection(!showExpandableSection)} */}
-      {/*    expanded={showExpandableSection} */}
-      {/*    isCardActive={isCardActive} */}
-      {/*  /> */}
-      {/*  {showExpandableSection && ( */}
-      {/*    <DetailsSection */}
-      {/*      removed={removed} */}
-      {/*      bscScanAddress={getBscScanLink(lpAddress, 'address')} */}
-      {/*      infoAddress={`/info/pool/${lpAddress}`} */}
-      {/*      totalValueFormatted={totalValueFormatted} */}
-      {/*      lpLabel={lpLabel} */}
-      {/*      addLiquidityUrl={addLiquidityUrl} */}
-      {/*    /> */}
-      {/*  )} */}
-      {/* </ExpandingWrapper> */}
     </StyledCard>
   )
 }

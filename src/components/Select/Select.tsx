@@ -35,7 +35,7 @@ const DropDownListContainer = styled.div`
   }
 `
 
-const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boolean }>`
+const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boolean, zindex?: string }>`
   cursor: pointer;
   width: 100%;
   position: relative;
@@ -44,7 +44,7 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean, displayIconOnly?: boole
   height: ${({height}) => height || "36px"};
   min-width: ${({displayIconOnly, minWidth}) => minWidth || displayIconOnly ? '64px' : '130px'} ;
   user-select: none;
-  z-index: 20;
+  z-index: ${({zindex}) => zindex ? `${zindex}` : '20'};
 
   ${({ theme }) => theme.mediaQueries.md} {
     min-width: ${({minWidth}) => minWidth || "150px"};
@@ -106,12 +106,17 @@ export interface OptionProps {
   value: any
 }
 
-const Select: React.FunctionComponent<SelectProps> = ({
+export interface ZIndexProps {
+  zindex?: string
+}
+
+const Select: React.FunctionComponent<SelectProps & ZIndexProps> = ({
   options,
   onOptionChange,
   selectedTextColor,
   selectedBackgroundColor,
   displayIconOnly,
+  zindex,
   ...props
 }) => {
   const dropdownRef = useRef(null)
@@ -144,7 +149,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
   }, [])
 
   return (
-    <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly}>
+    <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly} zindex={zindex}>
       <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly} height={props.height}>
         <>
           {options[selectedOptionIndex]?.icon && (

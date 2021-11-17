@@ -27,7 +27,7 @@ const MultiplierTag = styled(Tag)`
 `
 
 const StyledHeading = styled(Heading)<{ isCardActive?: boolean }>`
-  font-size: 20px;
+  font-size: 18px;
   //color: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.primaryButtonText : theme.colors.text)};
 `
 
@@ -40,25 +40,16 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   isCardActive,
 }) => {
   return (
-    <Wrapper justifyContent="space-between" alignItems="center" mb="4px">
-      <Flex flexDirection="column" alignItems="flex-start">
-        <StyledHeading mb="4px" scale="sm" isCardActive={isCardActive}>
-          {lpLabel.split(' ')[0]}
-        </StyledHeading>
-        {/* <Flex justifyContent="center"> */}
-        {/*  {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
-        {/*  {multiplier ? ( */}
-        {/*    <MultiplierTag variant="secondary">{multiplier}</MultiplierTag> */}
-        {/*  ) : ( */}
-        {/*    <Skeleton ml="4px" width={42} height={28} /> */}
-        {/*  )} */}
-        {/* </Flex> */}
-      </Flex>
+    <Wrapper alignItems="center" mb="4px">
       <Flex>
-        <CurrencyLogo currency={token} size="30px" style={{ marginRight: '-8px' }} />
-        <CurrencyLogo currency={quoteToken} size="30px" style={{ marginRight: '0' }} />
+        <CurrencyLogo currency={token} size="28px" style={{ marginRight: '-8px' }} />
+        <CurrencyLogo currency={quoteToken} size="28px" style={{ marginRight: '0' }} />
       </Flex>
-      {/* <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={64} height={64} /> */}
+      <Flex flexDirection="column" alignItems="flex-start">
+        <StyledHeading ml="13px" mb="4px" scale="sm" isCardActive={isCardActive}>
+          {lpLabel.split('-')[0]} / {lpLabel.split('-')[1]}
+        </StyledHeading>
+      </Flex>
     </Wrapper>
   )
 }

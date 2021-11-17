@@ -285,7 +285,7 @@ export const AddLiquidityCard = ({
       ]
       value = null
     }
-    console.log('ARGS', args, value.toString())
+    // console.log('ARGS', args, value.toString())
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then((estimatedGasLimit) =>

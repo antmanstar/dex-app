@@ -44,6 +44,7 @@ import useTheme from '../../hooks/useTheme'
 import { useDerivedMintInfo } from '../../state/mint/hooks'
 import useTotalSupply from '../../hooks/useTotalSupply'
 import { Field } from '../../state/mint/actions'
+import { RemoveLiquidityCard } from '../RemoveLiquidity/RemoveLiquidityCard'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -315,6 +316,7 @@ const TokenList = ({
   apr,
   userLiquidity,
   handleAddClick,
+  handleRemoveClick
 }: {
   tokens: [Token, Token]
   matic: Currency
@@ -324,6 +326,7 @@ const TokenList = ({
   apr: number,
   userLiquidity: any,
   handleAddClick: () => void,
+  handleRemoveClick: () => void,
 }) => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -478,7 +481,9 @@ const TokenList = ({
             borderColor="#fb8e8e"
             borderRadius="50%"
             borderWidth="2px"
-            marginLeft="8px">
+            marginLeft="8px"
+            onClick={handleRemoveClick}
+          >
             <MinusIcon color="#fb8e8e" />
           </IconButton>
         </Flex>
@@ -547,6 +552,40 @@ export default function Pool() {
   const handleAddClick = (currencyIdA, currencyIdB) => {
     history.push(`?type=add&token1=${currencyIdA.address}&token2=${currencyIdB.address}`)
     handleAddButton()
+  }
+
+
+  // Add Liquidity Modal
+  const [handleRemoveButton, handleDismissRemoveModal] = useModal(
+    <RemoveLiquidityCard
+      history={history}
+      params={location.search}
+      onDismiss={() => {
+        handleDismissRemoveModal()
+      }}
+      customOnDismiss={() => {
+        history.replace({
+          search: ''
+        })
+      }}
+    />,
+    true,
+    true,
+    'remove-liquidity-modal'
+  )
+
+  // Open the modal if currency token is present in the url
+  useEffect(() => {
+    if ((currencyAFromURL || currencyBFromURL) && typeOfModal === 'remove') {
+      handleRemoveButton()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyAFromURL, currencyBFromURL, typeOfModal])
+
+  // handle Add button click
+  const handleRemoveClick = (currencyIdA, currencyIdB) => {
+    history.push(`?type=remove&token1=${currencyIdA.address}&token2=${currencyIdB.address}`)
+    handleRemoveButton()
   }
 
   // fetch the user's balances of all tracked V2 LP tokens
@@ -668,7 +707,16 @@ export default function Pool() {
 
         const userLiquidity = v2PairsBalances[arr.liquidityToken.address]?.toFixed(3)
 
-        return <TokenList tokens={arr.tokens} matic={matic} userLiquidity={userLiquidity} handleAddClick={() => handleAddClick(arr.tokens[0], arr.tokens[1])} {...arr} />
+        return (
+          <TokenList
+            tokens={arr.tokens}
+            matic={matic}
+            userLiquidity={userLiquidity}
+            handleAddClick={() => handleAddClick(arr.tokens[0], arr.tokens[1])}
+            handleRemoveClick={() => handleRemoveClick(arr.tokens[0], arr.tokens[1])}
+            {...arr}
+          />
+        )
       })
     }
     return (

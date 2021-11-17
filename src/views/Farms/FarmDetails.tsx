@@ -29,6 +29,7 @@ const StyledFarmName = styled(Flex)`
 
 const StyledDtailFlex = styled(Flex)`
   background-color: ${({theme}) => theme.colors.backgroundAlt};
+  border: 1px solid #131823;
   border-radius: 10px;
   & > div {
     width: 100%;
@@ -134,7 +135,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
         <CardHeading
           token={data.token}
           quoteToken={data.quoteToken}
-          lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('ECO', 'ECO')}
+          lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
         />
       </StyledFarmName>}
       <StyledCardSummary>
@@ -150,7 +151,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
             }
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily Rol')}</Text>
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily ROI')}</Text>
             <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">2.586%</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column" mt="3px" mb="3px">
@@ -178,18 +179,14 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           </StyledCardInfo>
           <StyledControlFlex>
             <Flex justifyContent="space-between">
-              <Link external small href="localhost:3000" fontSize="14px" fontWeight="400" fontFamily="Myriad Pro">
-                {t('Add Liquidity')}
-              </Link>
-              <Link external small href="localhost:3000" fontSize="14px" fontWeight="400" fontFamily="Myriad Pro">
-                {t('Remove Liquidity')}
-              </Link>
+              <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Add Liquidity')}</Text></Button>
+              <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Remove Liquidity')}</Text></Button>
             </Flex>
             <Flex justifyContent="flex-start" flexDirection="column" mb="30px" mt="30px" alignItems="center">
               <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Pending Rewards')}</Text>
               {
                 displayBalance() ? 
-                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">0 Joe</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">0 ECO</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
               }            
               <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
             </Flex>

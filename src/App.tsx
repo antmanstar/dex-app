@@ -18,6 +18,8 @@ import history from './routerHistory'
 // Views included in the main bundle
 import Pools from './views/Pools'
 import Swap from './views/Swap'
+import Stake from './views/Stake'
+import Bridge from './views/Bridge'
 import {
   RedirectDuplicateTokenIds,
   RedirectOldAddLiquidityPathStructure,
@@ -79,20 +81,20 @@ const App: React.FC = () => {
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
-            {/* <Route path="/" exact> */}
-            {/*  <Home /> */}
-            {/* </Route> */}
-            {/* <Route exact path="/farms/auction"> */}
-            {/*  <FarmAuction /> */}
-            {/* </Route> */}
+            <Route path="/bridge">
+              <Bridge />
+            </Route>            
+            <Route path="/pools">
+              <Pools />
+            </Route>
             <Route exact strict path="/farms">
               <Farms />
             </Route>
             <Route path="/farms/:fid">
               <FarmManage />
             </Route>
-            <Route path="/pools">
-              <Pools />
+            <Route path="/stake">
+              <Stake />
             </Route>
             {/* <Route path="/lottery"> */}
             {/*  <Lottery /> */}
@@ -157,9 +159,6 @@ const App: React.FC = () => {
             </Route>
             <Route path="/pool">
               <Redirect to="/liquidity" />
-            </Route>
-            <Route path="/staking">
-              <Redirect to="/pools" />
             </Route>
             <Route path="/syrup">
               <Redirect to="/pools" />

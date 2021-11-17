@@ -44,8 +44,10 @@ import GlobalSettings from '../../components/Menu/GlobalSettings'
 import { useWidth } from '../../hooks/useWidth'
 
 interface IAddLiquidityCard {
-  currencyIdA: string
-  currencyIdB: string
+  history: any,
+  params: string,
+  onDismiss?: () => void,
+  customOnDismiss?: () => void,
 }
 
 const Container = styled.div`
@@ -134,15 +136,22 @@ const StyledModal = styled(Modal)`
 `
 
 export const AddLiquidityCard = ({
-  currencyIdA,
-  currencyIdB
- }: IAddLiquidityCard) => {
+  history,
+  params,
+  onDismiss,
+  customOnDismiss
+}: IAddLiquidityCard) => {
   const { account, chainId, library } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
   const { t } = useTranslation()
   const gasPrice = useGasPrice()
   const { theme } = useTheme()
   const width = useWidth()
+
+  // Get Currency addresses from url
+  const searchParams = new URLSearchParams(params)
+  const currencyIdA = searchParams.get('token1')
+  const currencyIdB = searchParams.get('token2')
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
@@ -152,6 +161,22 @@ export const AddLiquidityCard = ({
       dispatch(resetMintState())
     }
   }, [dispatch, currencyIdA, currencyIdB])
+
+  useEffect(() => {
+    console.log("mounted the modal")
+
+    return () => {
+      console.log("unmounted the modal")
+    }
+  }, [])
+
+  // Dismiss the modal
+  const handleDismiss = useCallback(() => {
+    if (customOnDismiss) {
+      customOnDismiss()
+    }
+    onDismiss()
+  }, [customOnDismiss, onDismiss])
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&
@@ -357,31 +382,31 @@ export const AddLiquidityCard = ({
 
   const handleCurrencyASelect = useCallback(
     (currencyA_: Currency) => {
-      // const newCurrencyIdA = currencyId(currencyA_)
-      // if (newCurrencyIdA === currencyIdB) {
-      //   history.push(`/add/${currencyIdB}/${currencyIdA}`)
-      // } else if (currencyIdB) {
-      //   history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
-      // } else {
-      //   history.push(`/add/${newCurrencyIdA}`)
-      // }
+      const newCurrencyIdA = currencyId(currencyA_)
+      if (newCurrencyIdA === currencyIdB) {
+        history.push(`?type=add&token1=${currencyIdB}&token2=${currencyIdA}`)
+      } else if (currencyIdB) {
+        history.push(`?type=add&token1=${newCurrencyIdA}/&token2=${currencyIdB}`)
+      } else {
+        history.push(`?type=add&token1${newCurrencyIdA}`)
+      }
     },
-    [],
+    [currencyIdB, history, currencyIdA],
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB_: Currency) => {
-      // const newCurrencyIdB = currencyId(currencyB_)
-      // if (currencyIdA === newCurrencyIdB) {
-      //   if (currencyIdB) {
-      //     history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
-      //   } else {
-      //     history.push(`/add/${newCurrencyIdB}`)
-      //   }
-      // } else {
-      //   history.push(`/add/${currencyIdA || 'MATIC'}/${newCurrencyIdB}`)
-      // }
+      const newCurrencyIdB = currencyId(currencyB_)
+      if (currencyIdA === newCurrencyIdB) {
+        if (currencyIdB) {
+          history.push(`?type=add&token1=${currencyIdB}&token2=${newCurrencyIdB}`)
+        } else {
+          history.push(`?type=add&token1=${newCurrencyIdB}`)
+        }
+      } else {
+        history.push(`?type=add&token1=${currencyIdA || 'MATIC'}&token2=${newCurrencyIdB}`)
+      }
     },
-    [],
+    [currencyIdA, history, currencyIdB],
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -534,7 +559,7 @@ export const AddLiquidityCard = ({
   }
 
   return (
-    <StyledModal title="Pool">
+    <StyledModal title={`${currencyA?.symbol}-${currencyB?.symbol} Pool`} onDismiss={handleDismiss}>
       {renderContent()}
     </StyledModal>
   )

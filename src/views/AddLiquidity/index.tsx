@@ -10,6 +10,7 @@ import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { useLocation } from 'react-router'
 import { AppDispatch } from '../../state'
 import { BasicCard, TransparentCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
@@ -132,7 +133,6 @@ export default function AddLiquidity({
   const gasPrice = useGasPrice()
   const { theme } = useTheme()
   const width = useWidth()
-  console.log("currencyIdA", currencyIdA);
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)

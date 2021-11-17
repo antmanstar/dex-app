@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Currency, Token } from '@pancakeswap/sdk'
 import {
@@ -21,6 +21,8 @@ import {
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import history from 'routerHistory'
+import { useLocation } from 'react-router'
 import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { usePair, usePairs } from '../../hooks/usePairs'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
@@ -311,6 +313,7 @@ const TokenList = ({
   liquidity,
   apr,
   userLiquidity,
+  handleAddClick,
 }: {
   tokens: [Token, Token]
   matic: Currency
@@ -319,6 +322,7 @@ const TokenList = ({
   liquidity: number
   apr: number,
   userLiquidity: any,
+  handleAddClick: () => void,
 }) => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -327,11 +331,6 @@ const TokenList = ({
   const [token1, token2] = tokens
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
-
-  const [selectedPool, setSelectedPool] = useState({
-    currencyIdA: null,
-    currencyIdB: null,
-  })
 
   let address1 = token1.address
   let address2 = token2.address
@@ -347,21 +346,6 @@ const TokenList = ({
     currency1 = matic
     // address2 = 'MATIC'
     // currency2 = matic
-  }
-
-  const [handleAddButton] = useModal(
-    <AddLiquidityCard
-      currencyIdA={selectedPool?.currencyIdA}
-      currencyIdB={selectedPool?.currencyIdB}
-    />
-  )
-
-  const handleAddClick = (currencyIdA, currencyIdB) => {
-    setSelectedPool({
-      currencyIdA,
-      currencyIdB
-    })
-    handleAddButton()
   }
 
   if (isMobile) {
@@ -453,7 +437,7 @@ const TokenList = ({
             borderColor="#28d250"
             borderRadius="50%"
             borderWidth="2px"
-            // onClick={() => handleAddClick(address1, address2)}
+            onClick={handleAddClick}
           >
             <AddIcon color="#28d250" />
           </IconButton>
@@ -479,6 +463,7 @@ export default function Pool() {
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
   const width = useWidth()
   const { theme } = useTheme()
+  const location = useLocation()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>('none')
@@ -494,6 +479,45 @@ export default function Pool() {
   const debouncedQuery = useDebounce(searchQuery, 200)
 
   const allPoolData = useAllPoolData()
+
+  // Get currency Id from the url if present
+  const searchParams = new URLSearchParams(location.search)
+  const currencyAFromURL = searchParams.get('token1')
+  const currencyBFromURL = searchParams.get('token2')
+  const typeOfModal = searchParams.get('type')
+
+  // Add Liquidity Modal
+  const [handleAddButton, handleDismissAddModal] = useModal(
+    <AddLiquidityCard
+      history={history}
+      params={location.search}
+      onDismiss={() => {
+        handleDismissAddModal()
+      }}
+      customOnDismiss={() => {
+        history.replace({
+          search: ''
+        })
+      }}
+    />,
+    true,
+    true,
+    'add-liquidity-modal'
+  )
+
+  // Open the modal if currency token is present in the url
+  useEffect(() => {
+    if ((currencyAFromURL || currencyBFromURL) && typeOfModal === 'add') {
+      handleAddButton()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyAFromURL, currencyBFromURL, typeOfModal])
+
+  // handle Add button click
+  const handleAddClick = (currencyIdA, currencyIdB) => {
+    history.push(`?type=add&token1=${currencyIdA.address}&token2=${currencyIdB.address}`)
+    handleAddButton()
+  }
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -614,7 +638,7 @@ export default function Pool() {
 
         const userLiquidity = v2PairsBalances[arr.liquidityToken.address]?.toFixed(3)
 
-        return <TokenList tokens={arr.tokens} matic={matic} userLiquidity={userLiquidity} {...arr} />
+        return <TokenList tokens={arr.tokens} matic={matic} userLiquidity={userLiquidity} handleAddClick={() => handleAddClick(arr.tokens[0], arr.tokens[1])} {...arr} />
       })
     }
     return (

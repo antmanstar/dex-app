@@ -336,11 +336,11 @@ const Stake: React.FC = () => {
         </Flex>
         <Body>
           {renderContent()}
-          {account && (
-            <Flex justifyContent="center">
-              <Loading />
-            </Flex>
-          )}
+          {/* {account && ( */}
+          {/*  <Flex justifyContent="center"> */}
+          {/*    <Loading /> */}
+          {/*  </Flex> */}
+          {/* )} */}
           <div ref={observerRef} />
         </Body>
       </StyledPage>

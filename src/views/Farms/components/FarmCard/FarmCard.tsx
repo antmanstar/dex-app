@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Card, Flex, Text, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
@@ -17,6 +17,9 @@ import { useWidth } from '../../../../hooks/useWidth'
 import useTheme from '../../../../hooks/useTheme'
 import { TransparentCard } from '../../../../components/Card'
 import { CurrencyLogo } from '../../../../components/Logo'
+import { getBalanceAmount, getBalanceNumber } from '../../../../utils/formatBalance'
+import { useFarmUser } from '../../../../state/farms/hooks'
+import { BIG_TEN } from '../../../../utils/bigNumber'
 
 export interface FarmWithStakedValue extends DeserializedFarm {
   apr?: number
@@ -28,7 +31,7 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
   align-self: baseline;
   cursor: pointer;
   transition: all 0.25s ease;
-  border: 1px solid #131823;
+  border: 2px solid ${({theme}) => theme.colors.backgroundAlt};
   background-color: ${({ isActive , theme }) => theme.colors.backgroundAlt};;
 
   &:hover {
@@ -159,6 +162,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const { t } = useTranslation()
   const width = useWidth()
   const { theme } = useTheme()
+  const { stakedBalance } = useFarmUser(farm.pid)
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
@@ -174,8 +178,22 @@ const FarmCard: React.FC<FarmCardProps> = ({
     quoteTokenAddress: farm.quoteToken.address,
     tokenAddress: farm.token.address,
   })
+
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
+  const liquidity = getBalanceNumber(new BigNumber(farm.liquidity), 0).toFixed(4)
+  const poolShare = parseFloat(stakedBalance.div(farm.totalStakedTokenInLp).div(BIG_TEN.pow(Number(farm?.token?.decimals) - 2)).toFixed(2))
+
+  const displayBalance = useCallback(() => {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.0000001)) {
+      return '<0.0000001'
+    }
+    if (stakedBalanceBigNumber.gt(0)) {
+      return stakedBalanceBigNumber.toFixed(8, BigNumber.ROUND_DOWN)
+    }
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+  }, [stakedBalance])
 
   return (
     <StyledCard isActive={isCardActive} onClick={onClick}>
@@ -195,23 +213,43 @@ const FarmCard: React.FC<FarmCardProps> = ({
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Liquidity')}</Text>
-            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>$35,256,822</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>${liquidity}</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Rewards')}</Text>
-            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>652 ECO</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>
+              {parseFloat(getBalanceNumber(new BigNumber(farm.userData.earnings)).toFixed(4))} ECO
+            </Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('APR')}</Text>
-            <Text fontSize="22px" fontWeight="700" color={theme.colors.purple}>2.53%</Text>
+            {!removed && (
+              <Text bold style={{ display: 'flex', alignItems: 'center' }}>
+                {farm.apr ? (
+                  <ApyButton
+                    variant="text-and-button"
+                    pid={farm.pid}
+                    lpSymbol={farm.lpSymbol}
+                    multiplier={farm.multiplier}
+                    lpLabel={lpLabel}
+                    addLiquidityUrl={addLiquidityUrl}
+                    cakePrice={cakePrice}
+                    apr={farm.apr}
+                    displayApr={displayApr}
+                  />
+                ) : (
+                  <Skeleton height={24} width={80} />
+                )}
+              </Text>
+            )}
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Staked')}</Text>
-            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>$35,256,822</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>{Number(displayBalance()).toFixed(4)} LP</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Share')}</Text>
-            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>5.3%</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>{poolShare || '0.00'}%</Text>
           </Flex>
         </StyledCardSummary>
       </FarmCardInnerContainer>

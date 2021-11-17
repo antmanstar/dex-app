@@ -32,10 +32,10 @@ export const mainnetTokens = {
   ),
   busd: new Token(
     MAINNET,
-    '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    '0x65B1A7066D51499DC6F5284c81645d6051D2ca67',
     18,
-    'BUSD',
-    'BUSD',
+    'USDT',
+    'US Doller Tether',
     'https://www.binance.com/',
   ),
   cake: new Token(
@@ -87,6 +87,14 @@ export const testnetTokens = {
     18,
     'MATIC',
     'MATIC',
+    'https://www.binance.com/',
+  ),
+  busd: new Token(
+    TESTNET,
+    '0x65B1A7066D51499DC6F5284c81645d6051D2ca67',
+    18,
+    'USDT',
+    'US Doller Tether',
     'https://www.binance.com/',
   ),
   cake: new Token(

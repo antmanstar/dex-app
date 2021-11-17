@@ -93,9 +93,9 @@ const App: React.FC = () => {
             <Route path="/farms/:fid">
               <FarmManage />
             </Route>
-            <Route path="/stake">
-              <Stake />
-            </Route>
+            {/* <Route path="/stake"> */}
+            {/*  <Stake /> */}
+            {/* </Route> */}
             {/* <Route path="/lottery"> */}
             {/*  <Lottery /> */}
             {/* </Route> */}

@@ -13,7 +13,7 @@ const farms: SerializedFarmConfig[] = [
       [ChainId.TESTNET]: '0x99658e8d18Dc9BB6DBfbaA0d9C4c1cB69E3d9Fd1',
     },
     token: serializedTokens.weth,
-    quoteToken: serializedTokens.bnb,
+    quoteToken: serializedTokens.wbnb,
     isCommunity: true,
   },
   {
@@ -23,8 +23,8 @@ const farms: SerializedFarmConfig[] = [
       137: '0x69B126538e89194EC895250f5ad196D364c8FB67',
       [ChainId.TESTNET]: '0x69B126538e89194EC895250f5ad196D364c8FB67',
     },
-    token: serializedTokens.usdt,
-    quoteToken: serializedTokens.bnb,
+    token: serializedTokens.busd,
+    quoteToken: serializedTokens.wbnb,
     isCommunity: true,
   },
 ]

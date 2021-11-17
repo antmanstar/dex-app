@@ -8,6 +8,8 @@ import { useFarmUser, useLpTokenPrice } from 'state/farms/hooks'
 
 const ApyLabelContainer = styled(Flex)`
   cursor: pointer;
+  font-weight: 700;
+  font-size: 22px;
 
   &:hover {
     opacity: 0.5;

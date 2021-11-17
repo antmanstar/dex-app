@@ -13,10 +13,9 @@ import {
   Flex,
   Card,
   SearchIcon,
-  SubMenuItems,
+  useWalletModal,
   Tab,
   TabMenu,
-  Input,
   Link,
   useMatchBreakpoints, useModal,
 } from '@pancakeswap/uikit'
@@ -29,6 +28,7 @@ import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd, useFarmFromPid } 
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { DeserializedFarm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
+import useAuth from 'hooks/useAuth'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import { orderBy } from 'lodash'
@@ -41,6 +41,8 @@ import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
 import { useDispatch } from 'react-redux'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
+import history from 'routerHistory'
+import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -59,6 +61,10 @@ const StyledPage = styled(`div`)`
   width: 100%;
   z-index: 1;
   padding-top: 57px;
+
+  @media screen and (max-width: 968px) {
+    padding-top: 27px;
+  }
 `
 
 const Header = styled(`div`)`
@@ -72,12 +78,21 @@ const Header = styled(`div`)`
   padding-top:25px;
   border-radius: 10px;
   padding-bottom: 25px;
-  flex-direction: column;
   padding-right: 18px;
-  
-  ${({theme}) => theme.mediaQueries.sm} {
-    flex-direction: row;
-  } 
+
+  @media screen and (max-width: 968px) {
+    margin-top: 0;
+    padding: 5px 10px 10px 5px
+  }
+`
+
+const StyledHeaderButton = styled(Button)`
+  padding: 0px;
+  margin-right: 20px;
+
+  @media screen and (max-width: 576px) {
+    margin-right: 5px;
+  }
 `
 
 const Body = styled(`div`)`
@@ -93,6 +108,7 @@ const StyledDtailFlex = styled(Flex)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border: 1px solid #131823;
    
   background-color: ${({theme}) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -141,30 +157,6 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const InputWrapper = styled(`div`)`
-  width: 100%;
-  max-width: 400px;
-  position: relative;
-
-  // background-color: ${({theme}) => theme.colors.backgroundAlt};
-
-  & > div {
-    position: absolute;
-    right: 55px;
-    top: 6px;
-  }
-`
-
-const StyledInput = styled(Input)`
-  border-radius: 5px;
-  height: 60px;
-  background: ${({ theme }) => theme.isDark ? '#0c1017' : theme.colors.backgroundAlt};
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.textSubtle2};
-    font-size: 14px;
-  }
-`
-
 const StyledFlexLayout = styled.div`
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -172,7 +164,7 @@ const StyledFlexLayout = styled.div`
   grid-row-gap: 34px;
   padding-top: 5px;
   
-   @media screen and (max-width: 763px) {
+  @media screen and (max-width: 763px) {
     grid-template-columns: 1fr;
   }
 `
@@ -180,6 +172,23 @@ const StyledFlexLayout = styled.div`
 const FarmsContainer = styled(Card)`
   background: #00000000;
   width: 100%;
+`
+
+const InputWrapper = styled.div`
+  height: 60px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  background: ${({ theme }) => theme.colors.input};
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  @media screen and (max-width: 763px) {
+    margin-bottom: 80px;
+  }
+
+  border: 1px solid #131823;
 `
 
 const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
@@ -202,9 +211,11 @@ const FarmManage: React.FC = () => {
   const dispatch = useDispatch()
   const { theme, isDark } = useTheme()
   const location = useLocation()
+  const { login, logout } = useAuth()
   const width = useWidth()
+  const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
   const [sortOption, setSortOption] = useState('stake')
-  const [query, setQuery] = useState('')
+  const [value, setValue] = useState('0.0')
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -231,14 +242,14 @@ const FarmManage: React.FC = () => {
     setSortOption(option.value)
   }
 
-  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value)
+  const handleInputChange = (val: string) => {
+    setValue(val)
   }
 
   const renderSortByTab = (): JSX.Element => {
     return (
         <StyledTabContainer>        
-          {width > 768 ? <TabMenu
+          {width > 576 ? <TabMenu
             activeIndex={getSortByTabs().map( (tt) => { return tt.value; }).indexOf(sortOption)}
             onItemClick={(index) => {
               setSortOption(getSortByTabs()[index].value)
@@ -268,18 +279,18 @@ const FarmManage: React.FC = () => {
       <Flex flexDirection="column" mt="40px">
         <Text mb="5px">{t('LP Token Balance')}</Text>
         <InputWrapper>
-          <StyledInput
-            scale="lg"
-            autoComplete="off"
-            onChange={handleChangeQuery}
+          <NumericalInput
+            value={value}
+            onUserInput={(val) => handleInputChange(val)}
           />
-            <Flex height="48px" alignItems="center" borderRight="1px solid #363636" paddingRight="15px">
-              <Text textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.textDisabled}>{t('Max')}</Text>
-            </Flex>
-            <Flex flexDirection="column" ml="55px">
-              <CurrencyLogo currency={farm.token} size="28px" style={{ marginBottom: '-8px' }} />
-              <CurrencyLogo currency={farm.quoteToken} size="28px" style={{ marginBottom: '0' }} />
-            </Flex>
+          <Flex height="48px" alignItems="center" borderRight="1px solid #363636">
+            <Button onClick={()=>handleInputChange('1000')} scale="sm" variant="text">
+            <Text textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.textDisabled}>{t('Max')}</Text>
+            </Button>
+          </Flex>
+          <Flex flexDirection="column" ml="10px">
+            <Text>{farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('LP', '')}</Text>
+          </Flex>
         </InputWrapper>
       </Flex>
     )
@@ -296,7 +307,7 @@ const FarmManage: React.FC = () => {
             {renderInput()}
             </Flex>
             <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center">
-              <Button variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
+              <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
             </Flex>
           </StyledDtailFlex>
           </StyledFlexLayout>
@@ -308,13 +319,10 @@ const FarmManage: React.FC = () => {
     <Page>
       <StyledPage>
         <Header>
-          <Flex>
-            <ArrowBackIcon />
-            <Text fontWeight="500" fontSize="14px" ml="20px">{t('Manage Farm')}</Text>            
+          <Flex alignItems="center">
+            <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><ArrowBackIcon /></StyledHeaderButton>
+            <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><Text fontWeight="500" fontSize="14px">{t('Manage Farm')}</Text></StyledHeaderButton>            
           </Flex>
-          <Link external small href={pathname}>
-            {t('Get AVEX-JOE LP')}
-          </Link>
         </Header>
         <Body>
           {renderContent()}

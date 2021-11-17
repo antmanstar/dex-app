@@ -218,3 +218,10 @@ export interface ConnectedBidder {
   isWhitelisted: boolean
   bidderData?: Bidder
 }
+
+// Stake Configuration Constants
+export interface SerializedStakeConfig {
+  text1: string,
+  text2: string,
+  text3: string
+}

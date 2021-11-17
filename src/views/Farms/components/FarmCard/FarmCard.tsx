@@ -32,10 +32,10 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
   background-color: ${({ isActive , theme }) => theme.colors.backgroundAlt};;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.primary};
+    // background: ${({ theme }) => theme.colors.primary};
     transform: translateY(-5px);
     box-shadow: 0px 5px 12px rgb(126 142 177 / 20%);
-    border: px solid transparent;
+    border-color: ${({ theme }) => theme.colors.primary};
         
     h2 {
       color: ${({ theme }) => theme.colors.primaryButtonText };
@@ -181,7 +181,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
     <StyledCard isActive={isCardActive} onClick={onClick}>
       <FarmCardInnerContainer>
         <CardHeading
-          lpLabel={lpLabel}
+          lpLabel={lpLabel.replace('LP', '')}
           multiplier={farm.multiplier}
           isCommunityFarm={farm.isCommunity}
           token={farm.token}
@@ -190,7 +190,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
         />
         <StyledCardSummary>
           <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500">{t('Daily Rol')}</Text>
+            <Text fontSize="14px" fontWeight="500">{t('Daily ROI')}</Text>
             <Text fontSize="18px" fontWeight="700" color={theme.colors.purple}>2.53%</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">

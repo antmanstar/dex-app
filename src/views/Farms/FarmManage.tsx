@@ -205,6 +205,7 @@ const FarmManage: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const farm = useFarmFromPid(parseInt(pathname.split('/')[2]))
+  const { data } = useFarms()
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const { isTablet, isMobile } = useMatchBreakpoints()
@@ -216,6 +217,8 @@ const FarmManage: React.FC = () => {
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
   const [sortOption, setSortOption] = useState('stake')
   const [value, setValue] = useState('0.0')
+
+  usePollFarmsWithUserData(false)
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded

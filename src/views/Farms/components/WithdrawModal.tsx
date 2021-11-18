@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal } from '@pancakeswap/uikit'
+import { Button, Flex, Modal } from '@pancakeswap/uikit'
 import { ModalActions, ModalInput } from 'components/Modal'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
+import { Token } from '@pancakeswap/sdk'
 
 interface WithdrawModalProps {
   max: BigNumber
@@ -12,9 +13,11 @@ interface WithdrawModalProps {
   onDismiss?: () => void
   tokenName?: string
   isPopUp?: boolean
+  isCard?: boolean
+  tokens?: Token[]
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, tokenName = '', isPopUp }) => {
+const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max, tokenName = '', isPopUp, isCard, tokens }) => {
   const [val, setVal] = useState('')
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -39,8 +42,35 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-  return (
-    <Modal title={t('Unstake LP tokens')} onDismiss={onDismiss} isPopUp={isPopUp}>
+  const renderConfirmAction = () => {
+    return (
+      <Button
+        disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+        onClick={async () => {
+          setPendingTx(true)
+          try {
+            await onConfirm(val)
+            toastSuccess(t('Unstaked!'), t('Your earnings have also been harvested to your wallet'))
+            onDismiss()
+          } catch (e) {
+            toastError(
+              t('Error'),
+              t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+            )
+            console.error(e)
+          } finally {
+            setPendingTx(false)
+          }
+        }}
+        width="100%"
+      >
+        {pendingTx ? t('Confirming') : t('Confirm')}
+      </Button>
+    )
+  }
+
+  const renderContent = () => {
+    return (
       <ModalInput
         onSelectMax={handleSelectMax}
         onChange={handleChange}
@@ -48,33 +78,26 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
         max={fullBalance}
         symbol={tokenName}
         inputTitle={t('Unstake')}
+        tokens={tokens}
       />
+    )
+  }
+
+  if (isCard) {
+    return <Flex flexDirection="column" height="100%" justifyContent="space-between">
+      {renderContent()}
+      {renderConfirmAction()}
+    </Flex>
+  }
+
+  return (
+    <Modal title={t('Unstake LP tokens')} onDismiss={onDismiss} isPopUp={isPopUp}>
+      {renderContent()}
       <ModalActions>
         <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
           {t('Cancel')}
         </Button>
-        <Button
-          disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
-          onClick={async () => {
-            setPendingTx(true)
-            try {
-              await onConfirm(val)
-              toastSuccess(t('Unstaked!'), t('Your earnings have also been harvested to your wallet'))
-              onDismiss()
-            } catch (e) {
-              toastError(
-                t('Error'),
-                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-              )
-              console.error(e)
-            } finally {
-              setPendingTx(false)
-            }
-          }}
-          width="100%"
-        >
-          {pendingTx ? t('Confirming') : t('Confirm')}
-        </Button>
+        {renderConfirmAction()}
       </ModalActions>
     </Modal>
   )

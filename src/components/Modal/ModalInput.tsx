@@ -4,7 +4,9 @@ import { Text, Button, Input, InputProps, Flex, Link } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { parseUnits } from 'ethers/lib/utils'
 import { formatBigNumber } from 'utils/formatBalance'
+import { Token } from '@pancakeswap/sdk'
 import { useWidth } from '../../hooks/useWidth'
+import { CurrencyLogo } from '../Logo'
 
 interface ModalInputProps {
   max: string
@@ -16,6 +18,7 @@ interface ModalInputProps {
   addLiquidityUrl?: string
   inputTitle?: string
   decimals?: number
+  tokens?: Token[]
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -30,27 +33,28 @@ const StyledTokenInput = styled.div<InputProps>`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.input};
-  border-radius: 16px;
+  border-radius: 5px;
   //box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 16px 8px 0;
   width: 100%;
+  margin-bottom: 12px;
 `
 
 const StyledInput = styled(Input)`
   box-shadow: none;
-  width: 100px;
+  width: 200px;
   margin: 0 8px;
   padding: 0 8px;
   border: none;
 
-  ${({ theme }) => theme.mediaQueries.xs} {
-    width: 80px;
-  }
+  // ${({ theme }) => theme.mediaQueries.xs} {
+  //   width: 80px;
+  // }
 
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: auto;
-  }
+  // ${({ theme }) => theme.mediaQueries.sm} {
+  //   width: auto;
+  // }
 `
 
 const StyledErrorMessage = styled(Text)`
@@ -70,6 +74,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   addLiquidityUrl,
   inputTitle,
   decimals = 18,
+  tokens
 }) => {
   const { t } = useTranslation()
   const width = useWidth()
@@ -86,13 +91,13 @@ const ModalInput: React.FC<ModalInputProps> = ({
 
   return (
     <div style={{ position: 'relative' }}>
+      <Flex justifyContent="space-between" mb="12px">
+        <Text fontSize="14px" textAlign="left">
+          {inputTitle}
+        </Text>
+        <Text fontSize="14px" textAlign="right">{t('Balance: %balance%', { balance: parseFloat(Number(displayBalance(max)).toFixed(4)) })}</Text>
+      </Flex>
       <StyledTokenInput isWarning={isBalanceZero}>
-        <Flex justifyContent="space-between" pl="16px">
-          <Text fontSize="14px" textAlign="left">
-            {inputTitle}
-          </Text>
-          <Text fontSize="14px" textAlign="right">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
-        </Flex>
         <Flex alignItems="center" justifyContent="space-between">
           <StyledInput
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
@@ -105,10 +110,15 @@ const ModalInput: React.FC<ModalInputProps> = ({
             width="100%"
           />
           <Flex alignItems="center" justifyContent="end">
-            <Button scale="sm" onClick={onSelectMax} mr="8px">
+            <Button scale="sm" variant="text" onClick={onSelectMax} mr="8px">
               {t('Max')}
             </Button>
-            {width > 480 ? <Text fontSize='16px'>{symbol}</Text> : <Text fontSize='16px'>{t('LP Tokens')}</Text>}
+            <Flex flexDirection="column">
+              <Flex mb="-8px">
+                <CurrencyLogo currency={tokens[0]} size="28px"/>
+              </Flex>
+              <CurrencyLogo currency={tokens[1]} size="28px" />
+            </Flex>
           </Flex>
         </Flex>
       </StyledTokenInput>

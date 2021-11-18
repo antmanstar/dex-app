@@ -100,8 +100,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
     return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }, [stakedBalance])
 
-  const liquidity = getBalanceNumber(new BigNumber(data.lpTotalInQuoteToken).times(data.quoteTokenPriceBusd), 0).toFixed(4)
-  const liquidityNumber = !Number.isNaN(Number(liquidity)) ? liquidity : '0'
+  const liquidityNumber = !Number.isNaN(Number(data.liquidity)) ? data.liquidity : '0'
   const poolShare = parseFloat(stakedBalance.div(data.totalStakedTokenInLp).div(BIG_TEN.pow(Number(data?.token?.decimals) - 2)).toFixed(2))
 
   const earningsBigNumber = new BigNumber(data?.userData.earnings)
@@ -149,14 +148,14 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           >
             {t('Rewards')}
           </Text>
-          {displayEarnings && Number(displayEarnings) > 0 ? (
+          {displayEarnings ? (
             <Text
               fontSize='18px'
               fontWeight='700'
               mt='3px'
               mb='3px'
             >
-              {displayEarnings}
+              {displayEarnings} ECO
             </Text>
           ) : (<Skeleton height={24} width={80} mt="3px" mb="3px"/>)}
         </Flex>

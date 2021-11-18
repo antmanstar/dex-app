@@ -14,19 +14,35 @@ import {
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import Page from 'views/Page'
-import { usePollFarmsWithUserData, useFarmFromPid } from 'state/farms/hooks'
+import {
+  usePollFarmsWithUserData,
+  useFarmFromPid,
+  useFarmUser,
+  useLpTokenPrice,
+  usePriceCakeBusd,
+} from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { useTranslation } from 'contexts/Localization'
 import useAuth from 'hooks/useAuth'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
 import history from 'routerHistory'
+import BigNumber from 'bignumber.js'
+import { ChainId } from '@pancakeswap/sdk'
+import { useDispatch } from 'react-redux'
 import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
 import useTheme from '../../hooks/useTheme'
 import { FarmDetails } from './FarmDetails'
 import { useWidth } from '../../hooks/useWidth'
 import { BASE_ADD_LIQUIDITY_URL } from '../../config'
 import getLiquidityUrlPathParts from '../../utils/getLiquidityUrlPathParts'
+import StakedAction from './components/FarmTable/Actions/StakedAction'
+import DepositModal from './components/DepositModal'
+import { getFarmApr } from '../../utils/apr'
+import { getDisplayApr } from './hooks/getDisplayApr'
+import { getBalanceNumber } from '../../utils/formatBalance'
+import { fetchFarmUserDataAsync } from '../../state/farms'
+import useStakeFarms from './hooks/useStakeFarms'
 
 const StyledPage = styled(`div`)`
   max-width: 1024px;
@@ -77,10 +93,12 @@ const Body = styled(`div`)`
 `
 const StyledDtailFlex = styled(Flex)`
   padding: 20px;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #131823;
+  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
+  max-width: 450px;
    
   background-color: ${({theme}) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -169,13 +187,18 @@ const FarmManage: React.FC = () => {
   const farm = useFarmFromPid(parseInt(pathname.split('/')[2]))
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
+  const { tokenBalance, stakedBalance } = useFarmUser(farm.pid)
   const { theme } = useTheme()
   const location = useLocation()
   const { login, logout } = useAuth()
+  const dispatch = useDispatch()
   const width = useWidth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
-  const [sortOption, setSortOption] = useState('stake')
+  const [sortOption, setSortOption] = useState('deposit')
   const [value, setValue] = useState('0.0')
+  const lpPrice = useLpTokenPrice(farm.lpSymbol)
+  const cakePrice = usePriceCakeBusd()
+  const { onStake } = useStakeFarms(farm.pid)
 
   usePollFarmsWithUserData(false)
 
@@ -188,17 +211,24 @@ const FarmManage: React.FC = () => {
     tokenAddress: farm.token.address,
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-
+  
+  const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
+  const { cakeRewardsApr, lpRewardsApr } = getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNET])
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', 'ECO')
+
+  const handleStake = async (amount: string) => {
+    await onStake(amount)
+    dispatch(fetchFarmUserDataAsync({ account, pids: [farm.pid] }))
+  }
 
   const getSortByTabs = () => {
     return [
       {
-        value: 'stake',
+        value: 'deposit',
         label: 'Stake',
       },
       {
-        value: 'unstake',
+        value: 'withdraw',
         label: 'Unstake',
       },
       {
@@ -270,15 +300,15 @@ const FarmManage: React.FC = () => {
     return (
         <FarmsContainer>
           <StyledFlexLayout>
-          {farm && <FarmDetails userDataReady={userDataReady} location={location} data={farm} addLiquidityUrl={addLiquidityUrl} lpLabel={lpLabel}/>}
+          {farm && <FarmDetails userDataReady={userDataReady} location={location} data={{ ...farm, apr: cakeRewardsApr, liquidity: getBalanceNumber(totalLiquidity, 0).toFixed(4) }} addLiquidityUrl={addLiquidityUrl} lpLabel={lpLabel}/>}
           <StyledDtailFlex>
             <Flex justifyContent="space-between" flexDirection="column" mt="3px" mb="3px">
-            {renderSortByTab()}
-            {renderInput()}
+              {renderSortByTab()}
             </Flex>
-            <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center">
-              <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
-            </Flex>
+            <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={farm.pid} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={location} contentType={sortOption} isCard/>
+            {/* <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center"> */}
+            {/*  <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button> */}
+            {/* </Flex> */}
           </StyledDtailFlex>
           </StyledFlexLayout>
         </FarmsContainer>

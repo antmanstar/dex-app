@@ -1,6 +1,6 @@
 import React from 'react'
 import { Currency, Pair } from '@pancakeswap/sdk'
-import { Button, ChevronDownIcon, Text, useModal, Flex } from '@pancakeswap/uikit'
+import { Button, ChevronDownIcon, Text, useModal, Flex, LogoRoundIcon } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -19,8 +19,17 @@ const InputRow = styled.div<{ selected: boolean }>`
   background: ${({ theme }) => theme.colors.input};
   //border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 10px;
-  padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
+  padding: ${({ selected }) => (selected ? '1rem 0.5rem 1rem 1rem' : '1rem 0.75rem 1rem 1rem')};
 `
+
+const InputWrapper = styled(Flex)`
+  flex-direction: column;
+  width: 100%
+`
+const StyledNumericalInput = styled(NumericalInput)`
+  width: 100%
+`
+
 const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
   padding: 0 0.5rem;
   border-left: 1px solid ${({ theme }) => theme.colors.borderColor};
@@ -48,6 +57,7 @@ const LabelRow = styled.div<{ secondInput?: boolean }>`
     return ''
   }}
 `
+
 const InputPanel = styled.div<{ hideInput?: boolean }>`
   display: flex;
   flex-flow: column nowrap;
@@ -56,11 +66,24 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
   // background-color: ${({ theme }) => theme.colors.background};
   z-index: 1;
 `
+
 const Container = styled.div<{ hideInput: boolean }>`
   border-radius: 16px;
   //background-color: ${({ theme }) => theme.colors.input};
   // box-shadow: ${({ theme }) => theme.shadows.inset};
 `
+
+const NetworkSelector = styled(Flex)`
+  background: ${({ theme }) => theme.colors.input};
+  border-radius: 20px;
+  height: 40px;
+  padding: 5px;
+  align-items: center;
+`
+const ChainSelectionButton = styled(Flex)`
+  cursor: pointer;
+`
+
 interface CurrencyInputPanelProps {
   value: string
   onUserInput: (value: string) => void
@@ -120,7 +143,14 @@ export default function BridgeInput({
         {!hideInput && (
           <LabelRow secondInput={secondInput}>
             <RowBetween>
-              <Text small>{translatedLabel}</Text>
+              <ChainSelectionButton alignItems="center" onClick={() => console.log("Change Chain")}>
+                <Text small mr="10px">{translatedLabel}</Text>
+                <NetworkSelector>
+                  <LogoRoundIcon width="24px" />
+                  <Text fontSize="16px" ml="5px" mr="5px">Unknown Chain</Text>
+                  <ChevronDownIcon width="24px" />              
+                </NetworkSelector>
+              </ChainSelectionButton>
               {account && (
                 <Text onClick={onMax} style={{ display: 'inline', cursor: 'pointer' }} small>
                   {!hideBalance && !!currency
@@ -134,18 +164,20 @@ export default function BridgeInput({
         <InputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
           {!hideInput && (
             <>
-              <NumericalInput
-                className="token-amount-input"
-                value={value}
-                onUserInput={(val) => {
-                  onUserInput(val)
-                }}
-              />
-              {account && currency && showMaxButton && label !== 'To' && (
-                <Button onClick={onMax} scale="sm" variant="text">
-                  MAX
-                </Button>
-              )}
+              <InputWrapper>
+                <Text fontSize="12px" fontWeight="600" mb="10px">{translatedLabel === "From" ? t("Sending Amount") : t("Received Amount")}</Text>
+                <StyledNumericalInput
+                  value={value}
+                  onUserInput={(val) => {
+                    onUserInput(val)
+                  }}
+                />
+              </InputWrapper>
+              {/* {account && currency && showMaxButton && label !== 'To' && ( */}
+              <Button onClick={onMax} scale="sm" variant="text">
+                MAX
+              </Button>
+              {/* )} */}
             </>
           )}
           <CurrencySelectButton
@@ -171,9 +203,9 @@ export default function BridgeInput({
                 <Text id="pair">
                   {(currency && currency.symbol && currency.symbol.length > 20
                     ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
-                        currency.symbol.length - 5,
-                        currency.symbol.length,
-                      )}`
+                      currency.symbol.length - 5,
+                      currency.symbol.length,
+                    )}`
                     : currency?.symbol) || t('Select a currency')}
                 </Text>
               )}

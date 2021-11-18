@@ -378,7 +378,7 @@ export const AddLiquidityCard = ({
       if (newCurrencyIdA === currencyIdB) {
         history.push(`?type=add&token1=${currencyIdB}&token2=${currencyIdA}`)
       } else if (currencyIdB) {
-        history.push(`?type=add&token1=${newCurrencyIdA}/&token2=${currencyIdB}`)
+        history.push(`?type=add&token1=${newCurrencyIdA}&token2=${currencyIdB}`)
       } else {
         history.push(`?type=add&token1${newCurrencyIdA}`)
       }

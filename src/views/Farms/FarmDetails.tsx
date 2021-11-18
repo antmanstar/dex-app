@@ -219,7 +219,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
               </Text>
               {
                 displayBalance() ?
-                  <Text fontSize='18px' fontWeight='700' mt='3px' mb='3px'>{displayBalance()}</Text> :
+                  <Text fontSize='18px' fontWeight='700' mt='3px' mb='3px'>{parseFloat(displayBalance())} LP</Text> :
                   <Skeleton height={24} width={80} mt='3px' mb='3px' />
               }
             </Flex>

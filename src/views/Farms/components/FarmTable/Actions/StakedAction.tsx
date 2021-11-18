@@ -177,13 +177,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       <>
         {isCard && renderContent()}
         <ActionContainer>
-          {/* <ActionTitles> */}
-          {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-          {/*    {t('Start Farming')} */}
-          {/*  </Text> */}
-          {/* </ActionTitles> */}
           <ActionContent>
-            <ConnectWalletButton width="100%" variant="subtle" />
+            <Flex marginTop="12px" width="100%">
+              <ConnectWalletButton width="100%" />
+            </Flex>
           </ActionContent>
         </ActionContainer>
       </>
@@ -200,28 +197,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
         <>
           {isCard && renderContent()}
           <ActionContainer>
-            {/* <ActionTitles> */}
-            {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px"> */}
-            {/*    {lpSymbol} */}
-            {/*  </Text> */}
-            {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-            {/*    {t('Staked')} */}
-            {/*  </Text> */}
-            {/* </ActionTitles> */}
             <ActionContent>
-              {/* <div> */}
-              {/*  <Heading>{displayBalance()}</Heading> */}
-              {/*  {stakedBalance.gt(0) && lpPrice.gt(0) && ( */}
-              {/*    <Balance */}
-              {/*      fontSize="12px" */}
-              {/*      color="textSubtle" */}
-              {/*      decimals={2} */}
-              {/*      value={getBalanceNumber(lpPrice.times(stakedBalance))} */}
-              {/*      unit=" USD" */}
-              {/*      prefix="~" */}
-              {/*    /> */}
-              {/*  )} */}
-              {/* </div> */}
               <Flex width="100%" justifyContent="space-evenly">
                 <Button onClick={onPresentWithdraw} variant="primary" mr="6px" width="100%">
                   {t("Unstake")}
@@ -249,14 +225,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       <>
         {isCard && renderContent()}
         <ActionContainer>
-          {/* <ActionTitles> */}
-          {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px" pr="4px"> */}
-          {/*    {t('Stake').toUpperCase()} */}
-          {/*  </Text> */}
-          {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px"> */}
-          {/*    {lpSymbol} */}
-          {/*  </Text> */}
-          {/* </ActionTitles> */}
           <ActionContent>
             <Button
               width="100%"
@@ -277,11 +245,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       <>
         {isCard && renderContent()}
         <ActionContainer>
-          {/* <ActionTitles> */}
-          {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-          {/*    {t('Start Farming')} */}
-          {/*  </Text> */}
-          {/* </ActionTitles> */}
           <ActionContent>
             <Skeleton width="100%" height="45px" marginBottom="8px" marginTop="12px" />
           </ActionContent>
@@ -294,11 +257,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     <>
       {isCard && renderContent()}
       <ActionContainer>
-        {/* <ActionTitles> */}
-        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-        {/*    {t('Enable Farm')} */}
-        {/*  </Text> */}
-        {/* </ActionTitles> */}
         <ActionContent>
           <Button width="100%" disabled={requestedApproval} onClick={handleApprove} variant="subtle" mt="12px">
             {t('Enable')}

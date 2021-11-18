@@ -37,7 +37,7 @@ const StyledFarmName = styled(Flex)`
 
 const StyledDtailFlex = styled(Flex)`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  border: 1px solid #131823;
+  border: 1px solid ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
 
   & > div {
@@ -61,7 +61,7 @@ const StyledCardSummary = styled.div`
     grid-column-gap: 26px;
     grid-template-columns: 1fr 1fr;
   }
-  border-bottom: 1px solid #363636;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.background};
 `
 
 const StyledCardInfoWrapper = styled(Flex)`

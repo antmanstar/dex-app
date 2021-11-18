@@ -590,7 +590,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                         {t('Unsupported Asset')}
                       </Button>
                     ) : !account ? (
-                      <ConnectWalletButton width="100%" variant="subtle" />
+                      <ConnectWalletButton width="100%" />
                     ) : showWrap ? (
                       <Button width="100%" disabled={Boolean(wrapInputError)} onClick={onWrap}>
                         {wrapInputError ??

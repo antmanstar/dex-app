@@ -23,6 +23,8 @@ interface IFarmDetails {
   hideDetailsHeading?: boolean
   location?: any
   userDataReady: boolean
+  addLiquidityUrl: string
+  lpLabel: string
 }
 
 const StyledFarmName = styled(Flex)`
@@ -89,7 +91,7 @@ const StyledControlFlex = styled(Flex)`
 
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { t } = useTranslation()
-  const { data, hideDetailsHeading, location, userDataReady } = props
+  const { data, hideDetailsHeading, location, userDataReady, lpLabel, addLiquidityUrl } = props
   const { account } = useActiveWeb3React()
   const { stakedBalance } = useFarmUser(data.pid)
   const { theme } = useTheme()
@@ -108,13 +110,6 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const liquidity = getBalanceNumber(new BigNumber(data.lpTotalInQuoteToken).times(data.quoteTokenPriceBusd), 0).toFixed(4)
   const liquidityNumber = !Number.isNaN(Number(liquidity)) ? liquidity : '0'
   const poolShare = parseFloat(stakedBalance.div(data.totalStakedTokenInLp).div(BIG_TEN.pow(Number(data?.token?.decimals) - 2)).toFixed(2))
-
-  const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: data.quoteToken.address,
-    tokenAddress: data.token.address,
-  })
-  const lpLabel = data.lpSymbol && data.lpSymbol.toUpperCase().replace('ECO', 'ECO')
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
   const earningsBigNumber = new BigNumber(data?.userData.earnings)
   const cakePrice = usePriceCakeBusd()
@@ -207,7 +202,6 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
             scale="xs"
             to={`/add/${data.token.address}/${data.quoteToken.address}`}
             px="4px"
-
           >
             {t('Add Liquidity')}
           </Button>

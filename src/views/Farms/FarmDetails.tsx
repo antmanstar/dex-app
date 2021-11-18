@@ -83,16 +83,9 @@ const StyledCardInfo = styled(Flex)`
   //}
 `
 
-const StyledControlFlex = styled(Flex)`
-  padding-left: 10px;
-  //flex-direction: column;
-  justify-content: space-around;
-`
-
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { t } = useTranslation()
   const { data, hideDetailsHeading, location, userDataReady, lpLabel, addLiquidityUrl } = props
-  const { account } = useActiveWeb3React()
   const { stakedBalance } = useFarmUser(data.pid)
   const { theme } = useTheme()
 

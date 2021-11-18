@@ -1,59 +1,29 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
-import { Route, useRouteMatch, useLocation, NavLink, useParams } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
+import React, { useState } from 'react'
+import { useLocation} from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import {
-  Image,
-  Heading,
-  RowType,
-  Toggle,
   Text,
   Button,
   ArrowBackIcon,
   Flex,
   Card,
-  SearchIcon,
   useWalletModal,
   Tab,
   TabMenu,
-  Link,
-  useMatchBreakpoints, useModal, LinkExternal,
+  LinkExternal,
 } from '@pancakeswap/uikit'
-import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
-import FlexLayout from 'components/Layout/Flex'
 import Page from 'views/Page'
-// import Page from 'components/Layout/Page'
-import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd, useFarmFromPid } from 'state/farms/hooks'
+import { usePollFarmsWithUserData, useFarmFromPid } from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import { DeserializedFarm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useAuth from 'hooks/useAuth'
-import { getBalanceNumber } from 'utils/formatBalance'
-import { getFarmApr } from 'utils/apr'
-import { orderBy } from 'lodash'
-import isArchivedPid from 'utils/farmHelpers'
-import { latinise } from 'utils/latinise'
-import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
-import { ViewMode } from 'state/user/actions'
-import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
-import { useDispatch } from 'react-redux'
-import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
 import history from 'routerHistory'
 import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
-import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
-import Table from './components/FarmTable/FarmTable'
-import FarmTabButtons from './components/FarmTabButtons'
-import { RowProps } from './components/FarmTable/Row'
-import ToggleView from './components/ToggleView/ToggleView'
-import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
-import config from '../../components/Menu/config/config'
-import RowDataJSON from '../../config/constants/DummyFarmsData.json'
 import { FarmDetails } from './FarmDetails'
-import { setActiveBodyType } from '../../state/farms'
 import { useWidth } from '../../hooks/useWidth'
 import { BASE_ADD_LIQUIDITY_URL } from '../../config'
 import getLiquidityUrlPathParts from '../../utils/getLiquidityUrlPathParts'
@@ -193,26 +163,13 @@ const InputWrapper = styled.div`
   border: 1px solid #131823;
 `
 
-const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
-  if (cakeRewardsApr && lpRewardsApr) {
-    return (cakeRewardsApr + lpRewardsApr).toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-  if (cakeRewardsApr) {
-    return cakeRewardsApr.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-  return null
-}
-
 const FarmManage: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const farm = useFarmFromPid(parseInt(pathname.split('/')[2]))
-  const { data } = useFarms()
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
-  const { isTablet, isMobile } = useMatchBreakpoints()
-  const dispatch = useDispatch()
-  const { theme, isDark } = useTheme()
+  const { theme } = useTheme()
   const location = useLocation()
   const { login, logout } = useAuth()
   const width = useWidth()

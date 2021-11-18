@@ -686,11 +686,6 @@ const Bridge: React.FC = () => {
       <StyledPage>
         <Body>
           {renderContent()}
-          {account && (
-            <Flex justifyContent="center">
-              <Loading />
-            </Flex>
-          )}
           <div ref={observerRef} />
         </Body>
       </StyledPage>

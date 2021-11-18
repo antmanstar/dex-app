@@ -182,6 +182,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
   const liquidity = getBalanceNumber(new BigNumber(farm.liquidity), 0).toFixed(4)
+  const liquidityNumber = !Number.isNaN(Number(liquidity)) ? liquidity : '0';
   const poolShare = parseFloat(stakedBalance.div(farm.totalStakedTokenInLp).div(BIG_TEN.pow(Number(farm?.token?.decimals) - 2)).toFixed(2))
 
   const displayBalance = useCallback(() => {
@@ -213,7 +214,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Liquidity')}</Text>
-            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>${liquidity}</Text>
+            <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>${liquidityNumber || 0}</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Rewards')}</Text>

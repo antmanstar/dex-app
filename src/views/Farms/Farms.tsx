@@ -125,6 +125,7 @@ const TotalFarmContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   padding-right: 50px;
+  align-items: center;
   
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
@@ -246,6 +247,7 @@ const StyledFlexLayout = styled.div`
 const FarmsContainer = styled(Card)`
   background: #00000000;
   width: 100%;
+  padding-bottom: 32px;
 `
 
 const StyledSelect = styled(Select)`

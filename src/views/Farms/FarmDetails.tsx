@@ -168,7 +168,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           <Text fontSize='14px' fontWeight='500' color={theme.colors.headerSubtleText} mt='3px'
                 mb='3px'>{t('APR')}</Text>
           <Text mt='3px' mb='3px'>
-            {data.apr ? (
+            {(data.apr || data.apr === 0) ? (
               <ApyButton
                 variant="text-and-button"
                 pid={data.pid}
@@ -179,6 +179,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
                 cakePrice={cakePrice}
                 apr={data.apr}
                 displayApr={getDisplayApr(data.apr, data.lpRewardsApr)}
+                fontSize="18px"
               />
             ) : (
               <Skeleton height={24} width={80} />

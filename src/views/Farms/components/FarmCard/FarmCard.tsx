@@ -179,6 +179,8 @@ const FarmCard: React.FC<FarmCardProps> = ({
     tokenAddress: farm.token.address,
   })
 
+  console.log("farm", farm);
+
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
   const liquidity = getBalanceNumber(new BigNumber(farm.liquidity), 0).toFixed(4)
@@ -226,7 +228,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
             <Text fontSize="14px" fontWeight="400">{t('APR')}</Text>
             {!removed && (
               <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-                {farm.apr ? (
+                {(farm.apr || farm.apr === 0) ? (
                   <ApyButton
                     variant="text-and-button"
                     pid={farm.pid}

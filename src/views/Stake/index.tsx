@@ -18,6 +18,9 @@ import {
   Svg,
   Tab,
   TabMenu,
+  Table,
+  Td,
+  Th,
   useWalletModal,
   useMatchBreakpoints, useModal,
 } from '@pancakeswap/uikit'
@@ -34,16 +37,19 @@ import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
 import { useDispatch } from 'react-redux'
 import history from 'routerHistory'
+import { CurrencyLogo } from 'components/Logo'
+import pools from 'config/constants/pools'
+import stake from '../../config/constants/stake'
 import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
 import useTheme from '../../hooks/useTheme'
 import { useWidth } from '../../hooks/useWidth'
-import stake from '../../config/constants/stake'
 
 const StyledPage = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
   padding-top: 57px;
+  margin-bottom: 30px;
 
   @media screen and (max-width: 968px) {
     padding-top: 27px;
@@ -76,11 +82,23 @@ const StyledFlexLayout = styled.div`
   }
 `
 
-const StyledAPRCard = styled(Flex)`
+const StyledAPRCard = styled.div`
   padding: 23px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  margin-bottom: 23px;
+  
+  grid-template-columns: 0.3fr 0.3fr 0.3fr;
+  grid-column-gap: 34px;
+  grid-row-gap: 20px;
+  
+  @media screen and (max-width: 763px) {
+    grid-template-columns: .5fr .5fr;
+  }
+
+  @media screen and (max-width: 320px) {
+    grid-template-columns: 1fr;
+  }
+
   border: 1px solid #131823;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
@@ -116,6 +134,20 @@ const StyledECOReportWrapper = styled(Flex)`
   }
 `
 
+const StyledPoolInfoWrapper = styled(Flex)`
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid #131823;
+   
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  border-radius: 10px;
+  & > div {
+    width: 100%;
+  }
+`
+
 const DecoText = styled(Text)`
   text-decoration: underline;  
 `
@@ -127,6 +159,7 @@ const StyledDetailFlex = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid #131823;
+  max-height: 397px;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -192,12 +225,55 @@ const InputWrapper = styled.div`
   border: 1px solid #131823;
 `
 
+const BorderedText = styled(Text)`
+  border: 1px solid;
+  width: max-content;
+  padding: 1px 3px;
+`
+
+const StyledTableHeader = styled.thead`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.background}
+`
+
+const StyledTr = styled.tr`
+  border-radius: 10px;
+
+  &:hover {
+    & > td {
+        background: rgba(3, 3, 3, 0.2);
+
+      &:last-child {
+        border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      &:first-child {
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+      }
+    }
+  }
+`
+
+const StyledTd = styled(Td) <{ isXs: boolean }>`
+  padding-left: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-right: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-top: 10px;
+  padding-bottom: 10px;
+`
+
+const StyledTh = styled(Th) <{ isXs: boolean }>`
+  padding-left: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-right: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-bottom: 5px;
+`
+
 const Stake: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
-  const { isTablet, isMobile } = useMatchBreakpoints()
+  const { isTablet, isMobile, isXs } = useMatchBreakpoints()
   const dispatch = useDispatch()
   const { theme, isDark } = useTheme()
   const { login, logout } = useAuth()
@@ -205,6 +281,8 @@ const Stake: React.FC = () => {
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
   const [sortOption, setSortOption] = useState('stake')
   const [value, setValue] = useState('0.0')
+  const [sortBy, setSortBy] = useState<string>('all')
+  const [reverseOrder, setReversOrder] = useState<boolean>(false)
 
   const getSortByTabs = () => {
     return [
@@ -215,6 +293,156 @@ const Stake: React.FC = () => {
       {
         value: 'unstake',
         label: 'Unstake',
+      }
+    ]
+  }
+
+  const getSampleData = () => {
+    return [
+      {
+        pools: {
+          "decimals": 18,
+          "symbol": "SPELL",
+          "name": "SPELL",
+          "chainId": 80001,
+          "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+          "tokenInfo": {
+            "name": "SPELL",
+            "symbol": "SPELL",
+            "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+            "chainId": 80001,
+            "decimals": 18,
+            "logoURI": "/images/tokens/0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8.png"
+          },
+          "tags": [],
+        },
+        apr: 36.71,
+        tvl: '4M',
+        earnings: 0
+      },
+      {
+        pools: {
+          "decimals": 18,
+          "symbol": "FONT",
+          "name": "FONT",
+          "chainId": 80002,
+          "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+          "tokenInfo": {
+            "name": "FONT",
+            "symbol": "FONT",
+            "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+            "chainId": 80002,
+            "decimals": 18,
+            "logoURI": "/images/tokens/0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8.png"
+          },
+          "tags": []
+        },
+        apr: 2.33,
+        tvl: '2',
+        earnings: 2712
+      },
+      {
+        pools: {
+          "decimals": 18,
+          "symbol": "LQDR",
+          "name": "LQDR",
+          "chainId": 80003,
+          "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+          "tokenInfo": {
+            "name": "LQDR",
+            "symbol": "LQDR",
+            "address": "0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8",
+            "chainId": 80003,
+            "decimals": 18,
+            "logoURI": "/images/tokens/0x6726ba83CD463dc3a2118Ab2C6E553E2c8a9F2d8.png"
+          },
+          "tags": []
+        },
+        apr: 11.11,
+        tvl: '1',
+        earnings: 100
+      }
+    ]
+  }
+
+  const renderTable = () => {
+    console.log("POOLS", pools)
+    const filteredPairs = getSampleData();
+
+    if (filteredPairs?.length > 0) {
+      let sortedOrder = [...filteredPairs]
+
+      if (sortBy !== 'none') {
+        sortedOrder.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0))
+      }
+
+      sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
+
+      return sortedOrder.map((arr) => {
+        return (
+          <StyledTr>
+            {
+              getHeaders().map((header, index) => {
+                const prefix = header.id === 'tvl' ? '$' : '';
+                if (header.id === "pools") return (
+                  <StyledTd isXs={isXs} >
+                    <Flex justifyContent='flex-start' flexDirection="row" alignItems="center">
+                    <CurrencyLogo currency={arr[header.id]} />
+                    <Text fontSize="14px" fontWeight="400" ml="5px" display={isXs ? 'none' : 'block'}>{`Earn ${arr[header.id].name}`}</Text>
+                    </Flex>
+                  </StyledTd>
+                )
+                return (
+                  <StyledTd isXs={isXs} >
+                    <Text fontSize="14px" fontWeight="400">{`${prefix}${arr[header.id]}`}</Text>
+                  </StyledTd>
+                )
+              })
+            }
+          </StyledTr>)
+      })
+    }
+
+    return (
+      <tr>
+        <Td colSpan={6}>
+          <Text color="textSubtle" textAlign="center">
+            {t('No liquidity found.')}
+          </Text>
+        </Td>
+      </tr>
+    )
+  }
+
+  const handleHeaderClick = (key: string) => {
+    if (key !== sortBy) {
+      setSortBy(key)
+      setReversOrder(false)
+    } else if (key === sortBy && !reverseOrder) {
+      setReversOrder(true)
+    } else {
+      setSortBy('none')
+      setReversOrder(false)
+    }
+  }
+
+  const getHeaders = () => {
+    return [
+      {
+        id: 'pools',
+        title: 'Pools',
+      },
+      {
+        id: 'apr',
+        title: 'APR',
+      },
+      {
+        id: 'tvl',
+        title: 'TVL',
+      },
+      {
+        id: 'earnings',
+        title: 'Earnings',
       }
     ]
   }
@@ -257,7 +485,10 @@ const Stake: React.FC = () => {
   const renderInput = (): JSX.Element => {
     return (
       <Flex flexDirection="column" mt="40px">
-        <Text mb="5px">{t('Balance')}</Text>
+        <Flex mb="5px" justifyContent="space-between" padding="0px 5px 0px 5px">
+          <Text>{t('Balance')}</Text>
+          <Text>0</Text>
+        </Flex>
         <InputWrapper>
           <NumericalInput
             value={value}
@@ -269,7 +500,7 @@ const Stake: React.FC = () => {
             </Button>
           </Flex>
           <Flex flexDirection="column" ml="10px">
-            <Text>AVAX-JOE</Text>
+            <CurrencyLogo currency={getSampleData()[0].pools} />
           </Flex>
         </InputWrapper>
       </Flex>
@@ -281,14 +512,19 @@ const Stake: React.FC = () => {
       <StakeContainer>
         <StyledFlexLayout>
           <Flex justifyContent="flex-start" flexDirection="column">
-            <StyledAPRCard mb="23px">
-              <Flex justifyContent="flex-start" flexDirection="column">
-                <Text fontWeight="700" fontSize="18px">{t('Staking APR')}</Text>
-                <Button variant="primary" scale="sm" width="125px" height="35px" mt="10px"><Text fontSize="14px">{t('View Status')}</Text></Button>
+            <StyledAPRCard>
+              <Flex justifyContent="center" flexDirection="column" mr="10px" flexGrow={1} >
+                <Text fontWeight="700" fontSize="18px">{t('bECO Stats')}</Text>
+                <Button variant="primary" scale="sm" width="110px" height="35px" mt="10px" padding="0" onClick={() => history.push('/dashboard')}>{t('View Stats')}</Button>
               </Flex>
-              <Flex justifyContent="center" flexDirection="column">
-                <Text fontWeight="700" fontSize="18px" textAlign="right">28.33593%</Text>
-                <Text fontWeight="500" fontSize="14px" textAlign="right">Last 7 days APR</Text>
+              <Flex justifyContent="flex-start" flexDirection="column">
+                <Text fontWeight="400" fontSize="14px">{t('APR')}</Text>
+                <Text fontWeight="700" fontSize="18px">2.33%</Text>
+                <BorderedText fontWeight="400" fontSize="14px">1bECO = 1.15 ECO</BorderedText>
+              </Flex>
+              <Flex justifyContent="flex-start" flexDirection="column">
+                <Text fontWeight="400" fontSize="14px">{t('TVL')}</Text>
+                <Text fontWeight="700" fontSize="18px">2.33%</Text>
               </Flex>
             </StyledAPRCard>
             <StyledECOReportWrapper>
@@ -296,12 +532,12 @@ const Stake: React.FC = () => {
                 <Flex justifyContent="flex-start" flexDirection="column">
                   <Flex mt="10px" mb="10px"><ESIcon color={theme.colors.primary} width="40px" /></Flex>
                   <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="5px" mb="5px">{t('XECO Balance')}</Text>
-                  <Text fontSize="18px" fontWeight="700" mt="5px" mb="5px">$35,256,822</Text>
+                  <Text fontSize="18px" fontWeight="700" mt="5px" mb="5px">$35,256</Text>
                 </Flex>
                 <Flex justifyContent="flex-start" flexDirection="column">
                   <Flex mb="10px"><StakeIcon color={theme.colors.primary} width="40px" /></Flex>
                   <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="5px" mb="5px">{t('Staked ECO')}</Text>
-                  <Text fontSize="18px" fontWeight="700" mt="5px" mb="5px">$35,256,822</Text>
+                  <Text fontSize="18px" fontWeight="700" mt="5px" mb="5px">$35,256</Text>
                 </Flex>
               </StyledECOReportCard>
               <Flex justifyContent="flex-start" flexDirection="column" mt="30px">
@@ -311,6 +547,23 @@ const Stake: React.FC = () => {
                 <Text fontSize="12px" fontWeight="500" color={theme.colors.headerSubtleText}>{t(stake[0].text3)}</Text>
               </Flex>
             </StyledECOReportWrapper>
+            <StyledPoolInfoWrapper>
+              <Table>
+                <StyledTableHeader>
+                  {getHeaders().map((singleHeader, index) => {
+                    return (
+                      <StyledTh
+                        onClick={() => handleHeaderClick(singleHeader.id)}
+                        isXs={isXs}
+                      >
+                        <Text fontSize="14px" color={theme.colors.headerSubtleText} fontWeight="400">{singleHeader.title}</Text>
+                      </StyledTh>
+                    )
+                  })}
+                </StyledTableHeader>
+                <tbody>{renderTable()}</tbody>
+              </Table>
+            </StyledPoolInfoWrapper>
           </Flex>
           <StyledDetailFlex>
             <Flex justifyContent="space-between" flexDirection="column">

@@ -143,7 +143,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
             <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Liquidity')}</Text>
             <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">$35,256,822</Text>
           </Flex>
-          <Flex justifyContent="flex-start" flexDirection="column" mt="3px" mb="3px">
+          <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Rewards')}</Text>
             {
               getBalanceNumber(new BigNumber(data.userData.earnings)) ? 
@@ -154,7 +154,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
             <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily ROI')}</Text>
             <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">2.586%</Text>
           </Flex>
-          <Flex justifyContent="flex-start" flexDirection="column" mt="3px" mb="3px">
+          <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('APR')}</Text>
             <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">6.25%</Text>
           </Flex>
@@ -190,7 +190,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
               }            
               <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
             </Flex>
-            <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center">
+            <Flex justifyContent="center" flexDirection="column" alignItems="center">
               <Button variant="primary" scale="md" width="125px" height="35px" mt="10px">{t('Harvest')}</Button>
             </Flex>
           </StyledControlFlex>
@@ -198,3 +198,4 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
     </StyledDtailFlex>
   )
 }
+

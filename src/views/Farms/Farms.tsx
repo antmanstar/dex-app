@@ -3,27 +3,20 @@ import { Route, useRouteMatch, useLocation, NavLink, Link } from 'react-router-d
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import {
-  Image,
   Heading,
-  RowType,
-  Toggle,
   Text,
   Button,
-  ArrowForwardIcon,
   Flex,
   Card,
   SearchIcon,
-  SubMenuItems,
   Tab,
   TabMenu,
   Input,
-  useMatchBreakpoints, useModal,
+  useMatchBreakpoints
 } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
-import FlexLayout from 'components/Layout/Flex'
 import Page from 'views/Page'
-// import Page from 'components/Layout/Page'
 import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd } from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { DeserializedFarm } from 'state/types'
@@ -34,21 +27,13 @@ import { orderBy } from 'lodash'
 import isArchivedPid from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
-import { ViewMode } from 'state/user/actions'
-import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
 import { useDispatch } from 'react-redux'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
-import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
 import { RowProps } from './components/FarmTable/Row'
-import ToggleView from './components/ToggleView/ToggleView'
-import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
-import config from '../../components/Menu/config/config'
-import RowDataJSON from '../../config/constants/DummyFarmsData.json'
-import { setActiveBodyType } from '../../state/farms'
 import { useWidth } from '../../hooks/useWidth'
 
 const StyledPage = styled(`div`)`
@@ -222,7 +207,7 @@ const InputWrapper = styled(`div`)`
   width: 100%;
   max-width: 400px;
   position: relative;
-  border: 1px solid #131823;
+  // border: 1px solid #131823;
   border-radius: 5px;
 
   & > svg {
@@ -246,30 +231,6 @@ const LabelWrapper = styled.div`
   }
 `
 
-const FilterContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 8px 0px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: auto;
-    padding: 0;
-  }
-  
-  @media screen and (min-width: 480px) {
-    ${LabelWrapper}:nth-child(2) {
-      margin-left: 16px;
-    }
-  }
-`
-
-const StyledImage = styled(Image)`
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 58px;
-`
-
 const StyledFlexLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -285,12 +246,6 @@ const StyledFlexLayout = styled.div`
 const FarmsContainer = styled(Card)`
   background: #00000000;
   width: 100%;
-`
-
-const DesktopFarmsDetails = styled.div`
-  @media screen and (max-width: 968px) {
-    display: none;
-  }
 `
 
 const StyledSelect = styled(Select)`
@@ -326,7 +281,6 @@ const Farms: React.FC = () => {
   const { data: farmsLP, userDataLoaded } = useFarms()
   const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
-  const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('liquidity')
   const { observerRef, isIntersecting } = useIntersectionObserver()
@@ -334,12 +288,10 @@ const Farms: React.FC = () => {
   const { isTablet, isMobile } = useMatchBreakpoints()
   const dispatch = useDispatch()
   const { theme } = useTheme()
-  const location = useLocation()
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
   const width = useWidth()
   const shouldRenderModal = width < 969
   const [tab, setTab] = useState<string>('all')
-
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
@@ -409,19 +361,19 @@ const Farms: React.FC = () => {
       },
       {
         value: 'eco',
-        label: 'Eco',
-      },
-      {
-        value: 'block',
-        label: 'Block',
+        label: 'Eco Farms',
       },
       {
         value: 'stable',
-        label: 'Stable',
+        label: 'Stable Farms',
+      },
+      {
+        value: 'block',
+        label: 'Block Farms',
       },
       {
         value: 'my',
-        label: 'My',
+        label: 'My Farms',
       },
     ]
   }

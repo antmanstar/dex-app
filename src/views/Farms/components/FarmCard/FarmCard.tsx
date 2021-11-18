@@ -190,7 +190,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
         />
         <StyledCardSummary>
           <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500">{t('Daily ROI')}</Text>
+            <Text fontSize="14px" fontWeight="400">{t('Daily ROI')}</Text>
             <Text fontSize="18px" fontWeight="700" color={theme.colors.purple}>2.53%</Text>
           </Flex>
           <Flex justifyContent="flex-start" flexDirection="column">

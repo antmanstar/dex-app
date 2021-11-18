@@ -329,6 +329,8 @@ const TokenList = ({
   let currency1: Token | Currency = token1
   let currency2: Token | Currency = token2
 
+  console.log("CUrrency", currency1)
+
   const [selectedPool, setSelectedPool] = useState({
     currencyIdA: null,
     currencyIdB: null,
@@ -408,12 +410,12 @@ const TokenList = ({
                       scale="sm"
                       variant="secondary"
                       size="16px"
-                      borderColor="#28d250"
+                      borderColor={theme.colors.green}
                       borderRadius="50%"
                       borderWidth="1px"
                       // onClick={() => handleAddClick(address1, address2)}
                     >
-                      <AddIcon color="#28d250" />
+                      <AddIcon color={theme.colors.green} />
                     </IconButton>
                     <IconButton 
                       scale="sm"
@@ -715,19 +717,19 @@ export default function Pool() {
       },
       {
         value: 'eco',
-        label: 'Eco',
+        label: 'Eco Pools',
       },
       {
         value: 'block',
-        label: 'Block',
+        label: 'Block Pools',
       },
       {
         value: 'stable',
-        label: 'Stable',
+        label: 'Stable Pools',
       },
       {
         value: 'my',
-        label: 'My',
+        label: 'My Pools',
       },
     ]
   }
@@ -757,9 +759,9 @@ export default function Pool() {
                 {t('Import')}
               </Button>
             </Flex>
-            {/* <Button variant="primary" scale="sm" as={Link} to="/migrate" width="93px" height="35px" margin="10px">
+            <Button variant="primary" scale="sm" as={Link} to="/migrate" width="93px" height="35px" margin="10px">
               {t('Migrate')}
-            </Button> */}
+            </Button>
           </PoolContainer>
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
@@ -776,9 +778,7 @@ export default function Pool() {
             <Text fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
           </TotalPoolContainer>
         </Header>
-        {/* <AppHeader title={t('Your Liquidity')} subtitle={t('Remove liquidity to receive tokens back')} /> */}
         <Body>
-          {/* {renderBody()} */}
           <StyledTabContainer>
             {width > 768 ? <TabMenu
               activeIndex={getPoolTypeTabs().map( (tt) => { return tt.value; }).indexOf(tab)}

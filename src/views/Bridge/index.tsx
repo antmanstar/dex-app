@@ -473,10 +473,10 @@ const Bridge: React.FC = () => {
                     style={{ padding: '0 1rem' }}
                   >
                     <Button
-                      onClick={() => {
-                        setApprovalSubmitted(false) // reset 2 step UI for approvals
-                        onSwitchTokens()
-                      }}
+                      // onClick={() => {
+                      //   setApprovalSubmitted(false) // reset 2 step UI for approvals
+                      //   onSwitchTokens()
+                      // }}
                       scale="sm"
                       variant="text"
                       mb="15px"

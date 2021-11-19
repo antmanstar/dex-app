@@ -485,6 +485,7 @@ const Bridge: React.FC = () => {
                     ) : null}
                   </AutoRow>
                 </AutoColumn>
+                {/* TODO: This input field is not required instead it will just render the information */}
                 <CurrencyInputPanel
                   value={formattedAmounts[Field.OUTPUT]}
                   onUserInput={handleTypeOutput}

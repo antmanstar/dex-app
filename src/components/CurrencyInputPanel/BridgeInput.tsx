@@ -90,6 +90,12 @@ const ChainSelectionButton = styled(Flex)`
   cursor: pointer;
 `
 
+const StyledMaxButton = styled(Button)`
+  display: flex;
+  //justify-items: flex-start;
+  align-items: flex-start;
+`
+
 interface CurrencyInputPanelProps {
   value: string
   onUserInput: (value: string) => void
@@ -182,9 +188,9 @@ export default function BridgeInput({
           )}
           <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-end" minWidth="120px" minHeight="70px">
             {/* {account && currency && showMaxButton && label !== 'To' && ( */}
-            <Button onClick={onMax} scale="xs" variant="text" paddingRight="13px">
-              {`${!secondInput ? 'Max' : 'Fee'}: -- ${!secondInput ? '' : 'USDT'}`}
-            </Button>
+            <StyledMaxButton onClick={onMax} scale="xs" variant="text" paddingRight="13px" padding="0">
+              {`${!secondInput ? 'Max' : 'Fee'}: ${!secondInput ? selectedCurrencyBalance?.toSignificant(6) ?? t('Loading') : '-- USDT'}`}
+            </StyledMaxButton>
             {/* )} */}
             {!secondInput && <CurrencySelectButton
               selected={!!currency}
@@ -226,7 +232,7 @@ export default function BridgeInput({
             <Flex width="100%" justifyContent="flex-end" mt={secondInput ? '10px' : '0'}>
               <Flex flexDirection="column" width="140px">
                 <Text fontSize="14px" fontWeight="400">{t('Available Balance')}</Text>
-                <Text fontSize="14px" fontWeight="700">$52,3535</Text>
+                <Text fontSize="14px" fontWeight="700">{!secondInput ? (`${selectedCurrencyBalance?.toSignificant(6) ?? t('Loading')} ${currency?.symbol}`) : `0.0`}</Text>
               </Flex>
             </Flex>
           </LabelRow>

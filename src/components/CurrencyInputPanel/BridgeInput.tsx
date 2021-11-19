@@ -159,8 +159,13 @@ export default function BridgeInput({
               <ChainSelectionButton alignItems="center">
                 <Text small mr="10px">{translatedLabel}</Text>
                 <NetworkSelector onClick={() => console.log("Change Chain")}>
-                  <LogoRoundIcon width="24px" />
-                  <Text fontSize="16px" ml="5px" mr="5px" display={width < 481 ? 'none' : 'block'}>Polygon (Matic)</Text>
+                  <img
+                    width="24px"
+                    height="24px"
+                    src='/images/tokens/matic.png'
+                    alt='Polygon'
+                  />
+                  <Text fontSize="16px" ml="5px" mr="5px" display={width < 481 ? 'none' : 'block'}>Polygon</Text>
                   <ChevronDownIcon width="24px" />
                 </NetworkSelector>
               </ChainSelectionButton>

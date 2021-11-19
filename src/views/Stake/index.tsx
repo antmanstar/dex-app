@@ -566,11 +566,11 @@ const Stake: React.FC = () => {
               <TVLCSFlex>
                 <TVLFlex>
                   <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('TVL')}</Text>
-                  <Text fontWeight="700" fontSize="18px">2.33%</Text>
+                  <Text fontWeight="700" fontSize="18px">$455,255</Text>
                 </TVLFlex>
                 <CSFlex>
                   <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('Circulating Supply')}</Text>
-                  <Text fontWeight="700" fontSize="18px">$45,255</Text>
+                  <Text fontWeight="700" fontSize="18px">$455,255</Text>
                 </CSFlex>
               </TVLCSFlex>
             </StyledAPRCard>

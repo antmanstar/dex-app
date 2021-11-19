@@ -89,13 +89,13 @@ const StyledAPRCard = styled.div`
   
   grid-template-columns: 0.3fr 0.3fr 0.3fr;
   grid-column-gap: 34px;
-  grid-row-gap: 20px;
+  grid-row-gap: 34px;
   
   @media screen and (max-width: 763px) {
     grid-template-columns: .5fr .5fr;
   }
 
-  @media screen and (max-width: 320px) {
+  @media screen and (max-width: 410px) {
     grid-template-columns: 1fr;
   }
 
@@ -105,6 +105,48 @@ const StyledAPRCard = styled.div`
   border-radius: 10px;
   & > div {
     width: 100%;
+  }
+`
+
+const TVLCSFlex = styled(Flex)`
+  justify-content: flex-start; 
+  flex-direction: column;   
+
+  @media screen and (max-width: 763px) {
+    flex-direction: row;
+    justify-content: center;
+    width: calc(200% + 34px) !important;
+  }
+
+  @media screen and (max-width: 410px) {
+    justify-content: flex-start; 
+    flex-direction: column;
+  }
+`
+
+const TVLFlex = styled(Flex)`
+  margin-top: 14px;
+  flex-direction: column;
+  width: 100%;
+
+  @media screen and (max-width: 763px) {
+    margin-top: 0;
+  }
+`
+
+const CSFlex = styled(Flex)`
+  margin-top: 14px;
+  flex-direction: column;
+  width: 100%;
+
+  @media screen and (max-width: 763px) {
+    margin-top: 0;
+    margin-left: 34px;
+  }
+
+  @media screen and (max-width: 410px) {
+    margin-top: 24px;
+    margin-left: 0;
   }
 `
 
@@ -366,7 +408,6 @@ const Stake: React.FC = () => {
   }
 
   const renderTable = () => {
-    console.log("POOLS", pools)
     const filteredPairs = getSampleData();
 
     if (filteredPairs?.length > 0) {
@@ -517,21 +558,21 @@ const Stake: React.FC = () => {
                 <Text fontWeight="700" fontSize="18px">{t('bECO Stats')}</Text>
                 <Button variant="primary" scale="sm" width="110px" height="35px" mt="10px" padding="0" onClick={() => history.push('/dashboard')}>{t('View Stats')}</Button>
               </Flex>
-              <Flex justifyContent="flex-start" flexDirection="column">
+              <Flex justifyContent="flex-start" flexDirection="column" alignSelf="center">
                 <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('APR')}</Text>
                 <Text fontWeight="700" fontSize="18px">2.33%</Text>
                 <BorderedText fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>1bECO = 1.15 ECO</BorderedText>
               </Flex>
-              <Flex flexDirection="column">
-              <Flex justifyContent="flex-start" flexDirection="column">
-                <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('TVL')}</Text>
-                <Text fontWeight="700" fontSize="18px">2.33%</Text>
-              </Flex>
-              <Flex justifyContent="flex-start" flexDirection="column" mt="14px">
-                <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('Circulating Supply')}</Text>
-                <Text fontWeight="700" fontSize="18px">$45,255</Text>
-              </Flex>
-              </Flex>
+              <TVLCSFlex>
+                <TVLFlex>
+                  <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('TVL')}</Text>
+                  <Text fontWeight="700" fontSize="18px">2.33%</Text>
+                </TVLFlex>
+                <CSFlex>
+                  <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('Circulating Supply')}</Text>
+                  <Text fontWeight="700" fontSize="18px">$45,255</Text>
+                </CSFlex>
+              </TVLCSFlex>
             </StyledAPRCard>
             <StyledECOReportWrapper>
               <StyledECOReportCard>

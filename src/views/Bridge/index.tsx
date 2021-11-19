@@ -118,6 +118,13 @@ const StyledTab = styled(Flex)<{ isActive?: boolean }>`
   cursor: pointer;
 `
 
+const TabText = styled(Text)<{ isActive?: boolean, isMobile?: boolean }>`
+  font-size: ${({ isMobile }) => isMobile ? '18px' : '24px'};
+  font-weight: 600;
+  text-align: center;
+  color: ${({ theme, isActive }) => isActive ? theme.colors.text : 'grey'};
+`
+
 const Label = styled(Text)`
   font-size: 12px;
   font-weight: bold;
@@ -145,6 +152,7 @@ const Bridge: React.FC = () => {
   const [tab, setTab] = useState<string>('bridge')
   const width = useWidth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
+  const { isTablet, isMobile, isXs } = useMatchBreakpoints()
 
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
@@ -428,7 +436,7 @@ const Bridge: React.FC = () => {
           {getFarmsTypeTabs().map((singleTab, index) => {
             return (
               <StyledTab isActive={tab===singleTab.value} onClick={() => setTab(singleTab.value)}>
-                <Text fontSize="24px" fontWeight="600" textAlign="center" color={tab===singleTab.value ? theme.colors.text : 'grey'}>{singleTab.label}</Text>
+                <TabText isActive={tab===singleTab.value} isMobile={isMobile}>{singleTab.label}</TabText>
               </StyledTab>
             )
           })}

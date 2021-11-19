@@ -16,8 +16,7 @@ const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  background: ${({ theme }) => theme.colors.swapInputBorder};
-  //border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
+  background: ${({ theme }) => theme.colors.bridgeInputBg};
   border-radius: 10px;
   padding: ${({ selected }) => (selected ? '1rem 0.5rem 1rem 1rem' : '1rem 0.75rem 1rem 1rem')};
 `
@@ -80,7 +79,7 @@ const Container = styled.div<{ hideInput: boolean }>`
 `
 
 const NetworkSelector = styled(Flex)`  
-  background: ${({ theme }) => theme.colors.swapInputBorder};
+  background: ${({ theme }) => theme.colors.bridgeInputBg};
   border-radius: 20px;
   height: 43px;
   padding: 5px;

@@ -518,13 +518,19 @@ const Stake: React.FC = () => {
                 <Button variant="primary" scale="sm" width="110px" height="35px" mt="10px" padding="0" onClick={() => history.push('/dashboard')}>{t('View Stats')}</Button>
               </Flex>
               <Flex justifyContent="flex-start" flexDirection="column">
-                <Text fontWeight="400" fontSize="14px">{t('APR')}</Text>
+                <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('APR')}</Text>
                 <Text fontWeight="700" fontSize="18px">2.33%</Text>
-                <BorderedText fontWeight="400" fontSize="14px">1bECO = 1.15 ECO</BorderedText>
+                <BorderedText fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>1bECO = 1.15 ECO</BorderedText>
               </Flex>
+              <Flex flexDirection="column">
               <Flex justifyContent="flex-start" flexDirection="column">
-                <Text fontWeight="400" fontSize="14px">{t('TVL')}</Text>
+                <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('TVL')}</Text>
                 <Text fontWeight="700" fontSize="18px">2.33%</Text>
+              </Flex>
+              <Flex justifyContent="flex-start" flexDirection="column" mt="14px">
+                <Text fontWeight="400" fontSize="14px" color={theme.colors.headerSubtleText}>{t('Circulating Supply')}</Text>
+                <Text fontWeight="700" fontSize="18px">$45,255</Text>
+              </Flex>
               </Flex>
             </StyledAPRCard>
             <StyledECOReportWrapper>
@@ -583,7 +589,7 @@ const Stake: React.FC = () => {
     <Page>
       <StyledPage>
         <Flex justifyContent="flex-start" flexDirection="column">
-          <Text fontSize="18px" mb="5px">{t(`Earn more EC0`)}</Text>
+          <Text fontSize="18px" mb="5px">{t(`Earn more ECO`)}</Text>
           <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="5px" mb="5px">{t(stake[0].text1)}</Text>
           <Text fontSize="14px" fontWeight="500" mt="5px" mb="5px">{t(stake[0].text2)}</Text>
         </Flex>

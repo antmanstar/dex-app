@@ -76,11 +76,6 @@ const StyledPage = styled(`div`)`
 
 const Body = styled(`div`)`
   border-radius: 10px;
-  margin-top: 40px;
-
-  @media screen and (max-width: 576px) {
-    margin-top: 30px;
-  }
 `
 
 const BridgeContainer = styled(Card)`
@@ -103,9 +98,8 @@ const BridgeCardWrapper = styled(Flex)`
 `
 
 const BridgeCardHeader = styled(Flex)`
-  padding: 16px 20px;
+  padding-top: 15px;
   display: flex;
-  // border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder2};
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   & > div {
@@ -113,22 +107,15 @@ const BridgeCardHeader = styled(Flex)`
   }
 `
 
-const TabContainer = styled(`div`)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const StyledTabContainer = styled(TabContainer)`
-  display: flex;
-  justify-content: center
-`
-
-const StyledTab = styled(Tab)`
-  padding: 0px 15px 10px 15px;
+const StyledTab = styled(Flex)<{ isActive?: boolean }>`
   font-size: 24px;
-  border-bottom: 2px solid;
+  border-bottom: 2px solid ${({ theme, isActive }) => isActive ? theme.colors.primary : theme.colors.cardBorder2};
+  padding-bottom: 15px;
   border-radius: 0;
+  width: 100%;
+  alignItems: center;
+  justify-content: center;
+  cursor: pointer;
 `
 
 const Label = styled(Text)`
@@ -437,23 +424,15 @@ const Bridge: React.FC = () => {
 
   const renderTab = (): JSX.Element => {
     return (
-      <StyledTabContainer>
-        <TabMenu
-          activeIndex={getFarmsTypeTabs().map((tt) => { return tt.value; }).indexOf(tab)}
-          onItemClick={(index) => {
-            setTab(getFarmsTypeTabs()[index].value)
-          }}
-          normalVariant
-        >
+      <Flex>
           {getFarmsTypeTabs().map((singleTab, index) => {
             return (
-              <StyledTab color={tab === singleTab.value ? 'primary' : ''} onClick={() => setTab(singleTab.value)}>
-                {singleTab.label}
+              <StyledTab isActive={tab===singleTab.value} onClick={() => setTab(singleTab.value)}>
+                <Text fontSize="24px" fontWeight="600" textAlign="center" color={tab===singleTab.value ? theme.colors.text : 'grey'}>{singleTab.label}</Text>
               </StyledTab>
             )
           })}
-        </TabMenu>
-      </StyledTabContainer>
+      </Flex>
     )
   }
 
@@ -483,7 +462,7 @@ const Bridge: React.FC = () => {
                 <AutoColumn justify="space-between">
                   <AutoRow
                     justify={isExpertMode ? 'space-between' : 'center'}
-                    style={{ padding: '0 1rem', marginTop: '16px' }}
+                    style={{ padding: '0 1rem' }}
                   >
                     <Button
                       onClick={() => {
@@ -492,8 +471,7 @@ const Bridge: React.FC = () => {
                       }}
                       scale="sm"
                       variant="text"
-                      mb="30px"
-                      mt="15px"
+                      mb="15px"
                     >
                       <ArrowUpDownIcon
                         width="25px"
@@ -556,17 +534,14 @@ const Bridge: React.FC = () => {
                   </AutoColumn>
                 )}
               </Flex>
-              <Flex flexDirection="column" padding="0 10px">
-                <Text fontSize="12px" fontWeight="400" mt="5px" mb="5px">{t(`If you have not add Eco Smart Chain network in your MetaMask yet, please click Add network and continue`)}</Text>
-              </Flex>
-              <Box mt="40px" mx="0.5rem">
+              <Box mt="15px" mx="0.5rem">
                 {swapIsUnsupported ? (
                   <Button width="100%" disabled mb="4px">
                     {t('Unsupported Asset')}
                   </Button>
                 ) : !account ? (
                   <Flex justifyContent="center" flexDirection="column" alignItems="center">
-                    <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
+                    <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" style={{borderRadius: '10px'}}>{t('Connect Wallet')}</Button>
                   </Flex>
                 ) : showWrap ? (
                   <Button width="100%" disabled={Boolean(wrapInputError)} onClick={onWrap}>

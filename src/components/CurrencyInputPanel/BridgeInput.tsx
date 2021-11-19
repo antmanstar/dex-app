@@ -1,6 +1,6 @@
 import React from 'react'
 import { Currency, Pair } from '@pancakeswap/sdk'
-import { Button, ChevronDownIcon, Text, useModal, Flex, LogoRoundIcon } from '@pancakeswap/uikit'
+import { Button, ChevronDownIcon, Text, useModal, Flex, LogoRoundIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -16,7 +16,7 @@ const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  background: ${({ theme }) => theme.colors.input};
+  background: ${({ theme }) => theme.colors.swapInputBorder};
   //border: 1px solid ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 10px;
   padding: ${({ selected }) => (selected ? '1rem 0.5rem 1rem 1rem' : '1rem 0.75rem 1rem 1rem')};
@@ -27,7 +27,13 @@ const InputWrapper = styled(Flex)`
   width: 100%
 `
 const StyledNumericalInput = styled(NumericalInput)`
-  width: 100%
+  width: 100%;
+  font-size: 24px;
+
+  ::placeholder {
+    color: grey;
+    opacity: 1;
+  }
 `
 
 const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
@@ -73,10 +79,10 @@ const Container = styled.div<{ hideInput: boolean }>`
   // box-shadow: ${({ theme }) => theme.shadows.inset};
 `
 
-const NetworkSelector = styled(Flex)`
-  background: ${({ theme }) => theme.colors.input};
+const NetworkSelector = styled(Flex)`  
+  background: ${({ theme }) => theme.colors.swapInputBorder};
   border-radius: 20px;
-  height: 40px;
+  height: 43px;
   padding: 5px;
   align-items: center;
 `
@@ -123,6 +129,7 @@ export default function BridgeInput({
   const { t } = useTranslation()
   const translatedLabel = label || t('Input')
   const width = useWidth()
+  const { isTablet, isMobile, isXs } = useMatchBreakpoints()
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal
@@ -143,21 +150,19 @@ export default function BridgeInput({
         {!hideInput && (
           <LabelRow secondInput={secondInput}>
             <RowBetween>
-              <ChainSelectionButton alignItems="center" onClick={() => console.log("Change Chain")}>
+              <ChainSelectionButton alignItems="center">
                 <Text small mr="10px">{translatedLabel}</Text>
-                <NetworkSelector>
+                <NetworkSelector onClick={() => console.log("Change Chain")}>
                   <LogoRoundIcon width="24px" />
-                  <Text fontSize="16px" ml="5px" mr="5px">Unknown Chain</Text>
-                  <ChevronDownIcon width="24px" />              
+                  <Text fontSize="16px" ml="5px" mr="5px" display={width < 481 ? 'none' : 'block'}>Polygon (Matic)</Text>
+                  <ChevronDownIcon width="24px" />
                 </NetworkSelector>
               </ChainSelectionButton>
-              {account && (
-                <Text onClick={onMax} style={{ display: 'inline', cursor: 'pointer' }} small>
-                  {!hideBalance && !!currency
-                    ? t('Balance: %balance%', { balance: selectedCurrencyBalance?.toSignificant(6) ?? t('Loading') })
-                    : ' -'}
-                </Text>
-              )}
+              {!secondInput && <Flex flexDirection="column" width="140px">
+                <Text fontSize="14px" fontWeight="400">{t('Estimated Value')}</Text>
+                <Text fontSize="14px" fontWeight="700">$52,3535</Text>
+              </Flex>
+              }
             </RowBetween>
           </LabelRow>
         )}
@@ -165,7 +170,7 @@ export default function BridgeInput({
           {!hideInput && (
             <>
               <InputWrapper>
-                <Text fontSize="12px" fontWeight="600" mb="10px">{translatedLabel === "From" ? t("Sending Amount") : t("Received Amount")}</Text>
+                <Text fontSize="14px" fontWeight="400" mb="18px" color="grey">{translatedLabel === "From" ? t("Sending Amount") : t("Received Amount")}</Text>
                 <StyledNumericalInput
                   value={value}
                   onUserInput={(val) => {
@@ -173,46 +178,59 @@ export default function BridgeInput({
                   }}
                 />
               </InputWrapper>
-              {/* {account && currency && showMaxButton && label !== 'To' && ( */}
-              <Button onClick={onMax} scale="sm" variant="text">
-                MAX
-              </Button>
-              {/* )} */}
             </>
           )}
-          <CurrencySelectButton
-            selected={!!currency}
-            className="open-currency-select-button"
-            onClick={() => {
-              if (!disableCurrencySelect) {
-                onPresentCurrencyModal()
-              }
-            }}
-          >
-            <Flex alignItems="center" justifyContent="space-between">
-              {pair ? (
-                <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={16} margin />
-              ) : currency ? (
-                <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
-              ) : null}
-              {pair ? (
-                <Text id="pair">
-                  {pair?.token0.symbol}:{pair?.token1.symbol}
-                </Text>
-              ) : (
-                <Text id="pair">
-                  {(currency && currency.symbol && currency.symbol.length > 20
-                    ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
-                      currency.symbol.length - 5,
-                      currency.symbol.length,
-                    )}`
-                    : currency?.symbol) || t('Select a currency')}
-                </Text>
-              )}
-              {!disableCurrencySelect && <ChevronDownIcon />}
-            </Flex>
-          </CurrencySelectButton>
+          <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-end" minWidth="120px" minHeight="70px">
+            {/* {account && currency && showMaxButton && label !== 'To' && ( */}
+            <Button onClick={onMax} scale="xs" variant="text" paddingRight="13px">
+              {`${!secondInput ? 'Max' : 'Fee'}: -- ${!secondInput ? '' : 'USDT'}`}
+            </Button>
+            {/* )} */}
+            {!secondInput && <CurrencySelectButton
+              selected={!!currency}
+              className="open-currency-select-button"
+              onClick={() => {
+                if (!disableCurrencySelect) {
+                  onPresentCurrencyModal()
+                }
+              }}
+            >
+              <Flex alignItems="center" justifyContent="space-between">
+                {pair ? (
+                  <DoubleCurrencyLogo currency0={pair.token0} currency1={pair.token1} size={16} margin />
+                ) : currency ? (
+                  <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
+                ) : null}
+                {pair ? (
+                  <Text id="pair">
+                    {pair?.token0.symbol}:{pair?.token1.symbol}
+                  </Text>
+                ) : (
+                  <Text id="pair">
+                    {(currency && currency.symbol && currency.symbol.length > 20
+                      ? `${currency.symbol.slice(0, 4)}...${currency.symbol.slice(
+                        currency.symbol.length - 5,
+                        currency.symbol.length,
+                      )}`
+                      : currency?.symbol) || t('Select a currency')}
+                  </Text>
+                )}
+                {!disableCurrencySelect && <ChevronDownIcon />}
+              </Flex>
+            </CurrencySelectButton>
+            }
+          </Flex>
         </InputRow>
+        {!hideInput && (
+          <LabelRow secondInput={secondInput}>
+            <Flex width="100%" justifyContent="flex-end" mt={secondInput ? '10px' : '0'}>
+              <Flex flexDirection="column" width="140px">
+                <Text fontSize="14px" fontWeight="400">{t('Available Balance')}</Text>
+                <Text fontSize="14px" fontWeight="700">$52,3535</Text>
+              </Flex>
+            </Flex>
+          </LabelRow>
+        )}
       </Container>
     </InputPanel>
   )

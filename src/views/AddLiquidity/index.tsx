@@ -44,6 +44,7 @@ import Page from '../Page'
 import useTheme from '../../hooks/useTheme'
 import GlobalSettings from '../../components/Menu/GlobalSettings'
 import { useWidth } from '../../hooks/useWidth'
+import useTotalSupply from '../../hooks/useTotalSupply'
 
 const Container = styled.div`
   display: grid;
@@ -399,6 +400,8 @@ export default function AddLiquidity({
     'addLiquidityModal',
   )
 
+  const totalPoolTokens = useTotalSupply(pair.liquidityToken)
+
   return (
     <StyledPage>
       <Container>
@@ -410,6 +413,7 @@ export default function AddLiquidity({
                 poolTokenPercentage={poolTokenPercentage}
                 noLiquidity={noLiquidity}
                 price={price}
+                totalPoolTokens={totalPoolTokens.toSignificant(4)}
                 pair={pair}
               />
               <StyledLightCard padding="24px" border="none !important">

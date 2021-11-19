@@ -562,7 +562,7 @@ export default function RemoveLiquidity({
             {currencies && currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B] && (
               <>
                 <TransparentCard padding="0px" noBorder>
-                  <LiqPoolDetailsCard currencies={currencies} pair={pair} />
+                  <LiqPoolDetailsCard currencies={currencies} pair={pair} totalPoolTokens={totalPoolTokens.toSignificant(4)}/>
                   <TransparentCard padding="24px" noBorder>
                     <PoolPriceBar
                       currencies={currencies}

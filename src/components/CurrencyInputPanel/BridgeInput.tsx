@@ -1,6 +1,15 @@
 import React from 'react'
 import { Currency, Pair } from '@pancakeswap/sdk'
-import { Button, ChevronDownIcon, Text, useModal, Flex, LogoRoundIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import {
+  Button,
+  ChevronDownIcon,
+  Text,
+  useModal,
+  Flex,
+  LogoRoundIcon,
+  useMatchBreakpoints,
+  IconButton, InfoIcon,
+} from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -11,6 +20,7 @@ import { CurrencyLogo, DoubleCurrencyLogo } from '../Logo'
 import { RowBetween } from '../Layout/Row'
 import { Input as NumericalInput } from './NumericalInput'
 import { useWidth } from '../../hooks/useWidth'
+import InfoTooltip from '../Tooltip/Tooltip'
 
 const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
@@ -193,6 +203,7 @@ export default function BridgeInput({
           <Flex flexDirection="column" justifyContent="flex-start" alignItems="flex-end" minWidth="120px" minHeight="70px">
             {/* {account && currency && showMaxButton && label !== 'To' && ( */}
             <StyledMaxButton onClick={onMax} scale="xs" variant="text" paddingRight="13px" padding="0">
+              {secondInput && <InfoTooltip text="This is the processing fee paid to the relay node to cover the operation cost." mr="4px" />}
               {`${!secondInput ? 'Max' : 'Fee'}: ${!secondInput ? selectedCurrencyBalance?.toSignificant(6) ?? t('Loading') : '-- USDT'}`}
             </StyledMaxButton>
             {/* )} */}

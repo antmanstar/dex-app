@@ -81,24 +81,19 @@ export const smallFooterLinks: (t: ContextApi['t']) => ISmallFooterLinks = (t) =
     links: [
       {
         id: 1,
-        title: t('Privacy'),
+        title: t('Documentation'),
         url: '#',
       },
       {
         id: 2,
-        title: t('Terms'),
+        title: t('Analytics'),
         url: '#',
       },
       {
         id: 3,
-        title: t('Contact'),
+        title: t('Request'),
         url: '#',
-      },
-      {
-        id: 4,
-        title: t('About'),
-        url: '#',
-      },
+      }
     ],
     audit: [
       {

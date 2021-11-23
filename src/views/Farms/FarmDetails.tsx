@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Flex, Heading, Skeleton, Text, Button, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 import { Link as RouterLink } from 'react-router-dom'
+import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import CardHeading from './components/FarmCard/CardHeading'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { getBalanceAmount, getBalanceNumber } from '../../utils/formatBalance'
@@ -28,6 +29,8 @@ interface IFarmDetails {
 }
 
 const StyledFarmName = styled(Flex)`
+  display: flex;
+  justifyContent: space-between;
   padding: 20px;
 
   & > div {
@@ -88,6 +91,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { data, hideDetailsHeading, location, userDataReady, lpLabel, addLiquidityUrl } = props
   const { stakedBalance } = useFarmUser(data.pid)
   const { theme } = useTheme()
+  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
 
   const displayBalance = useCallback(() => {
     const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
@@ -124,6 +128,13 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           quoteToken={data.quoteToken}
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
         />
+        <Flex onClick={showCalc} justifyContent="flex-end">
+          <img
+            width="30px"
+            src='/images/math.png'
+            alt='Caculator'
+          />
+        </Flex>
       </StyledFarmName>}
       <StyledCardSummary>
         <Flex justifyContent='flex-start' flexDirection='column'>

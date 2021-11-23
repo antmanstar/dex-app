@@ -49,7 +49,7 @@ const StyledPage = styled(`div`)`
   width: 100%;
   z-index: 1;
   padding-top: 57px;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
 
   @media screen and (max-width: 968px) {
     padding-top: 27px;
@@ -201,7 +201,6 @@ const StyledDetailFlex = styled(Flex)`
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid #131823;
-  max-height: 397px;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -428,8 +427,8 @@ const Stake: React.FC = () => {
                 if (header.id === "pools") return (
                   <StyledTd isXs={isXs} >
                     <Flex justifyContent='flex-start' flexDirection="row" alignItems="center">
-                    <CurrencyLogo currency={arr[header.id]} />
-                    <Text fontSize="14px" fontWeight="400" ml="5px" display={isXs ? 'none' : 'block'}>{`Earn ${arr[header.id].name}`}</Text>
+                      <CurrencyLogo currency={arr[header.id]} />
+                      <Text fontSize="14px" fontWeight="400" ml="5px" display={isXs ? 'none' : 'block'}>{`Earn ${arr[header.id].name}`}</Text>
                     </Flex>
                   </StyledTd>
                 )
@@ -555,7 +554,7 @@ const Stake: React.FC = () => {
           <Flex justifyContent="flex-start" flexDirection="column">
             <StyledAPRCard>
               <Flex justifyContent="center" flexDirection="column" mr="10px" flexGrow={1} >
-                <Text fontWeight="700" fontSize="18px">{t('bECO Stats')}</Text>
+                <Text fontWeight="700" fontSize="18px">{t('Staking')}</Text>
                 <Button variant="primary" scale="sm" width="110px" height="35px" mt="10px" padding="0" onClick={() => history.push('/dashboard')}>{t('View Stats')}</Button>
               </Flex>
               <Flex justifyContent="flex-start" flexDirection="column" alignSelf="center">
@@ -594,23 +593,6 @@ const Stake: React.FC = () => {
                 <Text fontSize="12px" fontWeight="500" color={theme.colors.headerSubtleText}>{t(stake[0].text3)}</Text>
               </Flex>
             </StyledECOReportWrapper>
-            <StyledPoolInfoWrapper>
-              <Table>
-                <StyledTableHeader>
-                  {getHeaders().map((singleHeader, index) => {
-                    return (
-                      <StyledTh
-                        onClick={() => handleHeaderClick(singleHeader.id)}
-                        isXs={isXs}
-                      >
-                        <Text fontSize="14px" color={theme.colors.headerSubtleText} fontWeight="400">{singleHeader.title}</Text>
-                      </StyledTh>
-                    )
-                  })}
-                </StyledTableHeader>
-                <tbody>{renderTable()}</tbody>
-              </Table>
-            </StyledPoolInfoWrapper>
           </Flex>
           <StyledDetailFlex>
             <Flex justifyContent="space-between" flexDirection="column">
@@ -622,6 +604,23 @@ const Stake: React.FC = () => {
             </Flex>
           </StyledDetailFlex>
         </StyledFlexLayout>
+        <StyledPoolInfoWrapper>
+          <Table>
+            <StyledTableHeader>
+              {getHeaders().map((singleHeader, index) => {
+                return (
+                  <StyledTh
+                    onClick={() => handleHeaderClick(singleHeader.id)}
+                    isXs={isXs}
+                  >
+                    <Text fontSize="14px" color={theme.colors.headerSubtleText} fontWeight="400">{singleHeader.title}</Text>
+                  </StyledTh>
+                )
+              })}
+            </StyledTableHeader>
+            <tbody>{renderTable()}</tbody>
+          </Table>
+        </StyledPoolInfoWrapper>
       </StakeContainer>
     )
   }

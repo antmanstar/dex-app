@@ -20,6 +20,7 @@ import Pools from './views/Pools'
 import Swap from './views/Swap'
 import Stake from './views/Stake'
 import Bridge from './views/Bridge'
+import Referral from './views/Referral'
 import {
   RedirectDuplicateTokenIds,
   RedirectOldAddLiquidityPathStructure,
@@ -95,6 +96,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/stake">
               <Stake />
+            </Route>
+            <Route path="/referral">
+              <Referral />
             </Route>
             {/* <Route path="/lottery"> */}
             {/*  <Lottery /> */}

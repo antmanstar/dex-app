@@ -4,16 +4,17 @@ import { Button, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ISmallFooterLinks } from './types'
 
 const StyledLinks = styled.div`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  // display: grid;
+  // grid-template-columns: minmax(0, 1fr);
 
-  ${({ theme }) => theme.mediaQueries.xs} {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
+  // ${({ theme }) => theme.mediaQueries.xs} {
+  //   grid-template-columns: 1fr 1fr 1fr 1fr;
+  // }
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
+  // ${({ theme }) => theme.mediaQueries.lg} {
+  //   grid-template-columns: 1fr 1fr 1fr 1fr;
+  // }
+  display: flex;
 `
 
 const StyledSocial = styled(StyledLinks)`

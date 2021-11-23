@@ -51,6 +51,7 @@ const AppBody = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
+  margin-bottom: 50px;
 `
 
 const Body = styled(`div`)`
@@ -74,7 +75,7 @@ const Header = styled(`div`)`
   padding-bottom: 16px;
   flex-direction: column;
   
-  ${({theme}) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
   }
 `
@@ -86,7 +87,7 @@ const PoolContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   
-  ${({theme}) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
     justify-content: center;
     align-items: center;
@@ -100,7 +101,7 @@ const LockedValueContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   
-  ${({theme}) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
     justify-content: center;
     align-items: center;
@@ -119,7 +120,7 @@ const LockedValueCard = styled(Flex)`
   margin-bottom: 10px;
   
   ${Text}:first-child {
-    color: ${({theme}) => theme.colors.headerSubtleText}
+    color: ${({ theme }) => theme.colors.headerSubtleText}
   }
 
   margin-top: ${props => (props.id === "eco_loc" ? `0` : `18px`)};
@@ -143,12 +144,12 @@ const TotalPoolContainer = styled(`div`)`
   justify-content: center;
   align-items: center;
   
-  ${({theme}) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
   }
   
   ${Text}:last-child {
-    color: ${({theme}) => theme.colors.headerSubtleText}
+    color: ${({ theme }) => theme.colors.headerSubtleText}
   }
 
   @media screen and (max-width: 576px) {
@@ -175,7 +176,7 @@ const InputWrapper = styled(`div`)`
   }
 `
 
-const StyledTable = styled(Table)<{ isMobile: boolean }>`
+const StyledTable = styled(Table) <{ isMobile: boolean }>`
   margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : 0)};
   //margin-top: 12px;
   border-collapse: separate;
@@ -209,7 +210,7 @@ const TableWrapperCard = styled(Card)`
   // padding-left: 8px;
   // padding-right: 8px;
   background-color: transparent;
-  // background: ${({theme}) => theme.colors.backgroundAlt3};
+  // background: ${({ theme }) => theme.colors.backgroundAlt3};
   margin-bottom: 32px;
   
   @media screen and (max-width: 576px) {
@@ -234,10 +235,10 @@ const StyledSearchInput = styled(Input)`
 const StyledDetailsContainer = styled(Flex)`
   border-radius: 10px;
   padding: 12px;
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
   justify-content: space-between;
   min-width: 400px;
-  ${({theme}) => theme.mediaQueries.md} {
+  ${({ theme }) => theme.mediaQueries.md} {
     min-width: 500px;
   }
 `
@@ -256,7 +257,7 @@ const SinglePoolButton = styled(Button)`
 
 const StyledSelect = styled(Select)`
   & > div:first-child {
-    background-color: ${({theme}) => theme.colors.headerInputBg};
+    background-color: ${({ theme }) => theme.colors.headerInputBg};
     box-shadow: none;
   }
 `
@@ -604,23 +605,23 @@ export default function Pool() {
           </PoolContainer>
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
-              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (ECOSWAP)')}</Text>
-              <Text color={theme.colors.green} fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked')}</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">
-              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (User)')}</Text>
-              <Text color={theme.colors.yellow} fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text fontWeight="500" fontSize="14px">{!account ? t('Total Staked Value') : t('My Total Staked Value')}</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>
-            <Text fontSize="46px" fontWeight="700">{filteredPairs.length}</Text>
+            <Text color={theme.colors.primary} fontSize="46px" fontWeight="700" glow>{filteredPairs.length}</Text>
             <Text fontSize="14px" fontWeight="500">{t('# of Pools')}</Text>
           </TotalPoolContainer>
         </Header>
         <Body>
           <StyledTabContainer>
             {width > 768 ? <TabMenu
-              activeIndex={getPoolTypeTabs().map( (tt) => { return tt.value; }).indexOf(tab)}
+              activeIndex={getPoolTypeTabs().map((tt) => { return tt.value; }).indexOf(tab)}
               onItemClick={(index) => {
                 setTab(getPoolTypeTabs()[index].value)
               }}
@@ -654,17 +655,17 @@ export default function Pool() {
           <TableWrapperCard>
             <StyledTable isMobile={isMobile}>
               <thead>
-              {getHeaders().map((singleHeader, index) => {
-                return (
-                  <Th
-                    className="cursor-pointer"
-                    textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
-                    onClick={() => handleHeaderClick(singleHeader.id)}
-                  >
-                    <Text fontSize="12px" color='grey' fontWeight="500">{singleHeader.title}</Text>
-                  </Th>
-                )
-              })}
+                {getHeaders().map((singleHeader, index) => {
+                  return (
+                    <Th
+                      className="cursor-pointer"
+                      textAlign={index === getHeaders().length - 1 ? 'right' : 'left'}
+                      onClick={() => handleHeaderClick(singleHeader.id)}
+                    >
+                      <Text fontSize="12px" color='grey' fontWeight="500">{singleHeader.title}</Text>
+                    </Th>
+                  )
+                })}
               </thead>
               <tbody>{renderTable()}</tbody>
             </StyledTable>

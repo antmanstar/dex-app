@@ -92,7 +92,8 @@ const StyledAPRCard = styled.div`
   grid-row-gap: 34px;
   
   @media screen and (max-width: 763px) {
-    grid-template-columns: .5fr .5fr;
+    display: flex;
+    flex-direction: column;
   }
 
   @media screen and (max-width: 410px) {
@@ -112,12 +113,6 @@ const TVLCSFlex = styled(Flex)`
   justify-content: flex-start; 
   flex-direction: column;   
 
-  @media screen and (max-width: 763px) {
-    flex-direction: row;
-    justify-content: center;
-    width: calc(200% + 34px) !important;
-  }
-
   @media screen and (max-width: 410px) {
     justify-content: flex-start; 
     flex-direction: column;
@@ -131,6 +126,7 @@ const TVLFlex = styled(Flex)`
 
   @media screen and (max-width: 763px) {
     margin-top: 0;
+    margin-bottom: 10px;
   }
 `
 
@@ -138,11 +134,6 @@ const CSFlex = styled(Flex)`
   margin-top: 14px;
   flex-direction: column;
   width: 100%;
-
-  @media screen and (max-width: 763px) {
-    margin-top: 0;
-    margin-left: 34px;
-  }
 
   @media screen and (max-width: 410px) {
     margin-top: 24px;

@@ -120,6 +120,10 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
     displayEarnings = earnings.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
+  const showCalc = () => {
+    setShowRoiCalculator(true)
+  }
+
   return (
     <StyledDtailFlex flexDirection='column'>
       {!hideDetailsHeading && <StyledFarmName>

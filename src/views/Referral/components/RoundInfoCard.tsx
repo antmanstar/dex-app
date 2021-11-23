@@ -7,33 +7,13 @@ import useTheme from 'hooks/useTheme'
 
 const StyledCard = styled(Card)`
   justify-content: space-between;
-  border-radius: 5px;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
-
-  @media screen and (max-width: 763px) {
-    width: 360px;
-  }
+  background-color: transparent;
+  text-align: center;   
+  max-width: 300px;
 `
 
 const StyledImage = styled.img`
-  height: 260px;
-  width: auto;
-
-  @media screen and (max-width: 1180px) {    
-    height: calc(260px - 5vw);
-  } 
-
-  @media screen and (max-width: 1000px) {    
-    height: calc(240px - 5vw);
-  } 
-
-  @media screen and (max-width: 850px) {    
-    height: calc(220px - 5vw);
-  }
-  
-  @media screen and (max-width: 280px) {    
-    height: calc(200px - 5vw);
-  } 
+  width: 188px;
 `
 
 interface InfoData {
@@ -48,13 +28,12 @@ const RoundInfoCard: React.FC<InfoData> = ({
   const { theme } = useTheme()
 
   return (
-    <StyledCard padding="25px">
-      <Text mb="5px" fontSize="16px" fontWeight="700" color={theme.colors.primary}>{t(data.title)}</Text>
+    <StyledCard>      
       <StyledImage
-          src={data.iconPath}
-          alt={t(data.title)}
-          height="128px"
-        />
+        src={data.icon}
+        alt={t(data.title)}
+      />
+      <Text mb="5px" fontSize="18px" fontWeight="500">{t(data.title)}</Text>
     </StyledCard>
   )
 }

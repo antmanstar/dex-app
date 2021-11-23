@@ -7,11 +7,18 @@ import useTheme from 'hooks/useTheme'
 
 const StyledCard = styled(Card)`
   justify-content: space-between;
+  text-align: center;
   border-radius: 5px;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
 
   @media screen and (max-width: 763px) {
     width: 360px;
+    margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: 410px) {
+    width: 100%;
+    margin-bottom: 20px;
   }
 `
 
@@ -27,9 +34,9 @@ const InfoCard: React.FC<InfoData> = ({
   const { theme } = useTheme()
 
   return (
-    <StyledCard padding="25px">
-      <Text mb="5px" fontSize="16px" fontWeight="700" color={theme.colors.primary}>{t(data.title)}</Text>
-      <Text mb="5px" fontSize="18px" fontWeight="700">{t(data.value)}</Text>
+    <StyledCard padding="20px">
+      <Text fontSize="22px" fontWeight="500" mb="30px">{t(data.title)}</Text>
+      <Text fontSize="32px" fontWeight="700" mt="30px" lineHeight="1.0" color={theme.colors.orange}>{t(data.value)}</Text>
     </StyledCard>
   )
 }

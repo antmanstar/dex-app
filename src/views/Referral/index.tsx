@@ -7,6 +7,7 @@ import {
   ArrowBackIcon,
   Flex,
   Card,
+  Input,
   useMatchBreakpoints,
   useWalletModal
 } from '@pancakeswap/uikit'
@@ -16,6 +17,8 @@ import useAuth from 'hooks/useAuth'
 import { useTranslation } from 'contexts/Localization'
 import { useDispatch } from 'react-redux'
 import StepCard from './components/StepCard'
+import InfoCard from './components/InfoCard'
+import RoundInfoCard from './components/RoundInfoCard'
 import useTheme from '../../hooks/useTheme'
 import { useWidth } from '../../hooks/useWidth'
 import config from '../../config/constants/referral'
@@ -33,16 +36,9 @@ const StyledPage = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  border: 1px solid #131823;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 18px;
-  padding-top:25px;
-  border-radius: 5px;
-  padding-bottom: 25px;
-  padding-right: 18px;
 
   @media screen and (max-width: 968px) {
     margin-top: 0;
@@ -52,7 +48,7 @@ const Header = styled(`div`)`
 
 const Body = styled(`div`)`
   border-radius: 10px;
-  margin-top: 50px;
+  margin-top: 30px;
 
   @media screen and (max-width: 576px) {
     margin-top: 30px;
@@ -60,7 +56,7 @@ const Body = styled(`div`)`
 `
 
 const ReferralContainer = styled(Card)`
-  background: #00000000;
+  background: transparent;
   width: 100%;
 `
 
@@ -81,8 +77,10 @@ const StyledFlexLayout = styled.div`
 
 const InviteSectionFlex = styled(Flex)`
   flex-direction: column;
+  margin-top: 100px;
   @media screen and (max-width: 763px) {
     align-items: center;
+    margin-top: 50px;
   }
 `
 const StyledBoldText = styled(Text)`
@@ -130,6 +128,68 @@ const StyledRegularText = styled(Text)`
   }
 `
 
+const InfoCardsSection = styled(Flex)`
+  display: grid;
+  grid-template-columns: 30% 30% 30%;
+  grid-column-gap: calc(5%);
+  grid-auto-rows: 1fr;
+
+  @media screen and (max-width: 763px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+`
+
+const ShareLinkSection = styled(Card)`
+  margin-top: 50px;
+  margin-bottom: 70px;
+  justify-content: space-between;
+  text-align: center;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  max-width: 750px;
+  padding: 30px;
+`
+
+const RoundInfoCardSection = styled(Flex)`
+  display: grid;
+  grid-template-columns: 22% 22% 22% 22%;
+  grid-column-gap: calc(4%);
+  grid-auto-rows: 1fr;
+
+  @media screen and (max-width: 950px) {
+    grid-template-columns: 48% 48%;
+    grid-row-gap: 20px;
+  }
+
+  @media screen and (max-width: 763px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+`
+
+const StyledInput = styled(Input)`
+  width: 580px;
+  height: 60px;
+  background-color: ${({ theme }) => theme.colors.bridgeInputBg};
+  
+  @media screen and (max-width: 420px) {
+    width: 100%;
+  }
+`
+
+const StyledButton = styled(Button)`
+  height: 60px;
+  background-color: ${({ theme }) => theme.colors.bridgeInputBg};
+  border-radius: 10px;
+`
+
 const Referral: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -140,6 +200,7 @@ const Referral: React.FC = () => {
   const width = useWidth()
   const { login, logout } = useAuth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
+
 
   return (
     <Page>
@@ -156,6 +217,39 @@ const Referral: React.FC = () => {
         </Header>
         <Body>
           <ReferralContainer>
+            {account && <InfoCardsSection>
+              {
+                config.headerLabels.map((label, index) => {
+                  return (
+                    <InfoCard data={{ title: label, value: ["50", "$0.00", "50%"][index] }} />
+                  )
+                })
+              }
+            </InfoCardsSection>
+            }
+            {account && <Flex justifyContent="center">
+              <ShareLinkSection>
+                <Text fontSize="22px" fontWeight="500">{config.shareLink}</Text>
+                <Flex mt="20px" mb="30px">
+                  <StyledInput noBorder/>
+                  <StyledButton>{t('Copy')}</StyledButton>
+                </Flex>
+                <Text>{t('(Your code')}: 26qyaqyk)</Text>
+              </ShareLinkSection>
+            </Flex>
+            }
+            <RoundInfoCardSection>
+              {
+                config.roundButtons.map((button, index) => {
+                  return (
+                    <Flex justifyContent="center">
+                      <RoundInfoCard data={{ title: button.text, icon: button.iconPath }} />
+                    </Flex>
+                  )
+                })
+              }
+
+            </RoundInfoCardSection>
             <InviteSectionFlex>
               <Text fontSize="22px" fontWeight="500">{t('How to invite friends')}</Text>
               <Text fontSize="14px" fontWeight="400">{t('Invite Your Friends & Earn')}</Text>
@@ -164,18 +258,18 @@ const Referral: React.FC = () => {
               {
                 config.steps.map((step, index) => {
                   return (
-                    <StepCard step={step}/>
+                    <StepCard step={step} />
                   )
-                }) 
+                })
               }
             </StyledFlexLayout>
-            <Flex justifyContent="center" flexDirection="column" mt="40px" mb={isMobile ? "20px" : "80px"} alignItems="center">
-              <Button onClick={onPresentConnectModal} variant="primary" scale="xs" width="130px" height="38px" padding="10px 0px">{t('Connect Wallet')}</Button>
+            <Flex justifyContent="center" flexDirection="column" mt="40px" mb={isMobile ? "20px" : account? "40px" : "80px"} alignItems="center">
+              {!account && <Button onClick={onPresentConnectModal} variant="primary" scale="xs" width="130px" height="38px" padding="10px 0px">{t('Connect Wallet')}</Button>}
             </Flex>
           </ReferralContainer>
         </Body>
       </StyledPage>
-    </Page>
+    </Page >
   )
 }
 

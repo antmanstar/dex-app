@@ -64,8 +64,8 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
-  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
+  // background-color: ${({theme}) => theme.colors.backgroundAlt};
+  // border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -610,7 +610,7 @@ export default function Pool() {
             </LockedValueCard>
             <LockedValueCard id="user_loc">
               <Text fontWeight="500" fontSize="14px">{!account ? t('Total Staked Value') : t('My Total Staked Value')}</Text>
-              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>{!account ? '31,787,112' : '232' }</Text>
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>

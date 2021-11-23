@@ -235,8 +235,8 @@ export default function BridgeInput({
           <LabelRow secondInput={secondInput}>
             <Flex width="100%" justifyContent="flex-end" mt={secondInput ? '10px' : '0'}>
               <Flex flexDirection="column" width="140px">
-                <Text fontSize="14px" fontWeight="400">{t('Available Balance')}</Text>
-                <Text fontSize="14px" fontWeight="700">{!secondInput ? (`${selectedCurrencyBalance?.toSignificant(6) ?? t('Loading')} ${currency?.symbol}`) : `0.0`}</Text>
+                <Text fontSize="14px" fontWeight="400">{secondInput ? t('Estimated Value') : ''}</Text>
+                <Text fontSize="14px" fontWeight="700">{secondInput ? '$52,3535' : ''}</Text>
               </Flex>
             </Flex>
           </LabelRow>

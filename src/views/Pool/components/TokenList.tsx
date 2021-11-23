@@ -236,9 +236,9 @@ const TokenList = ({
           <IconButton
             scale="sm"
             variant="secondary"
-            size="16px"
+            size="24px"
             borderColor="#28d250"
-            borderRadius="50%"
+            borderRadius="5px"
             borderWidth="2px"
             onClick={handleAddClick}
           >
@@ -246,10 +246,10 @@ const TokenList = ({
           </IconButton>
           <IconButton
             scale="sm"
-            size="16px"
+            size="24px"
             variant="secondary"
             borderColor="#fb8e8e"
-            borderRadius="50%"
+            borderRadius="5px"
             borderWidth="2px"
             marginLeft="8px"
             onClick={handleRemoveClick}

@@ -45,8 +45,8 @@ const StyledPage = styled(`div`)`
 
 const Header = styled(`div`)`
   margin-top: 8px;
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
-  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
+  // background-color: ${({theme}) => theme.colors.backgroundAlt};
+  // border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;

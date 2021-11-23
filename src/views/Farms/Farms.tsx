@@ -45,8 +45,8 @@ const StyledPage = styled(`div`)`
 
 const Header = styled(`div`)`
   margin-top: 8px;
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
-  border: 1px solid #131823;
+  // background-color: ${({theme}) => theme.colors.backgroundAlt};
+  // border: 1px solid #131823;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -654,8 +654,8 @@ const Farms: React.FC = () => {
         <Header>
           <InfoContainer>
             <StyledLabelCard>
-              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked (USER)')}</Text>
-              <Text color={theme.colors.green} fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text fontWeight="500" fontSize="14px">{t('Total Value Locked')}</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </StyledLabelCard>
             <StyledButtonCard>
               <Text fontWeight="500" fontSize="14px">{t('Eco to Harvest')}</Text>
@@ -664,16 +664,16 @@ const Farms: React.FC = () => {
           </InfoContainer>
           <InfoContainer>
             <StyledLabelCard>
-              <Text fontWeight="500" fontSize="14px">{t('Blockchain Price')}</Text>
-              <Text color={theme.colors.yellow} fontSize="22px" fontWeight="700">31,787,112</Text>
+              <Text fontWeight="500" fontSize="14px">{t('Total Staked Value')}</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </StyledLabelCard>
             <StyledButtonCard>
-              <Text fontWeight="500" fontSize="14px">{t('Farm with Highest APR')}</Text>
-              <Button variant="primary" scale="sm" width="125px" height="35px" mt="10px">{t('Farm Now')}</Button>
+              <Text fontWeight="500" fontSize="14px">{t('My Total Staked Value')}</Text>
+              <Text color={theme.colors.primary}fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </StyledButtonCard>
           </InfoContainer>
           <TotalFarmContainer>
-            <Text color={theme.colors.purple} fontSize="46px" fontWeight="700">{farmsLP.length}</Text>
+            <Text color={theme.colors.primary} fontSize="46px" fontWeight="700" glow>{farmsLP.length}</Text>
             <Text fontSize="14px" fontWeight="500">{t('# of Farms')}</Text>
           </TotalFarmContainer>
         </Header>

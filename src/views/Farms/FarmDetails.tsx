@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Flex, Heading, Skeleton, Text, Button, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
+import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import CardHeading from './components/FarmCard/CardHeading'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { getBalanceAmount, getBalanceNumber } from '../../utils/formatBalance'
@@ -21,6 +22,8 @@ interface IFarmDetails {
 }
 
 const StyledFarmName = styled(Flex)`
+  display: flex;
+  justifyContent: space-between;
   padding: 20px;
   & > div {
     width: 100%;
@@ -28,7 +31,7 @@ const StyledFarmName = styled(Flex)`
 `
 
 const StyledDtailFlex = styled(Flex)`
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border: 1px solid #131823;
   border-radius: 10px;
   & > div {
@@ -86,6 +89,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { account } = useActiveWeb3React()
   const { stakedBalance } = useFarmUser(data.pid)
   const { theme } = useTheme()
+  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
 
   const displayBalance = useCallback(() => {
     const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
@@ -129,6 +133,10 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
     )
   }
 
+  const showCalc = () => {
+    setShowRoiCalculator(true)
+  }
+
   return (
     <StyledDtailFlex flexDirection="column" >
       {!hideDetailsHeading && <StyledFarmName>
@@ -137,64 +145,84 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           quoteToken={data.quoteToken}
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
         />
+        <Flex onClick={showCalc} justifyContent="flex-end">
+          <img
+            width="30px"
+            src='/images/math.png'
+            alt='Caculator'
+          />
+        </Flex>
       </StyledFarmName>}
       <StyledCardSummary>
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Liquidity')}</Text>
-            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">$35,256,822</Text>
-          </Flex>
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Rewards')}</Text>
+        <Flex justifyContent="flex-start" flexDirection="column">
+          <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Liquidity')}</Text>
+          <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">$35,256,822</Text>
+        </Flex>
+        <Flex justifyContent="flex-start" flexDirection="column">
+          <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Rewards')}</Text>
+          {
+            getBalanceNumber(new BigNumber(data.userData.earnings)) ?
+              <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{getBalanceNumber(new BigNumber(data.userData.earnings))}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+          }
+        </Flex>
+        <Flex justifyContent="flex-start" flexDirection="column">
+          <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily ROI')}</Text>
+          <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">2.586%</Text>
+        </Flex>
+        <Flex justifyContent="flex-start" flexDirection="column">
+          <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('APR')}</Text>
+          <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">6.25%</Text>
+        </Flex>
+      </ StyledCardSummary>
+      <StyledCardInfoWrapper>
+        <StyledCardInfo>
+          <Flex justifyContent="flex-start" flexDirection="column" mb="20px" alignItems="center">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Staked')}</Text>
             {
-              getBalanceNumber(new BigNumber(data.userData.earnings)) ? 
-                <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{getBalanceNumber(new BigNumber(data.userData.earnings))}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px"/>
+              displayBalance() ?
+                <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{displayBalance()}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+            }
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
+          </Flex>
+          <Flex justifyContent="flex-start" flexDirection="column" alignItems="center">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Your Share')}</Text>
+            {
+              totalValueFormatted && displayBalance() ?
+                <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{`${(Number(displayBalance()) / Number(totalValueFormatted)).toFixed(8)} %`}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
             }
           </Flex>
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Daily ROI')}</Text>
-            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">2.586%</Text>
+        </StyledCardInfo>
+        <StyledControlFlex>
+          <Flex justifyContent="space-between">
+            <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Add Liquidity')}</Text></Button>
+            <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Remove Liquidity')}</Text></Button>
           </Flex>
-          <Flex justifyContent="flex-start" flexDirection="column">
-            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('APR')}</Text>
-            <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">6.25%</Text>
+          <Flex justifyContent="flex-start" flexDirection="column" mb="30px" mt="30px" alignItems="center">
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Pending Rewards')}</Text>
+            {
+              displayBalance() ?
+                <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">0 ECO</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
+            }
+            <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
           </Flex>
-        </ StyledCardSummary>  
-        <StyledCardInfoWrapper>
-          <StyledCardInfo>
-            <Flex justifyContent="flex-start" flexDirection="column" mb="20px" alignItems="center">
-              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Staked')}</Text>
-              {
-                displayBalance() ? 
-                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{displayBalance()}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
-              }            
-              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
-            </Flex>
-            <Flex justifyContent="flex-start" flexDirection="column" alignItems="center">
-              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Your Share')}</Text>
-              {
-                totalValueFormatted && displayBalance() ? 
-                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">{`${(Number(displayBalance()) / Number(totalValueFormatted)).toFixed(8)} %`}</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
-              }            
-            </Flex>
-          </StyledCardInfo>
-          <StyledControlFlex>
-            <Flex justifyContent="space-between">
-              <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Add Liquidity')}</Text></Button>
-              <Button variant="primary" scale="xs" width="100px" padding="0px"><Text fontSize="9px" fontWeight="500">{t('Remove Liquidity')}</Text></Button>
-            </Flex>
-            <Flex justifyContent="flex-start" flexDirection="column" mb="30px" mt="30px" alignItems="center">
-              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('Pending Rewards')}</Text>
-              {
-                displayBalance() ? 
-                  <Text fontSize="18px" fontWeight="700" mt="3px" mb="3px">0 ECO</Text> : <Skeleton height={24} width={80} mt="3px" mb="3px" />
-              }            
-              <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mt="3px" mb="3px">{t('$USD')}</Text>
-            </Flex>
-            <Flex justifyContent="center" flexDirection="column" alignItems="center">
-              <Button variant="primary" scale="md" width="125px" height="35px" mt="10px">{t('Harvest')}</Button>
-            </Flex>
-          </StyledControlFlex>
-        </StyledCardInfoWrapper>
+          <Flex justifyContent="center" flexDirection="column" alignItems="center">
+            <Button variant="primary" scale="md" width="125px" height="35px" mt="10px">{t('Harvest')}</Button>
+          </Flex>
+        </StyledControlFlex>
+      </StyledCardInfoWrapper>
+      {/* {showRoiCalculator && <RoiCalculatorModal
+        linkLabel={t('Get %symbol%', { symbol: data.lpSymbol })}
+        stakingTokenBalance={new BigNumber(0)}
+        stakingTokenSymbol={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
+        stakingTokenPrice={100}
+        multiplier={data.multiplier}
+        earningTokenPrice={cakePrice.toNumber()}
+        apr={10}
+        linkHref="#"
+        isFarm
+        initialValue='0'
+        onBack={() => setShowRoiCalculator(false)}
+      />} */}
     </StyledDtailFlex>
   )
 }

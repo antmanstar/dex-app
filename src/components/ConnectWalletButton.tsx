@@ -2,6 +2,8 @@ import React from 'react'
 import { Button, useWalletModal, WalletFilledIcon } from '@pancakeswap/uikit'
 import useAuth from 'hooks/useAuth'
 import { useTranslation } from 'contexts/Localization'
+
+import styled from 'styled-components'
 import { useWidth } from '../hooks/useWidth'
 
 const ConnectWalletButton = (props) => {
@@ -13,7 +15,7 @@ const ConnectWalletButton = (props) => {
 
   return (
     <Button onClick={onPresentConnectModal} {...props} scale="md">
-      {!onHeader && <WalletFilledIcon width='24px' color='currentColor' mr='4px' />}
+      <WalletFilledIcon width='24px' color='currentColor' mr='4px' />
       {t(onHeader ? 'Wallet' : 'Connect Wallet')}
     </Button>
   )

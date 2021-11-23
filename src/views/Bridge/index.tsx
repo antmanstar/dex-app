@@ -84,11 +84,13 @@ const BridgeContainer = styled(Card)`
 `
 
 const BridgeCardWrapper = styled(Flex)`
-  min-height: 600px;
+  min-height: 670px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid ${({ theme }) => theme.colors.cardBorder2};
+
+  margin-bottom: 100px;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -119,7 +121,8 @@ const StyledTab = styled(Flex)<{ isActive?: boolean }>`
 `
 
 const TabText = styled(Text)<{ isActive?: boolean, isMobile?: boolean }>`
-  font-size: ${({ isMobile }) => isMobile ? '18px' : '24px'};
+  // font-size: ${({ isMobile }) => isMobile ? '18px' : '24px'};
+  font-size: 18px;
   font-weight: 600;
   text-align: center;
   color: ${({ theme, isActive }) => isActive ? theme.colors.text : 'grey'};
@@ -452,7 +455,7 @@ const Bridge: React.FC = () => {
             {renderTab()}
           </BridgeCardHeader>
           {tab === 'bridge' ?
-            <Wrapper id="swap-page" padding="20px">
+            <Wrapper id="swap-page" padding="10px 20px 20px 20px">
               <Flex flexDirection="column">
                 <CurrencyInputPanel
                   label={
@@ -479,7 +482,8 @@ const Bridge: React.FC = () => {
                       }}
                       scale="sm"
                       variant="text"
-                      mb="15px"
+                      mb="35px"
+                      mt="20px"
                     >
                       <ArrowUpDownIcon
                         width="25px"
@@ -654,7 +658,7 @@ const Bridge: React.FC = () => {
                 )}
                 {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
               </Box>
-            </Wrapper> : <Text textAlign='center'>Coming Soon</Text>
+            </Wrapper> : <Text textAlign='center'> </Text>
           }
         </BridgeCardWrapper>
       </BridgeContainer>
@@ -669,11 +673,11 @@ const Bridge: React.FC = () => {
       <StyledPage>
         <Body>
           {renderContent()}
-          {account && (
+          {/* {account && (
             <Flex justifyContent="center">
               <Loading />
             </Flex>
-          )}
+          )} */}
           <div ref={observerRef} />
         </Body>
       </StyledPage>

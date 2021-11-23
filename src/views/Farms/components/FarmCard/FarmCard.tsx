@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Card, Flex, Text, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Card, Flex, Text, Skeleton, useMatchBreakpoints, Button } from '@pancakeswap/uikit'
 import { DeserializedFarm } from 'state/types'
 import { getBscScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
@@ -9,6 +9,7 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
+import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -17,6 +18,7 @@ import { useWidth } from '../../../../hooks/useWidth'
 import useTheme from '../../../../hooks/useTheme'
 import { TransparentCard } from '../../../../components/Card'
 import { CurrencyLogo } from '../../../../components/Logo'
+// import { tokenToString } from 'typescript'
 
 export interface FarmWithStakedValue extends DeserializedFarm {
   apr?: number
@@ -161,6 +163,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const { theme } = useTheme()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
 
   const totalValueFormatted =
     farm.liquidity && farm.liquidity.gt(0)
@@ -177,17 +180,30 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
 
+  const showCalc = () => {
+    setShowRoiCalculator(true)
+  }
+
   return (
     <StyledCard isActive={isCardActive} onClick={onClick}>
       <FarmCardInnerContainer>
-        <CardHeading
-          lpLabel={lpLabel.replace('LP', '')}
-          multiplier={farm.multiplier}
-          isCommunityFarm={farm.isCommunity}
-          token={farm.token}
-          quoteToken={farm.quoteToken}
-          isCardActive={isCardActive}
-        />
+        <Flex justifyContent="space-between">
+          <CardHeading
+            lpLabel={lpLabel.replace('LP', '')}
+            multiplier={farm.multiplier}
+            isCommunityFarm={farm.isCommunity}
+            token={farm.token}
+            quoteToken={farm.quoteToken}
+            isCardActive={isCardActive}
+          />
+          <Flex onClick={showCalc}>
+            <img
+              width="30px"
+              src='/images/math.png'
+              alt='Caculator'
+            />
+          </Flex>
+        </Flex>
         <StyledCardSummary>
           <Flex justifyContent="flex-start" flexDirection="column">
             <Text fontSize="14px" fontWeight="400">{t('Daily ROI')}</Text>
@@ -214,6 +230,19 @@ const FarmCard: React.FC<FarmCardProps> = ({
             <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>5.3%</Text>
           </Flex>
         </StyledCardSummary>
+        {showRoiCalculator && <RoiCalculatorModal
+          linkLabel={t('Get %symbol%', { symbol: lpLabel })}
+          stakingTokenBalance={new BigNumber(0)}
+          stakingTokenSymbol={lpLabel.replace('LP', '')}
+          stakingTokenPrice={100}
+          multiplier={farm.multiplier}
+          earningTokenPrice={cakePrice.toNumber()}
+          apr={10}
+          linkHref={addLiquidityUrl}
+          isFarm
+          initialValue='0'
+          onBack={() => setShowRoiCalculator(false)}
+        />}
       </FarmCardInnerContainer>
     </StyledCard>
   )

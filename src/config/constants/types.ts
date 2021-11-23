@@ -225,3 +225,26 @@ export interface SerializedStakeConfig {
   text2: string,
   text3: string
 }
+
+// Referral Configuration Constants
+export interface Step {
+  step: string,
+  title: string,
+  content: string,
+  img: string
+}
+
+export interface RoundButtons {
+  text: string,
+  iconPath: string
+}
+
+export interface SerializedReferralConfig {
+  header1: string,
+  header2: string,
+  header3: string,
+  headerLabels: string[],
+  shareLink: string,
+  roundButtons: RoundButtons[]
+  steps: Step[],
+}

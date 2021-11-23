@@ -10,7 +10,8 @@ interface IGlobalSettingsInterface {
 
 const StyledIconButton = styled(Flex)`
   button {
-    width: 30px;
+    width: 24px;
+    margin-left: 8px;
   }
 `
 

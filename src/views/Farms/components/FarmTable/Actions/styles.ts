@@ -6,20 +6,20 @@ export const ActionContainer = styled.div`
   border-radius: 16px;
   flex-grow: 1;
   flex-basis: 0;
-  margin-bottom: 16px;
+  //margin-bottom: 16px;
   width: 100%;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     //margin-left: 12px;
     //margin-right: 12px;
-    margin-bottom: 12px;
-    max-height: 100px;
+    //margin-bottom: 12px;
+    max-height: 45px;
   }
 
   ${({ theme }) => theme.mediaQueries.xl} {
     //margin-left: 48px;
     margin-right: 0;
-    max-height: 100px;
+    max-height: 45px;
   }
 `
 

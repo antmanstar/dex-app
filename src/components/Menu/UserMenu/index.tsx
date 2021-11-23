@@ -18,6 +18,7 @@ import WalletModal, { WalletView, LOW_BNB_BALANCE } from './WalletModal'
 import ProfileUserMenuItem from './ProfileUserMenutItem'
 import WalletUserMenuItem from './WalletUserMenuItem'
 import { useWidth } from '../../../hooks/useWidth'
+import { formatBigNumber } from '../../../utils/formatBalance'
 
 const StyledConnectWalletButton = styled(ConnectWalletButton)`
   height: 35px;
@@ -43,7 +44,7 @@ const UserMenu = () => {
   }
 
   return (
-    <UIKitUserMenu account={account} avatarSrc={avatarSrc} balance='84384384'>
+    <UIKitUserMenu account={account} avatarSrc={avatarSrc} balance={fetchStatus !== FetchStatus.SUCCESS ? '0.00' : `${formatBigNumber(balance, 3)}`}>
       <WalletUserMenuItem hasLowBnbBalance={hasLowBnbBalance} onPresentWalletModal={onPresentWalletModal} />
       <UserMenuItem as="button" onClick={onPresentTransactionModal}>
         {t('Transactions')}

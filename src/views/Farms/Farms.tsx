@@ -46,7 +46,7 @@ const StyledPage = styled(`div`)`
 const Header = styled(`div`)`
   margin-top: 8px;
   // background-color: ${({theme}) => theme.colors.backgroundAlt};
-  // border: 1px solid #131823;
+  // border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -125,6 +125,7 @@ const TotalFarmContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   padding-right: 50px;
+  align-items: center;
   
   ${({theme}) => theme.mediaQueries.sm} {
     width: auto;
@@ -246,6 +247,7 @@ const StyledFlexLayout = styled.div`
 const FarmsContainer = styled(Card)`
   background: #00000000;
   width: 100%;
+  padding-bottom: 32px;
 `
 
 const StyledSelect = styled(Select)`
@@ -285,8 +287,6 @@ const Farms: React.FC = () => {
   const [sortOption, setSortOption] = useState('liquidity')
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
-  const { isTablet, isMobile } = useMatchBreakpoints()
-  const dispatch = useDispatch()
   const { theme } = useTheme()
   const [activeFarmCard, setActiveFarmCard] = useState<any>(undefined)
   const width = useWidth()
@@ -304,7 +304,8 @@ const Farms: React.FC = () => {
 
   const [stakedOnly, setStakedOnly] = useUserFarmStakedOnly(isActive)
 
-  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  // const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  const activeFarms = farmsLP
   const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier === '0X' && !isArchivedPid(farm.pid))
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
@@ -614,26 +615,28 @@ const Farms: React.FC = () => {
 
   const renderContent = (): JSX.Element => {
     return (
-        <FarmsContainer>
-          <StyledFlexLayout>
-              {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
-              {chosenFarmsMemoized.map((farm) => (
-                <Link to={{
-                  pathname: `${path}/${farm.pid}`,
-                }} >
-                  <FarmCard
-                    isCardActive={activeFarmCard?.pid === farm.pid}
-                    key={farm.pid}
-                    farm={farm}
-                    displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-                    cakePrice={cakePrice}
-                    account={account}
-                    removed={false}
-                  />
-                </Link>
-              ))}
-          </StyledFlexLayout>
-        </FarmsContainer>
+      <FarmsContainer>
+        <StyledFlexLayout>
+          {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
+          <Route exact path={`${path}`}>
+            {chosenFarmsMemoized.map((farm) => (
+              <Link to={{
+                pathname: `${path}/${farm.pid}`,
+              }} >
+                <FarmCard
+                  isCardActive={activeFarmCard?.pid === farm.pid}
+                  key={farm.pid}
+                  farm={farm}
+                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                  cakePrice={cakePrice}
+                  account={account}
+                  removed={false}
+                />
+              </Link>
+            ))}
+          </Route>
+        </StyledFlexLayout>
+      </FarmsContainer>
     )
   }
 

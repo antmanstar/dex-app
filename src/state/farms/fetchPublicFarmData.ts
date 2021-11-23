@@ -13,6 +13,7 @@ type PublicFarmData = {
   tokenPriceVsQuote: SerializedBigNumber
   poolWeight: SerializedBigNumber
   multiplier: string
+  totalStakedTokenInLp: SerializedBigNumber
 }
 
 const fetchFarm = async (farm: SerializedFarm): Promise<PublicFarmData> => {
@@ -70,6 +71,9 @@ const fetchFarm = async (farm: SerializedFarm): Promise<PublicFarmData> => {
   // Total staked in LP, in quote token value
   const lpTotalInQuoteToken = quoteTokenAmountMc.times(new BigNumber(2))
 
+  // Total Staked token in Lp in LP unit
+  const totalStakedTokenInLp = new BigNumber(lpTokenBalanceMC).div(BIG_TEN.pow(tokenDecimals))
+
   // Only make masterchef calls if farm has pid
   const [info, totalAllocPoint] =
     pid || pid === 0
@@ -96,6 +100,7 @@ const fetchFarm = async (farm: SerializedFarm): Promise<PublicFarmData> => {
     tokenPriceVsQuote: quoteTokenAmountTotal.div(tokenAmountTotal).toJSON(),
     poolWeight: poolWeight.toJSON(),
     multiplier: `${allocPoint.div(100).toString()}X`,
+    totalStakedTokenInLp: totalStakedTokenInLp.toJSON(),
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Currency, Token } from '@pancakeswap/sdk'
 import {
@@ -21,6 +21,8 @@ import {
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import history from 'routerHistory'
+import { useLocation } from 'react-router'
 import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { usePair, usePairs } from '../../hooks/usePairs'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
@@ -42,6 +44,8 @@ import useTheme from '../../hooks/useTheme'
 import { useDerivedMintInfo } from '../../state/mint/hooks'
 import useTotalSupply from '../../hooks/useTotalSupply'
 import { Field } from '../../state/mint/actions'
+import { RemoveLiquidityCard } from '../RemoveLiquidity/RemoveLiquidityCard'
+import TokenList from './components/TokenList'
 
 const AppBody = styled(`div`)`
   max-width: 1024px;
@@ -60,8 +64,8 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  // background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  // border: 1px solid #131823;
+  // background-color: ${({theme}) => theme.colors.backgroundAlt};
+  // border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -137,6 +141,8 @@ const TotalPoolContainer = styled(`div`)`
   width: 100%;
   flex-direction: column;
   padding-right: 50px;
+  justify-content: center;
+  align-items: center;
   
   ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
@@ -175,20 +181,6 @@ const StyledTable = styled(Table) <{ isMobile: boolean }>`
   //margin-top: 12px;
   border-collapse: separate;
   border-spacing: 0 0.5rem;
-`
-
-const StyledDetailsWrapper = styled.div`
-  display: grid;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  grid-row-gap: 20px;
-
-  grid-template-columns: 1fr 1fr 1fr;
-
-  ${({ theme }) => theme.mediaQueries.xs} {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
 `
 
 const StyledTabContainer = styled(TabContainer)`
@@ -263,41 +255,6 @@ const SinglePoolButton = styled(Button)`
   width: 100%;
 `
 
-const StyledTr = styled.tr`
-  border-radius: 10px;
-
-  &:hover {
-    & > td {
-      background-color: ${({ theme }) => theme.colors.backgroundAlt2};
-      ${StyledDetailsContainer} {
-        background: rgba(3, 3, 3, 0.2);
-      }
-
-      &:last-child {
-        border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;
-      }
-
-      &:first-child {
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
-      }
-    }
-  }
-`
-
-const StyledTd = styled(Td)`
-  padding-top: 10px;
-  padding-right: 16px;
-  padding-bottom: 10px;
-  padding-left: 16px;
-  border-bottom: 1px solid #1c1f2b;
-`
-
-const StyledMobileCard = styled(Card)`
-  background: ${({ theme }) => theme.colors.background};
-`
-
 const StyledSelect = styled(Select)`
   & > div:first-child {
     background-color: ${({ theme }) => theme.colors.headerInputBg};
@@ -305,209 +262,13 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const TokenList = ({
-  tokens,
-  matic,
-  volume,
-  fees,
-  liquidity,
-  apr,
-  userLiquidity,
-}: {
-  tokens: [Token, Token]
-  matic: Currency
-  volume: number
-  fees: number
-  liquidity: number
-  apr: number,
-  userLiquidity: any,
-}) => {
-  const { isMobile } = useMatchBreakpoints()
-  const { t } = useTranslation()
-  const { theme } = useTheme()
-
-  const [token1, token2] = tokens
-  let currency1: Token | Currency = token1
-  let currency2: Token | Currency = token2
-
-  console.log("CUrrency", currency1)
-
-  const [selectedPool, setSelectedPool] = useState({
-    currencyIdA: null,
-    currencyIdB: null,
-  })
-
-  let address1 = token1.address
-  let address2 = token2.address
-
-  if (currency1.symbol.toLowerCase() === 'wmatic') {
-    address1 = 'MATIC'
-    currency1 = matic
-  }
-  if (currency2.symbol.toLowerCase() === 'wmatic') {
-    address2 = address1
-    currency2 = currency1
-    address1 = 'MATIC'
-    currency1 = matic
-    // address2 = 'MATIC'
-    // currency2 = matic
-  }
-
-  const [handleAddButton] = useModal(
-    <AddLiquidityCard
-      currencyIdA={selectedPool?.currencyIdA}
-      currencyIdB={selectedPool?.currencyIdB}
-    />
-  )
-
-  const handleAddClick = (currencyIdA, currencyIdB) => {
-    setSelectedPool({
-      currencyIdA,
-      currencyIdB
-    })
-    handleAddButton()
-  }
-
-  if (isMobile) {
-    return (
-      <tr>
-        <a href={`/add/${address1}/${address2}`}>
-          <StyledMobileCard mt="8px">
-            <CardBody>
-              <Flex mb="12px" alignItems="center">
-                <div>
-                  <CurrencyLogo currency={currency1} />
-                  <CurrencyLogo currency={currency2} />
-                </div>
-                <Text ml="10px" fontSize="20px" bold>
-                  {currency1?.symbol?.toUpperCase()} - {currency2?.symbol?.toUpperCase()}
-                </Text>
-              </Flex>
-              <StyledDetailsWrapper>
-                {[
-                  { title: 'volume', value: `$${volume}` },
-                  { title: 'liquidity', value: `$${liquidity}` },
-                  { title: 'fees', value: `$${fees}` },
-                  { title: "apr", value: `${apr}%` }
-                ].map((singleValue) => {
-                  return (
-                    <Flex alignItems="start" flexDirection="column">
-                      <Text color="textSubtle2" textTransform="capitalize" fontSize="12px">
-                        {singleValue.title}:
-                      </Text>
-                      <Text color="text" textTransform="capitalize" fontSize="16px">
-                        {singleValue.value}
-                      </Text>
-                    </Flex>
-                  )
-                })}
-                <Flex alignItems="start" flexDirection="column">
-                  <Text color="textSubtle2" textTransform="capitalize" fontSize="12px" mb="2px">
-                    {t('my liquidity')}:
-                  </Text>
-                  <Flex justifyContent="flex-end" alignItems="center">
-                    <Text fontSize="16px" mr="10px">${volume}</Text>
-                    <IconButton
-                      scale="sm"
-                      variant="secondary"
-                      size="24px"
-                      borderColor="#28d250"
-                      borderWidth="2px"
-                    // onClick={() => handleAddClick(address1, address2)}
-                    >
-                      <AddIcon color="#28d250" />
-                    </IconButton>
-                    <IconButton
-                      scale="sm"
-                      size="24px"
-                      variant="secondary"
-                      borderColor="#fb8e8e"
-                      borderWidth="2px"
-                      marginLeft="8px">
-                      <MinusIcon color="#fb8e8e" />
-                    </IconButton>
-                  </Flex>
-                </Flex>
-              </StyledDetailsWrapper>
-            </CardBody>
-          </StyledMobileCard>
-        </a>
-      </tr>
-    )
-  }
-
-  return (
-    <StyledTr>
-      <StyledTd>
-        <Button
-          id={`pool-${address1}-${address2}`}
-          as={Link}
-          scale="xxs"
-          variant="text"
-          to={`/add/${address1}/${address2}`}
-          pl="0"
-        >
-          <Flex>
-            <CurrencyLogo currency={currency1} />
-            <Flex marginLeft="-8px">
-              <CurrencyLogo currency={currency2} />
-            </Flex>
-          </Flex>
-          <Text ml="10px" fontSize="12px" fontWeight="500">
-            {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
-          </Text>
-        </Button>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="12px" fontWeight="500">${liquidity}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="12px" fontWeight="500">${volume}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Text fontSize="12px" fontWeight="500">${fees}</Text>
-      </StyledTd>
-      <StyledTd>
-        <Flex background={theme.colors.green} display="flex" justifyContent="center" borderRadius="5px" width="52px">
-          <Text color="white" fontSize="12px" mt="4px" mb="4px" textAlign="center" fontWeight="500">
-            {apr}%
-          </Text>
-        </Flex>
-      </StyledTd>
-      <StyledTd>
-        <Flex justifyContent="flex-end" alignItems="center">
-          <Text fontSize="12px" fontWeight="500" mr="10px">{userLiquidity || "0.000"} LP</Text>
-          <IconButton
-            scale="sm"
-            variant="secondary"
-            size="24px"
-            borderColor="#28d250"
-            borderWidth="2px"
-          // onClick={() => handleAddClick(address1, address2)}
-          >
-            <AddIcon color="#28d250" />
-          </IconButton>
-          <IconButton
-            scale="sm"
-            size="24px"
-            variant="secondary"
-            borderColor="#fb8e8e"
-            borderWidth="2px"
-            marginLeft="8px">
-            <MinusIcon color="#fb8e8e" />
-          </IconButton>
-        </Flex>
-      </StyledTd>
-    </StyledTr>
-  )
-}
-
 export default function Pool() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
   const width = useWidth()
   const { theme } = useTheme()
+  const location = useLocation()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [sortBy, setSortBy] = useState<string>('all')
@@ -523,6 +284,79 @@ export default function Pool() {
   const debouncedQuery = useDebounce(searchQuery, 200)
 
   const allPoolData = useAllPoolData()
+
+  // Get currency Id from the url if present
+  const searchParams = new URLSearchParams(location.search)
+  const currencyAFromURL = searchParams.get('token1')
+  const currencyBFromURL = searchParams.get('token2')
+  const typeOfModal = searchParams.get('type')
+
+  // Add Liquidity Modal
+  const [handleAddButton, handleDismissAddModal] = useModal(
+    <AddLiquidityCard
+      history={history}
+      params={location.search}
+      onDismiss={() => {
+        handleDismissAddModal()
+      }}
+      customOnDismiss={() => {
+        history.replace({
+          search: ''
+        })
+      }}
+    />,
+    true,
+    true,
+    'add-liquidity-modal'
+  )
+
+  // Open the modal if currency token is present in the url
+  useEffect(() => {
+    if ((currencyAFromURL || currencyBFromURL) && typeOfModal === 'add') {
+      handleAddButton()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyAFromURL, currencyBFromURL, typeOfModal])
+
+  // handle Add button click
+  const handleAddClick = (currencyIdA, currencyIdB) => {
+    history.push(`?type=add&token1=${currencyIdA.address}&token2=${currencyIdB.address}`)
+    handleAddButton()
+  }
+
+
+  // Add Liquidity Modal
+  const [handleRemoveButton, handleDismissRemoveModal] = useModal(
+    <RemoveLiquidityCard
+      history={history}
+      params={location.search}
+      onDismiss={() => {
+        handleDismissRemoveModal()
+      }}
+      customOnDismiss={() => {
+        history.replace({
+          search: ''
+        })
+      }}
+    />,
+    true,
+    true,
+    'remove-liquidity-modal'
+  )
+
+  // Open the modal if currency token is present in the url
+  useEffect(() => {
+    if ((currencyAFromURL || currencyBFromURL) && typeOfModal === 'remove') {
+      handleRemoveButton()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyAFromURL, currencyBFromURL, typeOfModal])
+
+  // handle Add button click
+  const handleRemoveClick = (currencyIdA, currencyIdB) => {
+    history.push(`?type=remove&token1=${currencyIdA.address}&token2=${currencyIdB.address}`)
+    handleRemoveButton()
+  }
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -643,7 +477,16 @@ export default function Pool() {
 
         const userLiquidity = v2PairsBalances[arr.liquidityToken.address]?.toFixed(3)
 
-        return <TokenList tokens={arr.tokens} matic={matic} userLiquidity={userLiquidity} {...arr} />
+        return (
+          <TokenList
+            tokens={arr.tokens}
+            matic={matic}
+            userLiquidity={userLiquidity}
+            handleAddClick={() => handleAddClick(arr.tokens[0], arr.tokens[1])}
+            handleRemoveClick={() => handleRemoveClick(arr.tokens[0], arr.tokens[1])}
+            {...arr}
+          />
+        )
       })
     }
     return (
@@ -767,7 +610,7 @@ export default function Pool() {
             </LockedValueCard>
             <LockedValueCard id="user_loc">
               <Text fontWeight="500" fontSize="14px">{!account ? t('Total Staked Value') : t('My Total Staked Value')}</Text>
-              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
+              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>{!account ? '31,787,112' : '232' }</Text>
             </LockedValueCard>
           </LockedValueContainer>
           <TotalPoolContainer>

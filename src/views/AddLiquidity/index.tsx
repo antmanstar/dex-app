@@ -10,6 +10,7 @@ import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { useLocation } from 'react-router'
 import { AppDispatch } from '../../state'
 import { BasicCard, TransparentCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
@@ -43,6 +44,7 @@ import Page from '../Page'
 import useTheme from '../../hooks/useTheme'
 import GlobalSettings from '../../components/Menu/GlobalSettings'
 import { useWidth } from '../../hooks/useWidth'
+import useTotalSupply from '../../hooks/useTotalSupply'
 
 const Container = styled.div`
   display: grid;
@@ -132,7 +134,6 @@ export default function AddLiquidity({
   const gasPrice = useGasPrice()
   const { theme } = useTheme()
   const width = useWidth()
-  console.log("currencyIdA", currencyIdA);
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
@@ -399,6 +400,8 @@ export default function AddLiquidity({
     'addLiquidityModal',
   )
 
+  const totalPoolTokens = useTotalSupply(pair.liquidityToken)
+
   return (
     <StyledPage>
       <Container>
@@ -410,6 +413,7 @@ export default function AddLiquidity({
                 poolTokenPercentage={poolTokenPercentage}
                 noLiquidity={noLiquidity}
                 price={price}
+                totalPoolTokens={totalPoolTokens.toSignificant(4)}
                 pair={pair}
               />
               <StyledLightCard padding="24px" border="none !important">

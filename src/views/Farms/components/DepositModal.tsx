@@ -8,6 +8,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, formatNumber } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
+import { Token } from '@pancakeswap/sdk'
 
 const AnnualRoiContainer = styled(Flex)`
   cursor: pointer;
@@ -35,6 +36,8 @@ interface DepositModalProps {
   addLiquidityUrl?: string
   cakePrice?: BigNumber
   isPopUp?: boolean
+  isCard?: boolean
+  tokens?: Token[]
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({
@@ -51,6 +54,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
   addLiquidityUrl,
   cakePrice,
   isPopUp,
+  isCard,
+  tokens,
 }) => {
   const [val, setVal] = useState('')
   const { toastSuccess, toastError } = useToast()
@@ -111,56 +116,81 @@ const DepositModal: React.FC<DepositModalProps> = ({
     )
   }
 
-  return (
-    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss} isPopUp={isPopUp} width="100%" maxWidth="480px">
-      <ModalInput
-        value={val}
-        onSelectMax={handleSelectMax}
-        onChange={handleChange}
-        max={fullBalance}
-        symbol={tokenName}
-        addLiquidityUrl={addLiquidityUrl}
-        inputTitle={t('Stake')}
-      />
-      {/* <Flex mt="24px" alignItems="center" justifyContent="space-between"> */}
-      {/*  <Text mr="8px" color="textSubtle"> */}
-      {/*    {t('Annual ROI at current rates')}: */}
-      {/*  </Text> */}
-      {/*  <AnnualRoiContainer alignItems="center" onClick={() => setShowRoiCalculator(true)}> */}
-      {/*    <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay> */}
-      {/*    <IconButton variant="text" scale="sm"> */}
-      {/*      <CalculateIcon color="textSubtle" width="18px" /> */}
-      {/*    </IconButton> */}
-      {/*  </AnnualRoiContainer> */}
-      {/* </Flex> */}
-      <ModalActions>
-        <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
-          {t('Cancel')}
-        </Button>
-        <Button
-          width="100%"
-          disabled={
-            pendingTx || !lpTokensToStake.isFinite() || lpTokensToStake.eq(0) || lpTokensToStake.gt(fullBalanceNumber)
+  const renderContent = () => {
+    return (
+      <>
+        <ModalInput
+          value={val}
+          onSelectMax={handleSelectMax}
+          onChange={handleChange}
+          max={fullBalance}
+          symbol={tokenName}
+          addLiquidityUrl={addLiquidityUrl}
+          inputTitle={t('Stake')}
+          tokens={tokens}
+        />
+        {/* <Flex mt="24px" alignItems="center" justifyContent="space-between"> */}
+        {/*  <Text mr="8px" color="textSubtle"> */}
+        {/*    {t('Annual ROI at current rates')}: */}
+        {/*  </Text> */}
+        {/*  <AnnualRoiContainer alignItems="center" onClick={() => setShowRoiCalculator(true)}> */}
+        {/*    <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay> */}
+        {/*    <IconButton variant="text" scale="sm"> */}
+        {/*      <CalculateIcon color="textSubtle" width="18px" /> */}
+        {/*    </IconButton> */}
+        {/*  </AnnualRoiContainer> */}
+        {/* </Flex> */}
+      </>
+    )
+  }
+
+  const cardAction = () => {
+    return (
+      <Button
+        width="100%"
+        disabled={
+          pendingTx || !lpTokensToStake.isFinite() || lpTokensToStake.eq(0) || lpTokensToStake.gt(fullBalanceNumber)
+        }
+        onClick={async () => {
+          setPendingTx(true)
+          try {
+            await onConfirm(val)
+            toastSuccess(t('Staked!'), t('Your funds have been staked in the farm'))
+            onDismiss()
+          } catch (e) {
+            toastError(
+              t('Error'),
+              t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+            )
+            console.error(e)
+          } finally {
+            setPendingTx(false)
           }
-          onClick={async () => {
-            setPendingTx(true)
-            try {
-              await onConfirm(val)
-              toastSuccess(t('Staked!'), t('Your funds have been staked in the farm'))
-              onDismiss()
-            } catch (e) {
-              toastError(
-                t('Error'),
-                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-              )
-              console.error(e)
-            } finally {
-              setPendingTx(false)
-            }
-          }}
-        >
-          {pendingTx ? t('Confirming') : t('Confirm')}
-        </Button>
+        }}
+      >
+        {pendingTx ? t('Confirming') : t('Confirm')}
+      </Button>
+    )
+  }
+
+  if (isCard) {
+    return (
+      <Flex flexDirection="column" justifyContent="space-between" height="100%">
+        {renderContent()}
+        {cardAction()}
+      </Flex>
+    )
+  }
+
+
+  return (
+    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss} isPopUp={isPopUp && !isCard} width="100%" maxWidth="480px">
+      {renderContent()}
+      <ModalActions>
+        {!isCard ? <Button variant='secondary' onClick={onDismiss} width='100%' disabled={pendingTx}>
+          {t('Cancel')}
+        </Button> : null}
+        {cardAction()}
       </ModalActions>
       <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
         {t('Get %symbol%', { symbol: tokenName })}

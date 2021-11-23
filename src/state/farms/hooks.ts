@@ -40,6 +40,7 @@ const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
     lpTotalSupply: farm.lpTotalSupply ? new BigNumber(farm.lpTotalSupply) : BIG_ZERO,
     tokenPriceVsQuote: farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO,
     poolWeight: farm.poolWeight ? new BigNumber(farm.poolWeight) : BIG_ZERO,
+    totalStakedTokenInLp: farm.totalStakedTokenInLp ? new BigNumber(farm.totalStakedTokenInLp) : BIG_ZERO,
   }
 }
 
@@ -82,7 +83,7 @@ export const usePollCoreFarmData = () => {
   const { fastRefresh } = useRefresh()
 
   useEffect(() => {
-    dispatch(fetchFarmsPublicDataAsync([251, 252]))
+    dispatch(fetchFarmsPublicDataAsync([1,2]))
   }, [dispatch, fastRefresh])
 }
 
@@ -146,7 +147,7 @@ export const useLpTokenPrice = (symbol: string) => {
 
 export const usePriceCakeBusd = (): BigNumber => {
   return new BigNumber('0.0')
-  const cakeBnbFarm = useFarmFromPid(251)
+  const cakeBnbFarm = useFarmFromPid(3)
 
   const cakePriceBusdAsString = cakeBnbFarm.tokenPriceBusd
 

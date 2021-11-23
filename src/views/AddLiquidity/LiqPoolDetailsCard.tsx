@@ -11,6 +11,7 @@ import { CurrencyLogo, DoubleCurrencyLogo } from '../../components/Logo'
 
 interface ILiqPoolDetailsCardInterface {
   currencies: { [field in Field]?: Currency }
+  totalPoolTokens: string
   noLiquidity?: boolean
   poolTokenPercentage?: Percent
   price?: Price
@@ -59,7 +60,7 @@ const StyledCard = styled(Card)`
 `
 
 const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqPoolDetailsCardInterface) => {
-  const { currencies, noLiquidity, poolTokenPercentage, price, pair } = props
+  const { currencies, noLiquidity, poolTokenPercentage, price, pair, totalPoolTokens } = props
   const { t } = useTranslation()
   const { theme } = useTheme()
 
@@ -100,7 +101,7 @@ const LiqPoolDetailsCard: React.FC<ILiqPoolDetailsCardInterface> = (props: ILiqP
             : '(0x0000000000000000000000000000000000000000)'}
         </AddressText>
         <StyledRow>
-          <AutoColumn justify="start">{renderSingleData(t('Liquidity'), '$0.00')}</AutoColumn>
+          <AutoColumn justify="start">{renderSingleData(t('Liquidity'), (`${totalPoolTokens} LP` || '$0.00'))}</AutoColumn>
           <AutoColumn justify="start">{renderSingleData(t('Volume (24H)'), '$0.00')}</AutoColumn>
           <AutoColumn justify="start">{renderSingleData(t('Fees (24H)'), '$0.00')}</AutoColumn>
           <AutoColumn justify="start">{renderSingleData(t('APR'), '0%')}</AutoColumn>

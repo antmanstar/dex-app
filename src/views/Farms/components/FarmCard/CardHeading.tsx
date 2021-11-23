@@ -40,17 +40,17 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
 }) => {
   return (
     <Wrapper alignItems="center" mb="4px">
-      <Link href="localhost:3000" fontSize="18px" fontWeight="600" >
+      <Flex>
         <Flex>
           <CurrencyLogo currency={token} size="28px" style={{ marginRight: '-8px' }} />
           <CurrencyLogo currency={quoteToken} size="28px" style={{ marginRight: '0' }} />
         </Flex>
-        <Flex flexDirection="column" alignItems="flex-start">
-          <StyledHeading ml="13px" mb="4px" scale="sm" isCardActive={isCardActive}>
+        <Flex flexDirection="column" alignItems="flex-start" mt="2px">
+          <StyledHeading ml="13px" mb="4px" scale="sm" fontSize="18px" fontWeight="600" isCardActive={isCardActive}>
             {lpLabel.split('-')[0]} / {lpLabel.split('-')[1]}
           </StyledHeading>
         </Flex>
-      </Link>
+      </Flex>
     </Wrapper>
   )
 }

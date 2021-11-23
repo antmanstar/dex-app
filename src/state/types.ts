@@ -47,6 +47,7 @@ export interface SerializedFarm extends SerializedFarmConfig {
   tokenPriceVsQuote?: SerializedBigNumber
   poolWeight?: SerializedBigNumber
   userData?: SerializedFarmUserData
+  totalStakedTokenInLp?: SerializedBigNumber
 }
 
 export interface DeserializedFarm extends DeserializedFarmConfig {
@@ -58,6 +59,7 @@ export interface DeserializedFarm extends DeserializedFarmConfig {
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
   userData?: DeserializedFarmUserData
+  totalStakedTokenInLp?: BigNumber
 }
 
 interface CorePoolProps {

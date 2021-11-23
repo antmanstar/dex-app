@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Balance from 'components/Balance'
 import { useWeb3React } from '@web3-react/core'
-import { useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
+import { useFarmFromPid, useFarmUser, useLpTokenPrice, usePriceCakeBusd } from 'state/farms/hooks'
 import { fetchFarmUserDataAsync, setActiveBodyType } from 'state/farms'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useTranslation } from 'contexts/Localization'
@@ -32,6 +32,8 @@ interface StackedActionProps extends FarmWithStakedValue {
   lpLabel?: string
   displayApr?: string
   location?: any
+  isCard?: boolean
+  contentType?: string
 }
 
 const Staked: React.FunctionComponent<StackedActionProps> = ({
@@ -45,7 +47,9 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   token,
   userDataReady,
   displayApr,
-  location
+  location,
+  isCard,
+  contentType
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -58,6 +62,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const lpPrice = useLpTokenPrice(lpSymbol)
   const cakePrice = usePriceCakeBusd()
   const width = useWidth()
+  const farm = useFarmFromPid(pid)
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -102,6 +107,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       multiplier={multiplier}
       addLiquidityUrl={addLiquidityUrl}
       cakePrice={cakePrice}
+      tokens={[farm.token, farm.quoteToken]}
       isPopUp={width < 481}
     />,
     true,
@@ -110,7 +116,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     width < 481
   )
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 481} />,
+    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} tokens={[farm.token, farm.quoteToken]} isPopUp={width < 481} />,
     true,
     false,
     'farm-unstake-withdraw-modal',
@@ -132,117 +138,132 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     }
   }, [onApprove, dispatch, account, pid])
 
+  const renderDepositCard = () => {
+    return (
+      <DepositModal
+        max={tokenBalance}
+        lpPrice={lpPrice}
+        lpLabel={lpLabel}
+        apr={apr}
+        displayApr={displayApr}
+        stakedBalance={stakedBalance}
+        onConfirm={handleStake}
+        tokenName={lpSymbol}
+        multiplier={multiplier}
+        addLiquidityUrl={addLiquidityUrl}
+        cakePrice={cakePrice}
+        isCard={isCard}
+        tokens={[farm.token, farm.quoteToken]}
+      />
+    )
+  }
+
+  const renderWithdrawCard = () => {
+    return (
+      <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 481} tokens={[farm.token, farm.quoteToken]} isCard/>
+    )
+  }
+
+  const renderContent = () => {
+    if (contentType === "deposit") {
+      return renderDepositCard()
+    }
+
+    return renderWithdrawCard()
+  }
+
   if (!account) {
     return (
-      <ActionContainer>
-        {/* <ActionTitles> */}
-        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-        {/*    {t('Start Farming')} */}
-        {/*  </Text> */}
-        {/* </ActionTitles> */}
-        <ActionContent>
-          <ConnectWalletButton width="100%" variant="subtle" />
-        </ActionContent>
-      </ActionContainer>
+      <>
+        {isCard && renderContent()}
+        <ActionContainer>
+          <ActionContent>
+            <Flex marginTop="12px" width="100%">
+              <ConnectWalletButton width="100%" />
+            </Flex>
+          </ActionContent>
+        </ActionContainer>
+      </>
     )
   }
 
   if (isApproved) {
     if (stakedBalance.gt(0)) {
+      if (isCard) {
+        return renderContent()
+      }
+
       return (
-        <ActionContainer>
-          {/* <ActionTitles> */}
-          {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px"> */}
-          {/*    {lpSymbol} */}
-          {/*  </Text> */}
-          {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-          {/*    {t('Staked')} */}
-          {/*  </Text> */}
-          {/* </ActionTitles> */}
-          <ActionContent>
-            {/* <div> */}
-            {/*  <Heading>{displayBalance()}</Heading> */}
-            {/*  {stakedBalance.gt(0) && lpPrice.gt(0) && ( */}
-            {/*    <Balance */}
-            {/*      fontSize="12px" */}
-            {/*      color="textSubtle" */}
-            {/*      decimals={2} */}
-            {/*      value={getBalanceNumber(lpPrice.times(stakedBalance))} */}
-            {/*      unit=" USD" */}
-            {/*      prefix="~" */}
-            {/*    /> */}
-            {/*  )} */}
-            {/* </div> */}
-            <Flex width="100%" justifyContent="space-evenly">
-              <Button onClick={onPresentWithdraw} variant="primary" mr="6px" width="100%">
-                {t("Unstake")}
-              </Button>
-              <Button
-                variant="primary"
-                onClick={onPresentDeposit}
-                width="100%"
-                disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
-              >
-                {t("Stake")}
-              </Button>
-            </Flex>
-          </ActionContent>
-        </ActionContainer>
+        <>
+          {isCard && renderContent()}
+          <ActionContainer>
+            <ActionContent>
+              <Flex width="100%" justifyContent="space-evenly">
+                <Button onClick={onPresentWithdraw} variant="primary" mr="6px" width="100%">
+                  {t("Unstake")}
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={onPresentDeposit}
+                  width="100%"
+                  disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
+                >
+                  {t("Stake")}
+                </Button>
+              </Flex>
+            </ActionContent>
+          </ActionContainer>
+        </>
       )
     }
 
+    if (isCard) {
+      return renderContent()
+    }
+
     return (
-      <ActionContainer>
-        {/* <ActionTitles> */}
-        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px" pr="4px"> */}
-        {/*    {t('Stake').toUpperCase()} */}
-        {/*  </Text> */}
-        {/*  <Text bold textTransform="uppercase" color="secondary" fontSize="12px"> */}
-        {/*    {lpSymbol} */}
-        {/*  </Text> */}
-        {/* </ActionTitles> */}
-        <ActionContent>
-          <Button
-            width="100%"
-            onClick={onPresentDeposit}
-            variant="primary"
-            disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
-          >
-            {t('Stake LP')}
-          </Button>
-        </ActionContent>
-      </ActionContainer>
+      <>
+        {isCard && renderContent()}
+        <ActionContainer>
+          <ActionContent>
+            <Button
+              width="100%"
+              onClick={onPresentDeposit}
+              variant="primary"
+              disabled={['history', 'archived'].some((item) => location.pathname.includes(item))}
+            >
+              {t('Stake LP')}
+            </Button>
+          </ActionContent>
+        </ActionContainer>
+      </>
     )
   }
 
   if (!userDataReady) {
     return (
-      <ActionContainer>
-        {/* <ActionTitles> */}
-        {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-        {/*    {t('Start Farming')} */}
-        {/*  </Text> */}
-        {/* </ActionTitles> */}
-        <ActionContent>
-          <Skeleton width="100%" height="45px" marginBottom="8px" marginTop="12px" />
-        </ActionContent>
-      </ActionContainer>
+      <>
+        {isCard && renderContent()}
+        <ActionContainer>
+          <ActionContent>
+            <Skeleton width="100%" height="45px" marginBottom="8px" marginTop="12px" />
+          </ActionContent>
+        </ActionContainer>
+      </>
     )
   }
 
   return (
-    <ActionContainer>
-      {/* <ActionTitles> */}
-      {/*  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px"> */}
-      {/*    {t('Enable Farm')} */}
-      {/*  </Text> */}
-      {/* </ActionTitles> */}
-      <ActionContent>
-        <Button width="100%" disabled={requestedApproval} onClick={handleApprove} variant="subtle">
-          {t('Enable')}
-        </Button>
-      </ActionContent>
-    </ActionContainer>
+    <>
+      {isCard && renderContent()}
+      <ActionContainer>
+        <ActionContent>
+          <Button width="100%" disabled={requestedApproval} onClick={handleApprove} variant="subtle" mt="12px">
+            {t('Enable')}
+          </Button>
+        </ActionContent>
+      </ActionContainer>
+    </>
   )
 }
 

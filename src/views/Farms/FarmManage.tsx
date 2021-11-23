@@ -1,60 +1,48 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
-import { Route, useRouteMatch, useLocation, NavLink, useParams } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
+import React, { useState } from 'react'
+import { useLocation} from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import {
-  Image,
-  Heading,
-  RowType,
-  Toggle,
   Text,
   Button,
   ArrowBackIcon,
   Flex,
   Card,
-  SearchIcon,
   useWalletModal,
   Tab,
   TabMenu,
-  Link,
-  useMatchBreakpoints, useModal,
+  LinkExternal,
 } from '@pancakeswap/uikit'
-import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
-import FlexLayout from 'components/Layout/Flex'
 import Page from 'views/Page'
-// import Page from 'components/Layout/Page'
-import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd, useFarmFromPid } from 'state/farms/hooks'
+import {
+  usePollFarmsWithUserData,
+  useFarmFromPid,
+  useFarmUser,
+  useLpTokenPrice,
+  usePriceCakeBusd,
+} from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import { DeserializedFarm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import useAuth from 'hooks/useAuth'
-import { getBalanceNumber } from 'utils/formatBalance'
-import { getFarmApr } from 'utils/apr'
-import { orderBy } from 'lodash'
-import isArchivedPid from 'utils/farmHelpers'
-import { latinise } from 'utils/latinise'
-import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
-import { ViewMode } from 'state/user/actions'
-import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
-import { useDispatch } from 'react-redux'
-import { CurrencyLogo, DoubleCurrencyLogo } from 'components/Logo'
 import history from 'routerHistory'
+import BigNumber from 'bignumber.js'
+import { ChainId } from '@pancakeswap/sdk'
+import { useDispatch } from 'react-redux'
 import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
-import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
-import Table from './components/FarmTable/FarmTable'
-import FarmTabButtons from './components/FarmTabButtons'
-import { RowProps } from './components/FarmTable/Row'
-import ToggleView from './components/ToggleView/ToggleView'
-import { DesktopColumnSchema } from './components/types'
 import useTheme from '../../hooks/useTheme'
-import config from '../../components/Menu/config/config'
-import RowDataJSON from '../../config/constants/DummyFarmsData.json'
 import { FarmDetails } from './FarmDetails'
-import { setActiveBodyType } from '../../state/farms'
 import { useWidth } from '../../hooks/useWidth'
+import { BASE_ADD_LIQUIDITY_URL } from '../../config'
+import getLiquidityUrlPathParts from '../../utils/getLiquidityUrlPathParts'
+import StakedAction from './components/FarmTable/Actions/StakedAction'
+import DepositModal from './components/DepositModal'
+import { getFarmApr } from '../../utils/apr'
+import { getDisplayApr } from './hooks/getDisplayApr'
+import { getBalanceNumber } from '../../utils/formatBalance'
+import { fetchFarmUserDataAsync } from '../../state/farms'
+import useStakeFarms from './hooks/useStakeFarms'
 
 const StyledPage = styled(`div`)`
   max-width: 1024px;
@@ -70,7 +58,7 @@ const StyledPage = styled(`div`)`
 const Header = styled(`div`)`
   margin-top: 40px;
   background-color: ${({theme}) => theme.colors.backgroundAlt};
-  border: 1px solid #131823;
+  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,10 +93,12 @@ const Body = styled(`div`)`
 `
 const StyledDtailFlex = styled(Flex)`
   padding: 20px;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #131823;
+  border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
+  max-width: 450px;
    
   background-color: ${({theme}) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -191,44 +181,54 @@ const InputWrapper = styled.div`
   border: 1px solid #131823;
 `
 
-const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
-  if (cakeRewardsApr && lpRewardsApr) {
-    return (cakeRewardsApr + lpRewardsApr).toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-  if (cakeRewardsApr) {
-    return cakeRewardsApr.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }
-  return null
-}
-
 const FarmManage: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const farm = useFarmFromPid(parseInt(pathname.split('/')[2]))
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
-  const { isTablet, isMobile } = useMatchBreakpoints()
-  const dispatch = useDispatch()
-  const { theme, isDark } = useTheme()
+  const { tokenBalance, stakedBalance } = useFarmUser(farm.pid)
+  const { theme } = useTheme()
   const location = useLocation()
   const { login, logout } = useAuth()
+  const dispatch = useDispatch()
   const width = useWidth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
-  const [sortOption, setSortOption] = useState('stake')
+  const [sortOption, setSortOption] = useState('deposit')
   const [value, setValue] = useState('0.0')
+  const lpPrice = useLpTokenPrice(farm.lpSymbol)
+  const cakePrice = usePriceCakeBusd()
+  const { onStake } = useStakeFarms(farm.pid)
+
+  usePollFarmsWithUserData(false)
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
   const userDataReady = !account || (!!account && !!farm)
 
+  const liquidityUrlPathParts = getLiquidityUrlPathParts({
+    quoteTokenAddress: farm.quoteToken.address,
+    tokenAddress: farm.token.address,
+  })
+  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  
+  const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
+  const { cakeRewardsApr, lpRewardsApr } = getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNET])
+  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', 'ECO')
+
+  const handleStake = async (amount: string) => {
+    await onStake(amount)
+    dispatch(fetchFarmUserDataAsync({ account, pids: [farm.pid] }))
+  }
+
   const getSortByTabs = () => {
     return [
       {
-        value: 'stake',
+        value: 'deposit',
         label: 'Stake',
       },
       {
-        value: 'unstake',
+        value: 'withdraw',
         label: 'Unstake',
       },
       {
@@ -300,15 +300,15 @@ const FarmManage: React.FC = () => {
     return (
         <FarmsContainer>
           <StyledFlexLayout>
-          {farm && <FarmDetails userDataReady={userDataReady} location={location} data={farm} />}
+          {farm && <FarmDetails userDataReady={userDataReady} location={location} data={{ ...farm, apr: cakeRewardsApr, liquidity: getBalanceNumber(totalLiquidity, 0).toFixed(4) }} addLiquidityUrl={addLiquidityUrl} lpLabel={lpLabel}/>}
           <StyledDtailFlex>
             <Flex justifyContent="space-between" flexDirection="column" mt="3px" mb="3px">
-            {renderSortByTab()}
-            {renderInput()}
+              {renderSortByTab()}
             </Flex>
-            <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center">
-              <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
-            </Flex>
+            <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={farm.pid} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={location} contentType={sortOption} isCard/>
+            {/* <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center"> */}
+            {/*  <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button> */}
+            {/* </Flex> */}
           </StyledDtailFlex>
           </StyledFlexLayout>
         </FarmsContainer>
@@ -323,6 +323,9 @@ const FarmManage: React.FC = () => {
             <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><ArrowBackIcon /></StyledHeaderButton>
             <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><Text fontWeight="500" fontSize="14px">{t('Manage Farm')}</Text></StyledHeaderButton>            
           </Flex>
+          <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
+            {t('Get %symbol%', { symbol: lpLabel })}
+          </LinkExternal>
         </Header>
         <Body>
           {renderContent()}

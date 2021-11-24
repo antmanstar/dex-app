@@ -400,7 +400,7 @@ export default function AddLiquidity({
     'addLiquidityModal',
   )
 
-  const totalPoolTokens = useTotalSupply(pair.liquidityToken)
+  const totalPoolTokens = useTotalSupply(pair?.liquidityToken)
 
   return (
     <StyledPage>
@@ -413,7 +413,7 @@ export default function AddLiquidity({
                 poolTokenPercentage={poolTokenPercentage}
                 noLiquidity={noLiquidity}
                 price={price}
-                totalPoolTokens={totalPoolTokens.toSignificant(4)}
+                totalPoolTokens={totalPoolTokens?.toSignificant(4) || '0'}
                 pair={pair}
               />
               <StyledLightCard padding="24px" border="none !important">

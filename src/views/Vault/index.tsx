@@ -77,6 +77,7 @@ const LockedValueContainer = styled(`div`)`
   }
 
   @media screen and (max-width: 576px) {
+    flex-direction: row;
     margin-top: 20px;
     margin-bottom: 10px;
   }
@@ -118,9 +119,32 @@ const LockedValueCard = styled(Flex)`
     background: transparent;
     padding-left: 0;
     padding-right: 0;
-    align-items: center;
+    align-items: left;
     margin-top: 5px;
     margin-bottom: 5px;
+    text-align: ${props => (props.id === "eco_loc" ? `left` : `right`)}
+  }
+`
+
+const TotalVaultCard= styled(Flex)`
+  width: 100%;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px 0px 20px 0px
+  
+  margin-top: 18px
+  margin-bottom: 0px;
+
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    align-items: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    flex-direction: column-reverse;
+    text-align: right;
   }
 `
 
@@ -408,10 +432,10 @@ export default function Vault() {
               <Text color={theme.colors.headerSubtleText} fontWeight="500" fontSize="14px">{t('Performance Fee')}</Text>
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>1%</Text>
             </LockedValueCard>
-            <LockedValueCard id="user_loc">
+            <TotalVaultCard>
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>20</Text>
-              <Text color={theme.colors.headerSubtleText} fontSize="14px" fontWeight="500">{t('# of Vaults')}</Text>
-            </LockedValueCard>
+              <Text color={theme.colors.headerSubtleText} fontSize="14px" fontWeight="500">{width<=576 ? t('Vaults') : t('# of Vaults')}</Text>
+            </TotalVaultCard>
           </LockedValueContainer>
           <NoteCard>
             <Text fontWeight="500" fontSize="28px" mb="10px">{t('Note')}</Text>
@@ -419,7 +443,7 @@ export default function Vault() {
           </NoteCard>
           <LockedValueContainer>
             <LockedValueCard id="eco_loc">
-              <Text color={theme.colors.headerSubtleText} fontWeight="500" fontSize="14px">{t('Total Value Locked')}</Text>
+              <Text color={theme.colors.headerSubtleText} fontWeight="500" fontSize="14px">{width<=280 ? t('TVL') : t('Total Value Locked')}</Text>
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">

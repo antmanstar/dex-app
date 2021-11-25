@@ -1,19 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
+import { ChevronDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 
-const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean, height?: any }>`
+const DropDownHeader = styled.div<{ background?: string, displayIconOnly?: boolean, bottomBorder?: boolean, height?: any }>`
   width: 100%;
   height: ${({height}) => height || "36px"};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({displayIconOnly}) => displayIconOnly ? '0px 8px': '0px 16px'};
-  box-shadow: ${({ theme }) => theme.shadows.inset};
-  // border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-  border-radius: 5px;
+  padding: ${({displayIconOnly, bottomBorder}) => bottomBorder ? "0px" : displayIconOnly ? '0px 8px': '0px 16px'};
+  box-shadow: ${({ theme, bottomBorder }) => bottomBorder ? 'none' : theme.shadows.inset};
+  border-radius: ${({ bottomBorder }) => bottomBorder ? '0px' : "5px"};
   background: ${({ theme, background }) => background || theme.colors.backgroundAlt};
-  transition: border-radius 0.15s;
+  border-bottom: 1px solid ${({ theme, bottomBorder }) => bottomBorder ?  theme.colors.text : 'transparent'};
 `
 
 const DropDownListContainer = styled.div`
@@ -98,6 +97,7 @@ export interface SelectProps extends BoxProps {
   selectedTextColor?: string
   selectedBackgroundColor?: string
   displayIconOnly?: boolean
+  bottomBorder?: boolean
 }
 
 export interface OptionProps {
@@ -116,6 +116,7 @@ const Select: React.FunctionComponent<SelectProps & ZIndexProps> = ({
   selectedTextColor,
   selectedBackgroundColor,
   displayIconOnly,
+  bottomBorder,
   zindex,
   ...props
 }) => {
@@ -150,7 +151,7 @@ const Select: React.FunctionComponent<SelectProps & ZIndexProps> = ({
 
   return (
     <DropDownContainer isOpen={isOpen} {...props} displayIconOnly={displayIconOnly} zindex={zindex}>
-      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly} height={props.height}>
+      <DropDownHeader onClick={toggling} background={selectedBackgroundColor} displayIconOnly={displayIconOnly} height={props.height} bottomBorder={bottomBorder}>
         <>
           {options[selectedOptionIndex]?.icon && (
             <img
@@ -162,7 +163,7 @@ const Select: React.FunctionComponent<SelectProps & ZIndexProps> = ({
           )}
         </>
         {!displayIconOnly && <Text marginLeft={options[selectedOptionIndex]?.icon ? '8px' : '0'} color={selectedTextColor || 'text'}>{options[selectedOptionIndex].label}</Text>}
-        <ArrowDropDownIcon color={selectedTextColor || 'text'} onClick={toggling} />
+        <ChevronDownIcon color={selectedTextColor || 'text'} onClick={toggling} />
       </DropDownHeader>
       <DropDownListContainer>
         <DropDownList ref={dropdownRef}>

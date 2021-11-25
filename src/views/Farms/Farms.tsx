@@ -17,12 +17,13 @@ import {
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
 import Page from 'views/Page'
+import { getFarmApr } from 'utils/apr'
+import history from 'routerHistory'
 import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd } from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { DeserializedFarm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { getFarmApr } from 'utils/apr'
 import { orderBy } from 'lodash'
 import isArchivedPid from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
@@ -620,19 +621,16 @@ const Farms: React.FC = () => {
           {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
           <Route exact path={`${path}`}>
             {chosenFarmsMemoized.map((farm) => (
-              <Link to={{
-                pathname: `${path}/${farm.pid}`,
-              }} >
-                <FarmCard
-                  isCardActive={activeFarmCard?.pid === farm.pid}
-                  key={farm.pid}
-                  farm={farm}
-                  displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-                  cakePrice={cakePrice}
-                  account={account}
-                  removed={false}
-                />
-              </Link>
+              <FarmCard
+                isCardActive={activeFarmCard?.pid === farm.pid}
+                key={farm.pid}
+                farm={farm}
+                displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+                cakePrice={cakePrice}
+                account={account}
+                removed={false}
+                onClick={() => history.push(`${path}/${farm.pid}`)}
+              />
             ))}
           </Route>
         </StyledFlexLayout>

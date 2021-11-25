@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Card, Flex, Text, Skeleton, useMatchBreakpoints, Button } from '@pancakeswap/uikit'
+import { Card, Flex, Text, Skeleton, useMatchBreakpoints, Button, useModal } from '@pancakeswap/uikit'
 import { DeserializedFarm } from 'state/types'
 import { getBscScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
@@ -21,7 +21,7 @@ import { CurrencyLogo } from '../../../../components/Logo'
 import { getBalanceAmount, getBalanceNumber } from '../../../../utils/formatBalance'
 import { useFarmUser } from '../../../../state/farms/hooks'
 import { BIG_TEN } from '../../../../utils/bigNumber'
-// import { tokenToString } from 'typescript'
+import { getDisplayApr } from '../../hooks/getDisplayApr'
 
 export interface FarmWithStakedValue extends DeserializedFarm {
   apr?: number
@@ -164,10 +164,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
   const { t } = useTranslation()
   const width = useWidth()
   const { theme } = useTheme()
-  const { stakedBalance } = useFarmUser(farm.pid)
-
-  const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
+  const { stakedBalance, tokenBalance } = useFarmUser(farm.pid)
 
   const totalValueFormatted =
     farm.liquidity && farm.liquidity.gt(0)
@@ -198,8 +195,24 @@ const FarmCard: React.FC<FarmCardProps> = ({
     return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }, [stakedBalance])
 
-  const showCalc = () => {
-    setShowRoiCalculator(true)
+  const [onPresentROICaculator] = useModal(
+    <RoiCalculatorModal
+      linkLabel={t('Get %symbol%', { symbol: lpLabel })}
+      stakingTokenBalance={stakedBalance.plus(tokenBalance)}
+      stakingTokenSymbol={farm.lpSymbol}
+      stakingTokenPrice={cakePrice.toNumber()}
+      earningTokenPrice={cakePrice.toNumber()}
+      apr={farm.apr}
+      multiplier={farm.multiplier}
+      displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+      linkHref={addLiquidityUrl}
+      isFarm
+    />,
+  )
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onPresentROICaculator();
   }
 
   return (
@@ -214,7 +227,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
             quoteToken={farm.quoteToken}
             isCardActive={isCardActive}
           />
-          <Flex onClick={showCalc}>
+          <Flex onClick={(e) => handleClick(e)}>
             <img
               width="30px"
               src='/images/math.png'
@@ -268,19 +281,6 @@ const FarmCard: React.FC<FarmCardProps> = ({
             <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>{poolShare || '0.00'}%</Text>
           </Flex>
         </StyledCardSummary>
-        {showRoiCalculator && <RoiCalculatorModal
-          linkLabel={t('Get %symbol%', { symbol: lpLabel })}
-          stakingTokenBalance={new BigNumber(0)}
-          stakingTokenSymbol={lpLabel.replace('LP', '')}
-          stakingTokenPrice={100}
-          multiplier={farm.multiplier}
-          earningTokenPrice={cakePrice.toNumber()}
-          apr={10}
-          linkHref={addLiquidityUrl}
-          isFarm
-          initialValue='0'
-          onBack={() => setShowRoiCalculator(false)}
-        />}
       </FarmCardInnerContainer>
     </StyledCard>
   )

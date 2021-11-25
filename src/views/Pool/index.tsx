@@ -474,7 +474,6 @@ export default function Pool() {
       sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
 
       return sortedOrder.map((arr) => {
-
         const userLiquidity = v2PairsBalances[arr.liquidityToken.address]?.toFixed(3)
 
         return (

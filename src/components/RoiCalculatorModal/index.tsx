@@ -198,7 +198,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
             {t('Staked for')}
           </Text>
-          <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="sm">
+          <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="sm" switchVariant variant="subtle" isBorder>
             <ButtonMenuItem variant="tertiary">{t('1D')}</ButtonMenuItem>
             <ButtonMenuItem variant="tertiary">{t('7D')}</ButtonMenuItem>
             <ButtonMenuItem variant="tertiary">{t('30D')}</ButtonMenuItem>
@@ -220,6 +220,9 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
                     activeIndex={activeCompoundingIndex}
                     onItemClick={setCompoundingFrequency}
                     scale="sm"
+                    switchVariant
+                    variant="subtle"
+                    isBorder
                   >
                     <ButtonMenuItem>{t('1D')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('7D')}</ButtonMenuItem>

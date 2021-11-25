@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Flex, Heading, Skeleton, Text, Button, Link } from '@pancakeswap/uikit'
+import { Flex, Heading, Skeleton, Text, Button, Link, useModal } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
@@ -48,6 +48,11 @@ const StyledDtailFlex = styled(Flex)`
   }
 `
 
+const ImageWrapper = styled(Flex)`
+  justify-content: flex-end;
+  cursor: pointer;
+`
+
 const StyledCardSummary = styled.div`
   padding: 25px;
   display: grid;
@@ -89,9 +94,8 @@ const StyledCardInfo = styled(Flex)`
 export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
   const { t } = useTranslation()
   const { data, hideDetailsHeading, location, userDataReady, lpLabel, addLiquidityUrl } = props
-  const { stakedBalance } = useFarmUser(data.pid)
+  const { stakedBalance, tokenBalance } = useFarmUser(data.pid)
   const { theme } = useTheme()
-  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
 
   const displayBalance = useCallback(() => {
     const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
@@ -120,9 +124,20 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
     displayEarnings = earnings.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
-  const showCalc = () => {
-    setShowRoiCalculator(true)
-  }
+  const [onPresentROICaculator] = useModal(
+    <RoiCalculatorModal
+      linkLabel={t('Get %symbol%', { symbol: lpLabel })}
+      stakingTokenBalance={stakedBalance.plus(tokenBalance)}
+      stakingTokenSymbol={data.lpSymbol}
+      stakingTokenPrice={cakePrice.toNumber()}
+      earningTokenPrice={cakePrice.toNumber()}
+      apr={data.apr}
+      multiplier={data.multiplier}
+      displayApr={getDisplayApr(data.apr, data.lpRewardsApr)}
+      linkHref={addLiquidityUrl}
+      isFarm
+    />,
+  )
 
   return (
     <StyledDtailFlex flexDirection='column'>
@@ -132,13 +147,13 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           quoteToken={data.quoteToken}
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
         />
-        <Flex onClick={showCalc} justifyContent="flex-end">
+        <ImageWrapper onClick={onPresentROICaculator}>
           <img
             width="30px"
             src='/images/math.png'
             alt='Caculator'
           />
-        </Flex>
+        </ImageWrapper>
       </StyledFarmName>}
       <StyledCardSummary>
         <Flex justifyContent='flex-start' flexDirection='column'>

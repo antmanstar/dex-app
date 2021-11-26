@@ -63,7 +63,6 @@ const ApyButton: React.FC<ApyButtonProps> = ({
     event.stopPropagation()
     onPresentApyModal()
   }
-  console.log("display apr", displayApr)
 
   return (
     <ApyLabelContainer alignItems="center" onClick={handleClickButton} fontSize={fontSize}>

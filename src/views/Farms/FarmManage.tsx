@@ -189,7 +189,7 @@ const FarmManage: React.FC = () => {
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const { tokenBalance, stakedBalance } = useFarmUser(farm.pid)
   const { theme } = useTheme()
-  const location = useLocation()
+  // const location = useLocation()
   const { login, logout } = useAuth()
   const dispatch = useDispatch()
   const width = useWidth()
@@ -300,12 +300,12 @@ const FarmManage: React.FC = () => {
     return (
         <FarmsContainer>
           <StyledFlexLayout>
-          {farm && <FarmDetails userDataReady={userDataReady} location={location} data={{ ...farm, apr: cakeRewardsApr, liquidity: getBalanceNumber(totalLiquidity, 0).toFixed(4) }} addLiquidityUrl={addLiquidityUrl} lpLabel={lpLabel}/>}
+          {farm && <FarmDetails userDataReady={userDataReady} location={pathname} data={{ ...farm, apr: cakeRewardsApr, liquidity: getBalanceNumber(totalLiquidity, 0).toFixed(4) }} addLiquidityUrl={addLiquidityUrl} lpLabel={lpLabel}/>}
           <StyledDtailFlex>
             <Flex justifyContent="space-between" flexDirection="column" mt="3px" mb="3px">
               {renderSortByTab()}
             </Flex>
-            <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={farm.pid} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={location} contentType={sortOption} isCard/>
+            <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={farm.pid} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={pathname} contentType={sortOption} isCard/>
             {/* <Flex justifyContent="center" flexDirection="column" mt="3px" mb="3px" alignItems="center"> */}
             {/*  <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button> */}
             {/* </Flex> */}

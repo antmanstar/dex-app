@@ -1,23 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Card, Flex, Text, Skeleton, useMatchBreakpoints, Button, useModal } from '@pancakeswap/uikit'
+import { Card, Flex, Text, Skeleton, useMatchBreakpoints, CalculatorIcon, useModal } from '@pancakeswap/uikit'
 import { DeserializedFarm } from 'state/types'
-import { getBscScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
-import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import RoiCalculatorModal from 'components/RoiCalculatorModal'
-import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
-import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
 import { useWidth } from '../../../../hooks/useWidth'
 import useTheme from '../../../../hooks/useTheme'
-import { TransparentCard } from '../../../../components/Card'
-import { CurrencyLogo } from '../../../../components/Logo'
 import { getBalanceAmount, getBalanceNumber } from '../../../../utils/formatBalance'
 import { useFarmUser } from '../../../../state/farms/hooks'
 import { BIG_TEN } from '../../../../utils/bigNumber'
@@ -45,14 +39,6 @@ const StyledCard = styled(Card)<{ isActive?: boolean }>`
     h2 {
       color: ${({ theme }) => theme.colors.primaryButtonText };
     }
-    
-    svg {
-      fill: ${({ theme }) => theme.colors.primaryButtonText };
-    }
-  }
-  
-  svg {
-    fill: ${({ theme, isActive }) => isActive ? theme.colors.primaryButtonText : theme.colors.text };
   }
 `
 
@@ -60,67 +46,6 @@ const FarmCardInnerContainer = styled(Flex)`
   flex-direction: column;
   justify-content: space-around;
   padding: 12px 16px;
-`
-
-const ExpandingWrapper = styled.div<{ isCardActive?: boolean }>`
-  padding: 12px 16px;
-  border-top: 2px solid ${({ isCardActive, theme }) => (isCardActive ? theme.colors.text : '#4c5969')};
-  overflow: hidden;
-`
-
-const StyledDetailsContainer = styled(Flex)`
-  border-radius: 10px;
-  padding: 12px;
-  background-color: ${({theme}) => theme.colors.backgroundAlt};
-  justify-content: space-between;
-  min-width: 400px;
-  ${({theme}) => theme.mediaQueries.md} {
-    min-width: 500px;
-  }
-`
-
-const SingleDetailWrapper = styled(Flex)`
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  padding: 0px 24px;
-`
-
-const StyledDesktopCard = styled(TransparentCard)<{isActive?: boolean}>`
-  padding: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  margin-bottom: 24px;
-  
-  ${({isActive, theme}) => {
-    if (isActive) {
-      return `
-        background: ${theme.colors.gradients.poolHover};
-        
-        ${StyledDetailsContainer} {
-          background: rgba(3, 3, 3, 0.2);
-        }
-        ${Text} {
-          color: white
-        }
-      `
-    }
-    
-    return ''
-  }}
-  
-  &:hover {
-    background: ${({ theme }) => theme.colors.gradients.poolHover};
-    ${StyledDetailsContainer} {
-      background: rgba(3, 3, 3, 0.2);
-    }
-    ${Text} {
-      color: white
-    }
-  }
 `
 
 const StyledCardSummary = styled.div`
@@ -228,11 +153,7 @@ const FarmCard: React.FC<FarmCardProps> = ({
             isCardActive={isCardActive}
           />
           <Flex onClick={(e) => handleClick(e)}>
-            <img
-              width="30px"
-              src='/images/math.png'
-              alt='Caculator'
-            />
+            <CalculatorIcon width="30px" color={theme.colors.primary}/>
           </Flex>
         </Flex>
         <StyledCardSummary>

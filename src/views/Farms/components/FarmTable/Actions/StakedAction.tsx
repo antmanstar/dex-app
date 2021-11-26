@@ -107,7 +107,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       multiplier={multiplier}
       addLiquidityUrl={addLiquidityUrl}
       cakePrice={cakePrice}
-      tokens={[farm.token, farm.quoteToken]}
+      tokens={[farm.token, pid === 0 ? null : farm.quoteToken]}
       isPopUp={width < 481}
     />,
     true,
@@ -115,8 +115,14 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     'farm-stake-deposit-modal',
     width < 481
   )
+  
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} tokens={[farm.token, farm.quoteToken]} isPopUp={width < 481} />,
+    <WithdrawModal
+      max={stakedBalance}
+      onConfirm={handleUnstake}
+      tokenName={lpSymbol}
+      tokens={[farm.token, pid === 0 ? null : farm.quoteToken]}
+      isPopUp={width < 481} />,
     true,
     false,
     'farm-unstake-withdraw-modal',
@@ -153,14 +159,14 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
         addLiquidityUrl={addLiquidityUrl}
         cakePrice={cakePrice}
         isCard={isCard}
-        tokens={[farm.token, farm.quoteToken]}
+        tokens={[farm.token, pid === 0 ? null : farm.quoteToken]}
       />
     )
   }
 
   const renderWithdrawCard = () => {
     return (
-      <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 481} tokens={[farm.token, farm.quoteToken]} isCard/>
+      <WithdrawModal max={stakedBalance} onConfirm={handleUnstake} tokenName={lpSymbol} isPopUp={width < 481} tokens={[farm.token, pid === 0 ? null : farm.quoteToken]} isCard />
     )
   }
 

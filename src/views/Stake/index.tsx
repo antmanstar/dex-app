@@ -39,6 +39,8 @@ import { useDispatch } from 'react-redux'
 import history from 'routerHistory'
 import { CurrencyLogo } from 'components/Logo'
 import pools from 'config/constants/pools'
+import StakedAction from 'views/Farms/components/FarmTable/Actions/StakedAction'
+import { useFarmFromPid } from 'state/farms/hooks'
 import stake from '../../config/constants/stake'
 import { Input as NumericalInput } from '../../components/CurrencyInputPanel/NumericalInput'
 import useTheme from '../../hooks/useTheme'
@@ -303,6 +305,7 @@ const StyledTh = styled(Th) <{ isXs: boolean }>`
 const Stake: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
+  const farm = useFarmFromPid(0)
   const { account } = useWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const { isTablet, isMobile, isXs } = useMatchBreakpoints()
@@ -316,14 +319,17 @@ const Stake: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('all')
   const [reverseOrder, setReversOrder] = useState<boolean>(false)
 
+  const userDataReady = !account || (!!account && !!farm)
+  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('ECO', 'ECO')
+
   const getSortByTabs = () => {
     return [
       {
-        value: 'stake',
+        value: 'deposit',
         label: 'Stake ECO',
       },
       {
-        value: 'unstake',
+        value: 'withdraw',
         label: 'Unstake',
       }
     ]
@@ -586,13 +592,14 @@ const Stake: React.FC = () => {
             </StyledECOReportWrapper>
           </Flex>
           <StyledDetailFlex>
-            <Flex justifyContent="space-between" flexDirection="column">
+            <Flex justifyContent="space-between" flexDirection="column" height="100%">
               {renderSortByTab()}
-              {renderInput()}
+              {/* {renderInput()} */}
+              <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={0} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={pathname} contentType={sortOption} isCard/>
             </Flex>
-            <Flex justifyContent="center" flexDirection="column" alignItems="center">
+            {/* <Flex justifyContent="center" flexDirection="column" alignItems="center">
               <Button onClick={onPresentConnectModal} variant="primary" scale="sm" width="100%" height="50px" mt="10px">{t('Connect Wallet')}</Button>
-            </Flex>
+            </Flex> */}
           </StyledDetailFlex>
         </StyledFlexLayout>
         <StyledPoolInfoWrapper>

@@ -161,7 +161,7 @@ const ControlPanel = styled(Flex)`
   display: grid;
   grid-template-columns: 22% 22% 22% 22%;
   grid-column-gap: 4%;
-  grid-row-gap: 40px;
+  grid-row-gap: 20px;
   justify-content: space-between;
 
   @media screen and (max-width: 950px) {
@@ -434,7 +434,7 @@ export default function Vault() {
             </LockedValueCard>
             <TotalVaultCard>
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>20</Text>
-              <Text color={theme.colors.headerSubtleText} fontSize="14px" fontWeight="500">{width<=576 ? t('Vaults') : t('# of Vaults')}</Text>
+              <Text color={theme.colors.headerSubtleText} fontSize="14px" fontWeight="500">{t('# of Vaults')}</Text>
             </TotalVaultCard>
           </LockedValueContainer>
           <NoteCard>
@@ -447,7 +447,7 @@ export default function Vault() {
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </LockedValueCard>
             <LockedValueCard id="user_loc">
-              <Text color={theme.colors.headerSubtleText} fontWeight="500" fontSize="14px">{t('Deposit')}</Text>
+              <Text color={theme.colors.headerSubtleText} fontWeight="500" fontSize="14px">{t('Deposited')}</Text>
               <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </LockedValueCard>
           </LockedValueContainer>

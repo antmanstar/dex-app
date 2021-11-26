@@ -1,12 +1,9 @@
 import { Currency, Token } from '@pancakeswap/sdk'
 import {
-  AddIcon,
+  CalculatorIcon,
   Button,
   Card,
-  CardBody,
-  Flex,
-  IconButton,
-  MinusIcon, Td,
+  Flex,  
   Text,
   ChevronDownIcon,
   ChevronUpIcon,
@@ -320,11 +317,7 @@ const VaultCard = ({
                   {item.title}
                 </Text>
                 {item.title === 'APY' && <Flex onClick={onPresentROICaculator} style={{cursor: "pointer"}}>
-                  <img
-                  width="20px"
-                  src='/images/math.png'
-                  alt='Caculator'
-                />
+                  <CalculatorIcon color={theme.colors.primary}/>
                 </Flex>}
               </Flex>
               <Flex flexDirection="column" height="42px" justifyContent="center">

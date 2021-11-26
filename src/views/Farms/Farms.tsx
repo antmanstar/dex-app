@@ -621,7 +621,7 @@ const Farms: React.FC = () => {
           {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
           <Route exact path={`${path}`}>
             {chosenFarmsMemoized.map((farm) => (
-              <FarmCard
+              farm.pid !== 0 && <FarmCard
                 isCardActive={activeFarmCard?.pid === farm.pid}
                 key={farm.pid}
                 farm={farm}

@@ -6,6 +6,17 @@ const serializedTokens = serializeTokens()
 
 const farms: SerializedFarmConfig[] = [
   {
+    pid: 0,
+    lpSymbol: 'ECO LP',
+    lpAddresses: {
+      137: '0x165966c22bcaE3fD8F7eC9c16b22cd8417d96Ea4',
+      [ChainId.TESTNET]: '0x165966c22bcaE3fD8F7eC9c16b22cd8417d96Ea4',
+    },
+    token: serializedTokens.cake,
+    quoteToken: serializedTokens.cake,
+    isCommunity: true,
+  },
+  {
     pid: 1,
     lpSymbol: 'WETH-MATIC LP',
     lpAddresses: {

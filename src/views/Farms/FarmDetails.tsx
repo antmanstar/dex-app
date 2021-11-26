@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Flex, Heading, Skeleton, Text, Button, Link, useModal } from '@pancakeswap/uikit'
+import { Flex, Heading, Skeleton, Text, Button, Link, useModal, CalculatorIcon } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
@@ -148,11 +148,7 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
           lpLabel={data.lpSymbol && data.lpSymbol.toUpperCase().replace('LP', '')}
         />
         <ImageWrapper onClick={onPresentROICaculator}>
-          <img
-            width="30px"
-            src='/images/math.png'
-            alt='Caculator'
-          />
+          <CalculatorIcon width="30px" color={theme.colors.primary}/>
         </ImageWrapper>
       </StyledFarmName>}
       <StyledCardSummary>

@@ -621,7 +621,7 @@ const Farms: React.FC = () => {
           {chosenFarmsMemoized?.length < 1 && renderNoDataFound()}
           <Route exact path={`${path}`}>
             {chosenFarmsMemoized.map((farm) => (
-              <FarmCard
+              farm.pid !== 0 && <FarmCard
                 isCardActive={activeFarmCard?.pid === farm.pid}
                 key={farm.pid}
                 farm={farm}
@@ -656,7 +656,7 @@ const Farms: React.FC = () => {
           <InfoContainer>
             <StyledLabelCard>
               <Text fontWeight="500" fontSize="14px">{t('Total Value Locked')}</Text>
-              <Text color={theme.colors.primary} fontSize="22px" fontWeight="700" glow>31,787,112</Text>
+              <Text color="primary" fontSize="22px" fontWeight="700" glow>31,787,112</Text>
             </StyledLabelCard>
             <StyledButtonCard>
               <Text fontWeight="500" fontSize="14px">{t('Eco to Harvest')}</Text>

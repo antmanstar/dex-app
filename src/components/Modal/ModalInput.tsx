@@ -114,10 +114,10 @@ const ModalInput: React.FC<ModalInputProps> = ({
               {t('Max')}
             </Button>
             <Flex flexDirection="column">
-              <Flex mb="-8px">
+              <Flex mb={tokens[1] !== null ? '-8px' : '0px'}>
                 <CurrencyLogo currency={tokens[0]} size="28px"/>
               </Flex>
-              <CurrencyLogo currency={tokens[1]} size="28px" />
+              {tokens[1] !== null && <CurrencyLogo currency={tokens[1]} size="28px" />}
             </Flex>
           </Flex>
         </Flex>

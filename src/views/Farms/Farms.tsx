@@ -227,12 +227,6 @@ const StyledSearchInput = styled(Input)`
   }
 `
 
-const LabelWrapper = styled.div`
-  > ${Text} {
-    font-size: 12px;
-  }
-`
-
 const StyledFlexLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;

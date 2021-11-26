@@ -17,6 +17,7 @@ import EasterEgg from './components/EasterEgg'
 import history from './routerHistory'
 // Views included in the main bundle
 import Pools from './views/Pools'
+import Tanks from './views/Tanks'
 import Swap from './views/Swap'
 import Stake from './views/Stake'
 import Bridge from './views/Bridge'
@@ -103,6 +104,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/vault">
               <Vault />
+            </Route>
+            <Route path="/tanks">
+              <Tanks />
             </Route>
             {/* <Route path="/lottery"> */}
             {/*  <Lottery /> */}

@@ -168,7 +168,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
           }
         }}
       >
-        {pendingTx ? t('Confirming') : t('Confirm')}
+        {pendingTx ? t('Confirming') : tokens[1] !== null ? t('Confirm') : t('Stake')}
       </Button>
     )
   }

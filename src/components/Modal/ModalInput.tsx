@@ -41,9 +41,11 @@ const StyledTokenInput = styled.div<InputProps>`
   margin-bottom: 12px;
 `
 
+const InputWrapper = styled(Flex)`
+`
+
 const StyledInput = styled(Input)`
   box-shadow: none;
-  width: 200px;
   margin: 0 8px;
   padding: 0 8px;
   border: none;
@@ -59,7 +61,7 @@ const StyledInput = styled(Input)`
 
 const StyledErrorMessage = styled(Text)`
   position: absolute;
-  bottom: -22px;
+  // bottom: -22px;
   a {
     display: inline;
   }
@@ -98,7 +100,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
         <Text fontSize="14px" textAlign="right">{t('Balance: %balance%', { balance: parseFloat(Number(displayBalance(max)).toFixed(4)) })}</Text>
       </Flex>
       <StyledTokenInput isWarning={isBalanceZero}>
-        <Flex alignItems="center" justifyContent="space-between">
+        <InputWrapper alignItems="center" justifyContent="space-between">
           <StyledInput
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode="decimal"
@@ -114,13 +116,13 @@ const ModalInput: React.FC<ModalInputProps> = ({
               {t('Max')}
             </Button>
             <Flex flexDirection="column">
-              <Flex mb={tokens[1] !== null ? '-8px' : '0px'}>
+              <Flex mb={tokens[1] !== null ? '-8px' : '0px'} minWidth="28px">
                 <CurrencyLogo currency={tokens[0]} size="28px"/>
               </Flex>
               {tokens[1] !== null && <CurrencyLogo currency={tokens[1]} size="28px" />}
             </Flex>
           </Flex>
-        </Flex>
+        </InputWrapper>
       </StyledTokenInput>
       {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">

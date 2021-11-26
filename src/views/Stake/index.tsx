@@ -592,7 +592,7 @@ const Stake: React.FC = () => {
             </StyledECOReportWrapper>
           </Flex>
           <StyledDetailFlex>
-            <Flex justifyContent="space-between" flexDirection="column" height="100%">
+            <Flex justifyContent="space-between" flexDirection="column" height="100%" minHeight="320px">
               {renderSortByTab()}
               {/* {renderInput()} */}
               <StakedAction userDataReady={userDataReady} token={farm.token} quoteToken={farm.quoteToken} pid={0} lpSymbol={lpLabel} lpAddresses={farm.lpAddresses} location={pathname} contentType={sortOption} isCard/>

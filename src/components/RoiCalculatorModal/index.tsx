@@ -41,7 +41,7 @@ interface RoiCalculatorModalProps {
 }
 
 const StyledModal = styled(Modal)`
-  width: 345px;
+  // width: 345px;
   & > :nth-child(2) {
     padding: 0;
   }
@@ -142,7 +142,6 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
       title={t('ROI Calculator')}
       onDismiss={onBack || onDismiss}
       onBack={onBack ?? null}
-      headerBackground="gradients.cardHeader"
     >
       <ScrollableContainer>
         <Flex flexDirection="column" mb="8px">
@@ -198,7 +197,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
             {t('Staked for')}
           </Text>
-          <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="sm" switchVariant variant="subtle" isBorder>
+          <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="xs" switchVariant variant="subtle" isBorder>
             <ButtonMenuItem variant="tertiary">{t('1D')}</ButtonMenuItem>
             <ButtonMenuItem variant="tertiary">{t('7D')}</ButtonMenuItem>
             <ButtonMenuItem variant="tertiary">{t('30D')}</ButtonMenuItem>

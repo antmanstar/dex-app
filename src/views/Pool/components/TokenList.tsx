@@ -51,9 +51,9 @@ const StyledTr = styled.tr`
 
   &:hover {
     & > td {
-      background-color: ${({ theme }) => theme.colors.backgroundAlt2};
+      background-color: ${({ theme }) => theme.colors.cardBgAlt};
       ${StyledDetailsContainer} {
-        background: rgba(3, 3, 3, 0.2);
+        background: black
       }
 
       &:last-child {

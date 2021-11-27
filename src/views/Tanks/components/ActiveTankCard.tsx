@@ -68,7 +68,7 @@ const ActiveTankCard: React.FC<TankCardProps> = ({
           <Flex flexDirection="column">
             <Text fontSize="22px" fontWeight="500">Earn WMATIC</Text>
             <BoxedTextWrapper>
-              <Text fontSize="12px" fontWeight="500" color="white">Stake Fish</Text>
+              <Text fontSize="12px" fontWeight="500" color="white">Stake ECO</Text>
             </BoxedTextWrapper>
           </Flex>
           <Flex>

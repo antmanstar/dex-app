@@ -94,6 +94,7 @@ const Body = styled(`div`)`
 const StyledDtailFlex = styled(Flex)`
   padding: 20px;
   padding-top: 8px;
+  min-height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

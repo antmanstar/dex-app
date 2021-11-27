@@ -7,7 +7,7 @@ const referral: SerializedReferralConfig = {
   header1: 'Tell your friends about ',
   header2: 'Earn together.',
   header3: 'Invite your friends and receive 6% of the earnings they claimed from our products. No invitation limits. Rewards credited instantly.',
-  headerLabels: ["Total Referred Friends", "Totla Commissions Earned", "Your Commission Rate"],
+  headerLabels: ["Total Referred Friends", "Total Commissions Earned", "Your Commission Rate"],
   shareLink: "Share your link & earn more!",
   roundButtons: [
     {

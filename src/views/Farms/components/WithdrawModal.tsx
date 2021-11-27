@@ -64,7 +64,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
         }}
         width="100%"
       >
-        {pendingTx ? t('Confirming') : t('Confirm')}
+        {pendingTx ? t('Confirming') : tokens[1] !== null ? t('Confirm') : t('Stake')}
       </Button>
     )
   }

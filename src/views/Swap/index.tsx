@@ -327,7 +327,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
   )
 
   const allTokens = useAllTokens()
-  const defaultSecondToken = Object.values(allTokens).filter(single => single.symbol.toLowerCase() === "weth")[0]
+  const defaultSecondToken = Object.values(allTokens).filter(single => single.symbol.toLowerCase() === "usdt")[0]
 
   useEffect(() => {
     if (defaultSecondToken) {

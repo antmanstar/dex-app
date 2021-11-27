@@ -21,10 +21,10 @@
     {
       "name": "EcoSwap Token",
       "symbol": "ECO",
-      "address": "0xdbF0Fb8499ab4dd4727fdbf96B3F9465063345f9",
+      "address": "0xB7cCc46858C501f10327E9caea30184d0bad9F76",
       "chainId": 80001,
       "decimals": 18,
-      "logoURI": "/images/tokens/0xdbF0Fb8499ab4dd4727fdbf96B3F9465063345f9.png"
+      "logoURI": "/images/tokens/0xB7cCc46858C501f10327E9caea30184d0bad9F76.png"
     },
     {
       "name": "ZENO",
@@ -43,12 +43,12 @@
       "logoURI": "/images/tokens/0x65B1A7066D51499DC6F5284c81645d6051D2ca67.png"
     },
     {
-      "name": "EcoSwap 2",
-      "symbol": "ECO2",
-      "address": "0xD52E9dF0792ec399efE3cd29677C87e96B8D4372",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "address": "0xfB5c6ec0A203D84FD9fBFd69Bc643Bd91b084AbA",
       "chainId": 80001,
       "decimals": 18,
-      "logoURI": "/images/tokens/0xD52E9dF0792ec399efE3cd29677C87e96B8D4372.png"
+      "logoURI": "/images/tokens/0xfB5c6ec0A203D84FD9fBFd69Bc643Bd91b084AbA.png"
     },
     {
       "name": "WETH",

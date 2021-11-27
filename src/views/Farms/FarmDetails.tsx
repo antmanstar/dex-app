@@ -258,11 +258,16 @@ export const FarmDetails: React.FC<IFarmDetails> = (props: IFarmDetails) => {
               >
                 {t('Pending Rewards')}
               </Text>
-              {
-                displayBalance() ?
-                  <Text fontSize='18px' fontWeight='700' mt='3px' mb='3px'>0 ECO</Text> :
-                  <Skeleton height={24} width={80} mt='3px' mb='3px' />
-              }
+              {displayEarnings ? (
+                <Text
+                  fontSize='18px'
+                  fontWeight='700'
+                  mt='3px'
+                  mb='3px'
+                >
+                  {displayEarnings} ECO
+                </Text>
+              ) : (<Skeleton height={24} width={80} mt="3px" mb="3px"/>)}
             </Flex>
             <Flex justifyContent='flex-start' flexDirection='column' alignItems='center'>
               <Text fontSize='14px' fontWeight='700' color={theme.colors.headerSubtleText} mt='3px'

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Button, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation } from 'contexts/Localization'
 import { ISmallFooterLinks } from './types'
 
 const StyledLinks = styled.div`
@@ -15,6 +16,7 @@ const StyledLinks = styled.div`
   //   grid-template-columns: 1fr 1fr 1fr 1fr;
   // }
   display: flex;
+  align-items: center;
 `
 
 const StyledSocial = styled(StyledLinks)`
@@ -62,6 +64,16 @@ const StyledAuditButton = styled(Button)`
   color: ${({ theme }) => theme.colors.text};
 `
 
+const StyledInviteButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 12px;
+  font-weight: 600;
+
+  &:hover, &.active {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
 const StyledSocialButton = styled(Button)`
   color: ${({ theme }) => theme.colors.text};
 `
@@ -70,6 +82,7 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
   const { links, socialMedia, audit } = props
 
   const { isMobile, isTablet } = useMatchBreakpoints()
+  const { t } = useTranslation()
 
   return (
     <StyledContainer justifyContent="space-between" alignItems="center" width="100%">
@@ -97,6 +110,11 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
         </StyledAudit>
       )}
       <StyledSocial>
+        <StyledLinks>
+          <StyledInviteButton as="a" variant="text" href="#">
+            {t('Invite & Earn')}
+          </StyledInviteButton>
+        </StyledLinks>
         {socialMedia.map((singleLink) => {
           return (
             <StyledSocialButton as="a" variant="text" scale="xxs" href={singleLink.url}>
@@ -114,3 +132,4 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
 }
 
 export default FooterSmall
+

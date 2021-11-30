@@ -47,10 +47,10 @@ const Header = styled(`div`)`
   border-radius: 10px;
   padding-bottom: 16px;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 20px;
 
   @media screen and (max-width: 576px) {
-    margin-top: 0px;
+    margin-top: 20px;
   }
   
   ${({ theme }) => theme.mediaQueries.sm} {

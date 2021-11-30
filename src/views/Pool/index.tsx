@@ -47,11 +47,16 @@ import { Field } from '../../state/mint/actions'
 import { RemoveLiquidityCard } from '../RemoveLiquidity/RemoveLiquidityCard'
 import TokenList from './components/TokenList'
 
-const AppBody = styled(`div`)`
+const StyledPage = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
-  margin-bottom: 50px;
+  padding-top: 27px;
+  margin-bottom: 100px;
+
+  @media screen and (max-width: 968px) {
+    padding-top: 27px;
+  }
 `
 
 const Body = styled(`div`)`
@@ -64,8 +69,6 @@ const Body = styled(`div`)`
 `
 
 const Header = styled(`div`)`
-  // background-color: ${({theme}) => theme.colors.backgroundAlt};
-  // border: 1px solid ${({theme}) => theme.colors.backgroundAlt};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -581,9 +584,7 @@ export default function Pool() {
     <Page>
       <PoolUpdater />
       <TokenUpdater />
-      {/* @ts-ignore */}
-      <SubMenuItems items={config(t)[0].items} mt={`${56 + 1}px`} activeItem="/liquidity" />
-      <AppBody>
+      <StyledPage>
         <Heading ml="1" mb="2">{t('Pools')}</Heading>
         <Header>
           <PoolContainer>
@@ -670,7 +671,7 @@ export default function Pool() {
             </StyledTable>
           </TableWrapperCard>
         </Body>
-      </AppBody>
+      </StyledPage>
     </Page>
   )
 }

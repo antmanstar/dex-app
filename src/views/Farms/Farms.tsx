@@ -41,7 +41,7 @@ const StyledPage = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
-  padding-top: 57px;
+  padding-top: 27px;
 `
 
 const Header = styled(`div`)`

@@ -48,7 +48,7 @@ const StyledPage = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
-  padding-top: 57px;
+  padding-top: 27px;
 
   @media screen and (max-width: 968px) {
     padding-top: 27px;
@@ -322,7 +322,7 @@ const FarmManage: React.FC = () => {
         <Header>
           <Flex alignItems="center">
             <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><ArrowBackIcon /></StyledHeaderButton>
-            <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><Text fontWeight="500" fontSize="14px">{t('Manage Farm')}</Text></StyledHeaderButton>            
+            <StyledHeaderButton variant="text" onClick={() => history.push('/farms')}><Text fontWeight="600" fontSize="16px">{t('Manage Farm')}</Text></StyledHeaderButton>            
           </Flex>
           <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
             {t('Get %symbol%', { symbol: lpLabel })}

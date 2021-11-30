@@ -67,7 +67,7 @@ const StyledPage = styled(`div`)`
   max-width: 539px;
   width: 100%;
   z-index: 1;
-  padding-top: 57px;
+  padding-top: 37px;
 
   @media screen and (max-width: 968px) {
     padding-top: 27px;
@@ -509,7 +509,7 @@ const Bridge: React.FC = () => {
                   secondInput
                 />
 
-                {isExpertMode && recipient !== null && !showWrap ? (
+                {/* {isExpertMode && recipient !== null && !showWrap ? (
                   <>
                     <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>
                       <ArrowWrapper clickable={false}>
@@ -521,9 +521,9 @@ const Bridge: React.FC = () => {
                     </AutoRow>
                     <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
                   </>
-                ) : null}
+                ) : null} */}
 
-                {showWrap ? null : (
+                {/* {showWrap ? null : (
                   <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
                     {Boolean(trade) && (
                       <RowBetween align="center">
@@ -544,7 +544,7 @@ const Bridge: React.FC = () => {
                       </RowBetween>
                     )}
                   </AutoColumn>
-                )}
+                )} */}
               </Flex>
               <Box mt="15px" mx="0.5rem">
                 {swapIsUnsupported ? (

@@ -52,7 +52,6 @@ const Header = styled(`div`)`
   border-radius: 10px;
   padding-bottom: 16px;
   flex-direction: column;
-  margin-top: 50px;
 
   @media screen and (max-width: 576px) {
     margin-top: 0px;
@@ -191,14 +190,14 @@ const StyledCheckbox = styled(CustomCheckbox)`
 `
 
 const StyledP = styled.p`
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.headerSubtleText};
   line-height: 1.2
 `
 
 const DecoPText = styled.a`
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 500;
   display: inline-block;
   color: ${({ theme }) => theme.colors.headerSubtleText};
@@ -438,7 +437,7 @@ export default function Vault() {
             </TotalVaultCard>
           </LockedValueContainer>
           <NoteCard>
-            <Text fontWeight="500" fontSize="28px" mb="10px">{t('Note')}</Text>
+            <Text fontWeight="500" fontSize="20px" mb="10px">{t('Note')}</Text>
             <StyledP>No deposit of withdrawl fees on any vault. Performace fee only on <DecoPText>non-native</DecoPText> vaults</StyledP>            
           </NoteCard>
           <LockedValueContainer>

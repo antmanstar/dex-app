@@ -1,11 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Tag, Flex, Heading, Skeleton, Link } from '@pancakeswap/uikit'
+import { Flex, Text } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
-import { CommunityTag, CoreTag } from 'components/Tags'
-import { TokenPairImage } from 'components/TokenImage'
-import { CurrencyLogo, DoubleCurrencyLogo } from '../../../../components/Logo'
-import { Field } from '../../../../state/mint/actions'
+import { CurrencyLogo } from '../../../../components/Logo'
 
 export interface ExpandableSectionProps {
   lpLabel?: string
@@ -20,14 +17,6 @@ const Wrapper = styled(Flex)`
   svg {
     margin-right: 4px;
   }
-`
-
-const MultiplierTag = styled(Tag)`
-  margin-left: 4px;
-`
-
-const StyledHeading = styled(Heading) <{ isCardActive?: boolean }>`
-  color: ${({ theme, isCardActive }) => (isCardActive ? theme.colors.primaryButtonText : theme.colors.text)};
 `
 
 const CardHeading: React.FC<ExpandableSectionProps> = ({
@@ -46,9 +35,9 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
           <CurrencyLogo currency={quoteToken} size="28px" style={{ marginRight: '0' }} />
         </Flex>
         <Flex flexDirection="column" alignItems="flex-start" mt="2px">
-          <StyledHeading ml="13px" mb="4px" scale="sm" fontSize="18px" fontWeight="600" isCardActive={isCardActive}>
+          <Text ml="13px" mb="4px" fontSize="18px" fontWeight="600" >
             {lpLabel.split('-')[0]} / {lpLabel.split('-')[1]}
-          </StyledHeading>
+          </Text>
         </Flex>
       </Flex>
     </Wrapper>

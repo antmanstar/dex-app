@@ -431,11 +431,11 @@ function SwapPage({ history, theme }: SwapPageInterface) {
       <ProtocolUpdater />
       <PoolUpdater />
       <TokenUpdater />
-      <div style={{textAlign: 'center', marginTop: '50px'}}>
-        <Text fontSize="24px">
+      <div style={{textAlign: 'center', marginTop: '20px'}}>
+        <Text fontSize="20px">
           {t('THE MOST EFFICIENT DEFI PLATFORM')}
         </Text>
-        <Text fontSize="16px" color="#7e96b8">
+        <Text fontSize="14px" color="#7e96b8">
           {t('Access the most liquidity, lowest slippage and best exchange rates across Ethereum, Binance Smart Chain and Polygon.')}
         </Text>
       </div>
@@ -547,7 +547,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                       secondInput
                     />
 
-                    {isExpertMode && recipient !== null && !showWrap ? (
+                    {/* {isExpertMode && recipient !== null && !showWrap ? (
                       <>
                         <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>
                           <ArrowWrapper clickable={false}>
@@ -582,7 +582,7 @@ function SwapPage({ history, theme }: SwapPageInterface) {
                           </RowBetween>
                         )}
                       </AutoColumn>
-                    )}
+                    )} */}
                   </AutoColumn>
                   <Box mt="1rem" mx="0.5rem">
                     {swapIsUnsupported ? (

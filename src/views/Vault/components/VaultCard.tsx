@@ -296,7 +296,7 @@ const VaultCard = ({
             </Flex>
           </Flex>
           <TokenNameWrapper ml="10px" flexDirection="column">
-            <Text fontSize="14px" fontWeight="400">
+            <Text fontSize="14px" fontWeight="600">
               {currency1?.symbol?.toUpperCase()} / {currency2?.symbol?.toUpperCase()}
             </Text>
             <Flex>

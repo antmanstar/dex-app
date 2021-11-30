@@ -50,7 +50,7 @@ const StyledPage = styled(`div`)`
   max-width: 1024px;
   width: 100%;
   z-index: 1;
-  padding-top: 57px;
+  padding-top: 27px;
   margin-bottom: 100px;
 
   @media screen and (max-width: 968px) {
@@ -101,8 +101,6 @@ const StyledAPRCard = styled.div`
   @media screen and (max-width: 410px) {
     grid-template-columns: 1fr;
   }
-
-  border: 1px solid #131823;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -160,7 +158,6 @@ const StyledECOReportWrapper = styled(Flex)`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px solid #131823;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -174,7 +171,6 @@ const StyledPoolInfoWrapper = styled(Flex)`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px solid #131823;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;
@@ -193,7 +189,6 @@ const StyledDetailFlex = styled(Flex)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #131823;
    
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 10px;

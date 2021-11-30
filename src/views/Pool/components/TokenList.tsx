@@ -215,10 +215,10 @@ const TokenList = ({
         </Button>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="12px" fontWeight="500">${liquidity}</Text>
+        <Text fontSize="12px" fontWeight="500">{parseFloat(liquidity.toFixed(4))}</Text>
       </StyledTd>
       <StyledTd>
-        <Text fontSize="12px" fontWeight="500">${volume}</Text>
+        <Text fontSize="12px" fontWeight="500">${parseFloat(volume.toFixed(4))}</Text>
       </StyledTd>
       <StyledTd>
         <Text fontSize="12px" fontWeight="500">${fees}</Text>

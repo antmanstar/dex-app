@@ -15,6 +15,7 @@ interface PoolFields {
   volumeUSD: string
   token0Price: string
   token1Price: string
+  totalSupply: string
   token0: {
     id: string
     symbol: string
@@ -64,6 +65,7 @@ const POOL_AT_BLOCK = (block: number | null, pools: string[]) => {
     reserve1
     reserveUSD
     volumeUSD
+    totalSupply
     token0Price
     token1Price
     token0 {
@@ -149,6 +151,7 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
         block14d.number,
         poolAddresses,
       )
+      // console.log("pool data", data);
       if (error) {
         setFetchState({ error: true })
       } else {
@@ -206,6 +209,7 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
               },
               token0Price: current.token0Price,
               token1Price: current.token1Price,
+              totalSupply: Number(current.totalSupply),
               volumeUSD,
               volumeUSDChange,
               volumeUSDWeek,
@@ -233,6 +237,8 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
       fetch()
     }
   }, [poolAddresses, block24h, block48h, block7d, block14d, blockError])
+
+  // console.log("fetch state", fetchState);
 
   return fetchState
 }

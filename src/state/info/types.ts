@@ -95,6 +95,8 @@ export interface PoolData {
 
   liquidityToken0: number
   liquidityToken1: number
+
+  totalSupply: number
 }
 
 export interface PoolsState {

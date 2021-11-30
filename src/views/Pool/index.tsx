@@ -364,13 +364,13 @@ export default function Pool() {
     () =>
       trackedTokenPairs.map((tokens, index) => {
         const lpToken = toV2LiquidityToken(tokens);
-        const pool = allPoolData[lpToken.address]?.data
+        const pool = allPoolData[lpToken.address.toLowerCase()]?.data
         return {
           liquidityToken: lpToken,
           tokens,
           volume: pool?.volumeUSD || 0,
           fees: pool?.totalFees24h || 0,
-          liquidity: pool?.liquidityUSD || 0,
+          liquidity: pool?.totalSupply || 0,
           apr: pool?.lpApr7d || 0,
         };
       }),

@@ -13,5 +13,5 @@ export const BITQUERY_API = 'https://graphql.bitquery.io'
  */
 export const GRAPH_API_PREDICTION_V1 = 'https://api.thegraph.com/subgraphs/name/pancakeswap/prediction'
 
-export const INFO_CLIENT = 'https://api.thegraph.com/subgraphs/name/cryptomackenzie/ecoswapexchange'
+export const INFO_CLIENT = 'https://api.thegraph.com/subgraphs/name/cryptomackenzie/ecograph'
 export const BLOCKS_CLIENT = 'https://api.thegraph.com/subgraphs/name/martianatwork/ecoswap-polygon-blocks'

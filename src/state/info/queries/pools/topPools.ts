@@ -19,7 +19,6 @@ const fetchTopPools = async (timestamp24hAgo: number): Promise<string[]> => {
       query topPools($blacklist: [String!], $timestamp24hAgo: Int) {
         pairDayDatas(
           first: 30
-          where: { dailyTxns_gt: 300, token0_not_in: $blacklist, token1_not_in: $blacklist, date_gt: $timestamp24hAgo }
           orderBy: dailyVolumeUSD
           orderDirection: desc
         ) {
@@ -46,6 +45,7 @@ const useTopPoolAddresses = (): string[] => {
   useEffect(() => {
     const fetch = async () => {
       const addresses = await fetchTopPools(timestamp24hAgo)
+      // console.log("top pool addresses", addresses);
       setTopPoolAddresse(addresses)
     }
     if (topPoolAddresses.length === 0) {

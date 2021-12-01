@@ -161,19 +161,17 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           <Flex justifyContent="space-between" mt="8px">
             <Button
               scale="xs"
-              p="4px 16px"
-              width="68px"
               variant="tertiary"
               onClick={() => setPrincipalFromUSDValue('100')}
+              padding="5px"
             >
               $100
             </Button>
             <Button
               scale="xs"
-              p="4px 16px"
-              width="68px"
               variant="tertiary"
               onClick={() => setPrincipalFromUSDValue('1000')}
+              padding="5px"
             >
               $1000
             </Button>
@@ -198,11 +196,11 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
             {t('Staked for')}
           </Text>
           <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="xs" switchVariant variant="subtle" isBorder>
-            <ButtonMenuItem variant="tertiary">{t('1D')}</ButtonMenuItem>
-            <ButtonMenuItem variant="tertiary">{t('7D')}</ButtonMenuItem>
-            <ButtonMenuItem variant="tertiary">{t('30D')}</ButtonMenuItem>
-            <ButtonMenuItem variant="tertiary">{t('1Y')}</ButtonMenuItem>
-            <ButtonMenuItem variant="tertiary">{t('5Y')}</ButtonMenuItem>
+            <ButtonMenuItem switchVariant>{t('1D')}</ButtonMenuItem>
+            <ButtonMenuItem switchVariant>{t('7D')}</ButtonMenuItem>
+            <ButtonMenuItem switchVariant>{t('30D')}</ButtonMenuItem>
+            <ButtonMenuItem switchVariant>{t('1Y')}</ButtonMenuItem>
+            <ButtonMenuItem switchVariant>{t('5Y')}</ButtonMenuItem>
           </FullWidthButtonMenu>
           {autoCompoundFrequency === 0 && (
             <>
@@ -223,10 +221,10 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
                     variant="subtle"
                     isBorder
                   >
-                    <ButtonMenuItem>{t('1D')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('7D')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('14D')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('30D')}</ButtonMenuItem>
+                    <ButtonMenuItem switchVariant>{t('1D')}</ButtonMenuItem>
+                    <ButtonMenuItem switchVariant>{t('7D')}</ButtonMenuItem>
+                    <ButtonMenuItem switchVariant>{t('14D')}</ButtonMenuItem>
+                    <ButtonMenuItem switchVariant>{t('30D')}</ButtonMenuItem>
                   </FullWidthButtonMenu>
                 </Flex>
               </Flex>

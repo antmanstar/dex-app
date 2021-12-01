@@ -47,34 +47,24 @@ const StyledMobileCard = styled(Card)`
 `
 
 const StyledTr = styled.tr`
-  border-radius: 10px;
+    border-bottom: 1px solid ${({theme}) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
+    line-height: 18px;
+    transition: all .3s cubic-bezier(.15,1,.22,1) 0s;
+    transition: all .3s;
 
-  &:hover {
-    & > td {
-      background-color: ${({ theme }) => theme.colors.cardBgAlt};
-      ${StyledDetailsContainer} {
-        background: black
-      }
-
-      &:last-child {
-        border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;
-      }
-
-      &:first-child {
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
-      }
+    &:hover{
+      z-index: 100;
+      box-shadow: 0 8px 12px 0 rgb(49 103 180 / 10%);
+      transform: scale(1.02);
+      border-radius: 10px;
     }
-  }
 `
 
 const StyledTd = styled(Td)`
-  padding-top: 10px;
+  padding-top: 15px;
   padding-right: 16px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
   padding-left: 16px;
-  border-bottom: 1px solid #1c1f2b;
 `
 
 const TokenList = ({

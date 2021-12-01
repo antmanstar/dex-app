@@ -175,7 +175,7 @@ const RoundInfoCardSection = styled(Flex)`
 `
 
 const StyledInput = styled(Input)`
-  width: 580px;
+  width: 570px;
   height: 60px;
   background-color: ${({ theme }) => theme.colors.bridgeInputBg};
   
@@ -188,6 +188,7 @@ const StyledButton = styled(Button)`
   height: 60px;
   background-color: ${({ theme }) => theme.colors.bridgeInputBg};
   border-radius: 10px;
+  margin-left: 5px;
 `
 
 const Referral: React.FC = () => {

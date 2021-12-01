@@ -73,7 +73,7 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
   const apy = (getApy(apr, autoCompoundFrequency > 0 ? autoCompoundFrequency : 1, 365, performanceFee) * 100).toFixed(2)
 
   return (
-    <Footer p="16px" flexDirection="column">
+    <Footer p="7px" flexDirection="column">
       <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)}>
         {isExpanded ? t('Hide') : t('Details')}
       </ExpandableLabel>

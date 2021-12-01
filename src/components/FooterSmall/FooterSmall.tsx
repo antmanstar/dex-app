@@ -65,12 +65,12 @@ const StyledAuditButton = styled(Button)`
 `
 
 const StyledInviteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 14px;
   font-weight: 600;
 
   &:hover, &.active {
-    color: ${({ theme }) => theme.colors.primary};
+    transform: scale(1.05);
   }
 `
 
@@ -111,7 +111,7 @@ const FooterSmall: React.FC<ISmallFooterLinks> = (props: ISmallFooterLinks) => {
       )}
       <StyledSocial>
         <StyledLinks>
-          <StyledInviteButton as="a" variant="text" href="#">
+          <StyledInviteButton as="a" variant="text" href="/referral">
             {t('Invite & Earn')}
           </StyledInviteButton>
         </StyledLinks>

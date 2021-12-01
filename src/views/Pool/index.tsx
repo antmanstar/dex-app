@@ -180,10 +180,15 @@ const InputWrapper = styled(`div`)`
 `
 
 const StyledTable = styled(Table) <{ isMobile: boolean }>`
-  margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : 0)};
-  //margin-top: 12px;
-  border-collapse: separate;
-  border-spacing: 0 0.5rem;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : '10px')};  
+  background: transparent;
+`
+
+const StyledTHeader = styled.thead`
+  height: 25px;
+  font-size: 12px;    
+  box-sizing: border-box;
+  border-bottom: 1px solid ${({theme}) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
 `
 
 const StyledTabContainer = styled(TabContainer)`
@@ -209,17 +214,21 @@ const StyledTabContainer = styled(TabContainer)`
 `
 
 const TableWrapperCard = styled(Card)`
-  margin-top: 12px;
-  // padding-left: 8px;
-  // padding-right: 8px;
-  background-color: transparent;
-  // background: ${({ theme }) => theme.colors.backgroundAlt3};
+  margin-top: 20px;
+  background: 
   margin-bottom: 32px;
+  padding: 10px;
+  border: ${({ theme }) => !theme.isDark ? '1px solid rgba(223,226,231,.8)' : 'none'};
+  border-radius: 5px;
+  box-shadow: ${({ theme }) => !theme.isDark ? '0 6px 8px 0 rgb(47 76 116 / 8%)' : 'none'};
+  background: ${({ theme }) => theme.isDark ? 'transparent' : 'white'};
   
   @media screen and (max-width: 576px) {
     background: transparent;
     padding-left: 0;
     padding-right: 0;
+    border: none;
+    box-shadow: none;
   }
 `
 
@@ -654,7 +663,7 @@ export default function Pool() {
           </StyledTabContainer>
           <TableWrapperCard>
             <StyledTable isMobile={isMobile}>
-              <thead>
+              <StyledTHeader>
                 {getHeaders().map((singleHeader, index) => {
                   return (
                     <Th
@@ -666,7 +675,7 @@ export default function Pool() {
                     </Th>
                   )
                 })}
-              </thead>
+              </StyledTHeader>
               <tbody>{renderTable()}</tbody>
             </StyledTable>
           </TableWrapperCard>

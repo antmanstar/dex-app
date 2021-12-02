@@ -227,7 +227,7 @@ const StyledTableHeader = styled.thead`
   height: 25px;
   font-size: 12px;    
   box-sizing: border-box;
-  border-bottom: 1px solid ${({theme}) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
+  border-bottom: 1px solid ${({ theme }) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
 `
 
 const TableWrapperCard = styled(Card)`
@@ -500,7 +500,7 @@ const Referral: React.FC = () => {
               </ShareLinkSection>
             </Flex>
             }
-            <StyledTabSection>
+            {account && <StyledTabSection>
               {renderTab()}
               {tab === 'commission' ?
                 <TableWrapperCard>
@@ -540,6 +540,7 @@ const Referral: React.FC = () => {
                 </TableWrapperCard>
               }
             </StyledTabSection>
+            }
             <RoundInfoCardSection>
               {
                 config.roundButtons.map((button, index) => {

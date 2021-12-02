@@ -413,14 +413,6 @@ const Stake: React.FC = () => {
             {
               getHeaders().map((header, index) => {
                 const prefix = header.id === 'tvl' ? '$' : '';
-                if (header.id === "pools") return (
-                  <StyledTd isXs={isXs} >
-                    <Flex justifyContent='flex-start' flexDirection="row" alignItems="center">
-                      <CurrencyLogo currency={arr[header.id]} />
-                      <Text fontSize="14px" fontWeight="400" ml="5px" display={isXs ? 'none' : 'block'}>{`Earn ${arr[header.id].name}`}</Text>
-                    </Flex>
-                  </StyledTd>
-                )
                 return (
                   <StyledTd isXs={isXs} >
                     <Text fontSize="14px" fontWeight="400">{`${prefix}${arr[header.id]}`}</Text>

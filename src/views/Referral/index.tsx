@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import {
@@ -9,7 +9,10 @@ import {
   Card,
   Input,
   useMatchBreakpoints,
-  useWalletModal
+  useWalletModal,
+  Th,
+  Td,
+  Table
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import Page from 'views/Page'
@@ -191,18 +194,276 @@ const StyledButton = styled(Button)`
   margin-left: 5px;
 `
 
+const StyledTabSection = styled(Flex)`
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 50px;
+`
+
+const StyledTab = styled(Flex) <{ isActive?: boolean }>`
+  font-size: 24px;
+  border-bottom: 2px solid ${({ theme, isActive }) => isActive ? theme.colors.primary : theme.colors.cardBorder2};
+  padding-bottom: 15px;
+  border-radius: 0;
+  width: 100%;
+  alignItems: center;
+  justify-content: center;
+  cursor: pointer;
+`
+
+const TabText = styled(Text) <{ isActive?: boolean, isMobile?: boolean }>`
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  color: ${({ theme, isActive }) => isActive ? theme.colors.text : 'grey'};
+`
+
+const StyledTable = styled(Table) <{ isMobile: boolean }>`
+  margin-bottom: ${({ isMobile }) => (isMobile ? '56px' : '10px')};  
+  background: transparent;
+`
+
+const StyledTableHeader = styled.thead`
+  height: 25px;
+  font-size: 12px;    
+  box-sizing: border-box;
+  border-bottom: 1px solid ${({theme}) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
+`
+
+const TableWrapperCard = styled(Card)`
+  margin-top: 20px;
+  background: 
+  margin-bottom: 32px;
+  padding: 10px;
+  border: ${({ theme }) => !theme.isDark ? '1px solid rgba(223,226,231,.8)' : 'none'};
+  border-radius: 5px;
+  box-shadow: ${({ theme }) => !theme.isDark ? '0 6px 8px 0 rgb(47 76 116 / 8%)' : 'none'};
+  background: ${({ theme }) => theme.isDark ? 'transparent' : 'white'};
+  
+  @media screen and (max-width: 576px) {
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+    box-shadow: none;
+  }
+`
+
+const StyledTr = styled.tr`
+  border-bottom: 1px solid ${({ theme }) => theme.isDark ? '#1c1f2b' : '#f2f2f2'};
+  line-height: 18px;
+  transition: all .3s cubic-bezier(.15,1,.22,1) 0s;
+  transition: all .3s;
+
+  &:hover{
+    z-index: 100;
+    box-shadow: 0 8px 12px 0 rgb(49 103 180 / 10%);
+    transform: scale(1.02);
+    border-radius: 10px;
+}
+`
+
+const StyledTd = styled(Td) <{ isXs: boolean }>`
+  padding-left: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-right: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-wrap: anywhere;
+`
+
+const StyledTh = styled(Th) <{ isXs: boolean }>`
+  padding-left: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-right: ${({ isXs }) => isXs ? '12px' : '23px'};
+  padding-bottom: 5px;
+`
+
 const Referral: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { isTablet, isMobile } = useMatchBreakpoints()
+  const { isTablet, isMobile, isXs } = useMatchBreakpoints()
   const dispatch = useDispatch()
   const { theme, isDark } = useTheme()
   const location = useLocation()
   const width = useWidth()
   const { login, logout } = useAuth()
   const { onPresentConnectModal } = useWalletModal(login, logout, t, "", width < 481)
+  const [tab, setTab] = useState<string>('commission')
+  const [sortBy, setSortBy] = useState<string>('email')
+  const [reverseOrder, setReversOrder] = useState<boolean>(false)
+  const [sortReferredBy, setSortReferredBy] = useState<string>('email')
+  const [reverseReferredOrder, setReversReferredOrder] = useState<boolean>(false)
+
+  const getTabs = () => {
+    return [
+      {
+        value: 'commission',
+        label: 'Commission History',
+      },
+      {
+        value: 'referred',
+        label: 'Referred Friends',
+      }
+    ]
+  }
+
+  const renderTab = (): JSX.Element => {
+    return (
+      <Flex>
+        {getTabs().map((singleTab, index) => {
+          return (
+            <StyledTab isActive={tab === singleTab.value} onClick={() => setTab(singleTab.value)}>
+              <TabText isActive={tab === singleTab.value} isMobile={isMobile}>{singleTab.label}</TabText>
+            </StyledTab>
+          )
+        })}
+      </Flex>
+    )
+  }
 
 
+  // Render Commision Table
+  const getCommissionData = () => {
+    return [
+      {
+        dates: "Wed, Dec, 01",
+        email: "ab***@***.com",
+        commission: "0.0063848348843ECO"
+      },
+      {
+        dates: "Thu, Dec, 02",
+        email: "ab***@***.com",
+        commission: "0.0263847778843ECO"
+      },
+      {
+        dates: "Thu, Dec, 02",
+        email: "ab***@***.com",
+        commission: "0.063458348865ECO"
+      }
+    ]
+  }
+
+  const handleHeaderClick = (key: string) => {
+    if (key !== sortBy) {
+      setSortBy(key)
+      setReversOrder(false)
+    } else if (key === sortBy && !reverseOrder) {
+      setReversOrder(true)
+    } else {
+      setSortBy('none')
+      setReversOrder(false)
+    }
+  }
+
+  const renderCommissionTable = () => {
+    const filteredData = getCommissionData();
+
+    if (filteredData?.length > 0) {
+      let sortedOrder = [...filteredData]
+
+      if (sortBy !== 'none') {
+        sortedOrder.sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : b[sortBy] > a[sortBy] ? -1 : 0))
+      }
+
+      sortedOrder = reverseOrder ? [...sortedOrder].reverse() : sortedOrder
+
+      return sortedOrder.map((arr) => {
+        return (
+          <StyledTr>
+            {
+              ["dates", "email", "commission"].map((header) => {
+                return (
+                  <StyledTd isXs={isXs} >
+                    <Text fontSize="14px" fontWeight="400">{`${arr[header]}`}</Text>
+                  </StyledTd>
+                )
+              })
+            }
+          </StyledTr>)
+      })
+    }
+
+    return (
+      <tr>
+        <Td colSpan={6}>
+          <Text color="textSubtle" textAlign="center">
+            {t('No Data found.')}
+          </Text>
+        </Td>
+      </tr>
+    )
+  }
+
+
+  // render referred table
+  const getReferredData = () => {
+    return [
+      {
+        dates: "Wed, Dec, 01",
+        email: "ab***@***.com"
+      },
+      {
+        dates: "Thu, Dec, 02",
+        email: "ab***@***.com"
+      },
+      {
+        dates: "Thu, Dec, 02",
+        email: "ab***@***.com"
+      }
+    ]
+  }
+
+  const handleReferredHeaderClick = (key: string) => {
+    if (key !== sortReferredBy) {
+      setSortReferredBy(key)
+      setReversReferredOrder(false)
+    } else if (key === sortReferredBy && !reverseReferredOrder) {
+      setReversReferredOrder(true)
+    } else {
+      setSortReferredBy('none')
+      setReversReferredOrder(false)
+    }
+  }
+
+  const renderReferredTable = () => {
+    const filteredData = getReferredData();
+
+    if (filteredData?.length > 0) {
+      let sortedOrder = [...filteredData]
+
+      if (sortReferredBy !== 'none') {
+        sortedOrder.sort((a, b) => (a[sortReferredBy] > b[sortReferredBy] ? 1 : b[sortReferredBy] > a[sortReferredBy] ? -1 : 0))
+      }
+
+      sortedOrder = reverseReferredOrder ? [...sortedOrder].reverse() : sortedOrder
+
+      return sortedOrder.map((arr) => {
+        return (
+          <StyledTr>
+            {
+              ["dates", "email"].map((header) => {
+                return (
+                  <StyledTd isXs={isXs} >
+                    <Text fontSize="14px" fontWeight="400">{`${arr[header]}`}</Text>
+                  </StyledTd>
+                )
+              })
+            }
+          </StyledTr>)
+      })
+    }
+
+    return (
+      <tr>
+        <Td colSpan={6}>
+          <Text color="textSubtle" textAlign="center">
+            {t('No Data found.')}
+          </Text>
+        </Td>
+      </tr>
+    )
+  }
+
+  // render main
   return (
     <Page>
       <StyledPage>
@@ -232,13 +493,53 @@ const Referral: React.FC = () => {
               <ShareLinkSection>
                 <Text fontSize="22px" fontWeight="500">{config.shareLink}</Text>
                 <Flex mt="20px" mb="30px">
-                  <StyledInput noBorder/>
+                  <StyledInput noBorder />
                   <StyledButton>{t('Copy')}</StyledButton>
                 </Flex>
                 <Text>{t('(Your code')}: 26qyaqyk)</Text>
               </ShareLinkSection>
             </Flex>
             }
+            <StyledTabSection>
+              {renderTab()}
+              {tab === 'commission' ?
+                <TableWrapperCard>
+                  <StyledTable isMobile={isMobile}>
+                    <StyledTableHeader>
+                      {["dates", "email", "commission"].map((singleHeader, index) => {
+                        return (
+                          <StyledTh
+                            onClick={() => handleHeaderClick(singleHeader)}
+                            isXs={isXs}
+                          >
+                            <Text fontSize="14px" color={theme.colors.headerSubtleText} fontWeight="400">{singleHeader}</Text>
+                          </StyledTh>
+                        )
+                      })}
+                    </StyledTableHeader>
+                    <tbody>{renderCommissionTable()}</tbody>
+                  </StyledTable>
+                </TableWrapperCard>
+                :
+                <TableWrapperCard>
+                  <StyledTable isMobile={isMobile}>
+                    <StyledTableHeader>
+                      {["dates", "email"].map((singleHeader, index) => {
+                        return (
+                          <StyledTh
+                            onClick={() => handleReferredHeaderClick(singleHeader)}
+                            isXs={isXs}
+                          >
+                            <Text fontSize="14px" color={theme.colors.headerSubtleText} fontWeight="400">{singleHeader}</Text>
+                          </StyledTh>
+                        )
+                      })}
+                    </StyledTableHeader>
+                    <tbody>{renderReferredTable()}</tbody>
+                  </StyledTable>
+                </TableWrapperCard>
+              }
+            </StyledTabSection>
             <RoundInfoCardSection>
               {
                 config.roundButtons.map((button, index) => {
@@ -264,7 +565,7 @@ const Referral: React.FC = () => {
                 })
               }
             </StyledFlexLayout>
-            <Flex justifyContent="center" flexDirection="column" mt="40px" mb={isMobile ? "20px" : account? "40px" : "80px"} alignItems="center">
+            <Flex justifyContent="center" flexDirection="column" mt="40px" mb={isMobile ? "20px" : account ? "40px" : "80px"} alignItems="center">
               {!account && <Button onClick={onPresentConnectModal} variant="primary" scale="xs" width="130px" height="38px" padding="10px 0px">{t('Connect Wallet')}</Button>}
             </Flex>
           </ReferralContainer>

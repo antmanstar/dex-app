@@ -420,7 +420,7 @@ const Bridge: React.FC = () => {
     'confirmSwapModal',
   )
 
-  const getFarmsTypeTabs = () => {
+  const getBridgeTabs = () => {
     return [
       {
         value: 'bridge',
@@ -436,7 +436,7 @@ const Bridge: React.FC = () => {
   const renderTab = (): JSX.Element => {
     return (
       <Flex>
-          {getFarmsTypeTabs().map((singleTab, index) => {
+          {getBridgeTabs().map((singleTab, index) => {
             return (
               <StyledTab isActive={tab===singleTab.value} onClick={() => setTab(singleTab.value)}>
                 <TabText isActive={tab===singleTab.value} isMobile={isMobile}>{singleTab.label}</TabText>

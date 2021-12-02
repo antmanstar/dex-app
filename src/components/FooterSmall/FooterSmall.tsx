@@ -37,7 +37,6 @@ const StyledAudit = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 100px;
 `
 
 const StyledContainer = styled(Flex)`

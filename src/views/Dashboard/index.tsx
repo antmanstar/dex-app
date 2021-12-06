@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation, NavLink, Link } from 'react-router-dom'
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import history from 'routerHistory'
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { Currency, Token } from '@pancakeswap/sdk'
 import { useWeb3React } from '@web3-react/core'
@@ -118,7 +119,7 @@ const StyledButtonBack = styled(ButtonBack)`
   width: 22px;
   height: 22px;
   z-index: 300;
-  margin-top: 80px;
+  margin-top: 85px;
   margin-left: 4px;
 `
 
@@ -131,7 +132,7 @@ const StyledButtonNext = styled(ButtonNext)`
   width: 22px;
   height: 22px;
   z-index: 300;
-  margin-top: 80px;
+  margin-top: 85px;
   margin-right: 4px;
 `
 
@@ -199,16 +200,6 @@ const SliderContainer = styled.div`
   }
 `
 
-const BannerSupply = styled(Card)`
-  padding: 20px;
-  align-self: top;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  border: 2px solid ${({ theme }) => theme.colors.backgroundAlt};
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  min-height:180px;
-`
-
 const StyledCarouselProvider = styled(CarouselProvider)`
   position: relative;
 `
@@ -269,6 +260,23 @@ const AbsText = styled(Text)`
   top: 120px;
 `
 
+const StyledLabel = styled(Text)<{progress?: number}>`
+  bottom: 40px;
+  left: ${({ progress }) => `calc(${progress}% - 24px)`};
+  position: absolute;
+  font-size: 14px;
+  font-weight: 700;
+
+  @media screen and (max-width: 860px) {
+    bottom: 20px;
+  }
+`
+
+const UnderlineText = styled(Text)`
+  text-decoration: underline;  
+  text-underline-offset: 3px;
+`
+
 const Dashboard: React.FC = () => {
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
@@ -279,6 +287,7 @@ const Dashboard: React.FC = () => {
   const width = useWidth()
 
   const matic = useCurrency('matic')
+  const progress = 75;
 
   // Pie Graph
   const myTheme = {
@@ -338,19 +347,19 @@ const Dashboard: React.FC = () => {
       "id": "polygon",
       "label": "Polygon",
       "value": 2,
-      "color": 'red'
+      "color": 'BlueViolet'
     },
     {
       "id": "avax",
       "label": "Avax",
       "value": 8,
-      "color": theme.colors.purple
+      "color": 'Crimson'
     },
     {
       "id": "eth",
       "label": "ETH",
       "value": 90,
-      "color": 'aqua'
+      "color": 'DodgerBlue'
     }
   ]
 
@@ -576,7 +585,7 @@ const Dashboard: React.FC = () => {
           </StyledCard>
           <StyledCard>
             <BlockHeader>
-              <Text fontSize="14px" fontWeight="500">Total Eco Mined</Text>
+              <Text fontSize="14px" fontWeight="500">Total Eco Minted</Text>
               <Text fontSize="22px" fontWeight="700" color={theme.colors.purple}>31,787</Text>
               <Text fontSize="18px" fontWeight="700" color={theme.colors.purple}>$31,787</Text>
             </BlockHeader>
@@ -587,7 +596,7 @@ const Dashboard: React.FC = () => {
           </StyledCard>
           <StyledCard>
             <BlockHeader>
-              <Text fontSize="14px" fontWeight="500">Total Eco Burned </Text>
+              <Text fontSize="14px" fontWeight="500">Total Eco Burned</Text>
               <Text fontSize="22px" fontWeight="700" color={theme.colors.purple}>31,787</Text>
               <Text fontSize="18px" fontWeight="700" color={theme.colors.purple}>$31,787</Text>
               <img src="/images/chart-yellow.svg" alt="" />
@@ -608,16 +617,21 @@ const Dashboard: React.FC = () => {
               </Flex>
               <Flex flexDirection="column">
                 <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mb="15px" mt="15px">Circulating Supply</Text>
-                <Text fontSize="22px" fontWeight="700" color={theme.colors.yellow}>31,787,112</Text>
-                <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>$31,787,112</Text>
-              </Flex>
-              <Flex flexDirection="column">
-                <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mb="15px" mt="15px">Total Supply</Text>
                 <Text fontSize="22px" fontWeight="700" color={theme.colors.green}>31,787,112</Text>
                 <Text fontSize="18px" fontWeight="700" color={theme.colors.green}>$31,787,112</Text>
               </Flex>
+              <Flex flexDirection="column">
+                <Text fontSize="14px" fontWeight="500" color={theme.colors.headerSubtleText} mb="15px" mt="15px">Total Supply</Text>
+                <Text fontSize="22px" fontWeight="700" color={theme.colors.yellow}>31,787,112</Text>
+                <Text fontSize="18px" fontWeight="700" color={theme.colors.yellow}>$31,787,112</Text>
+              </Flex>
             </SupplyInfoWrapper>
-            <Progress primaryStep={75} />
+            <div>
+              <StyledLabel progress={progress}>
+                {progress}%
+              </StyledLabel>
+              <Progress variant="custom" primaryStep={progress} />
+            </div>
           </StyledMaxSupply>
           <StyledMaxSupply>
             <SupplyRightInfoWrapper>
@@ -633,8 +647,8 @@ const Dashboard: React.FC = () => {
           <SliderContainer>
             <Flex justifyContent="space-between" mt="35px" mb="15px">
               <Text fontSize="22px" fontWeight="700" >Yield Farming</Text>
-              <Button onClick={() => console.log("Documentation")} scale="sm" variant="text" padding="0px">
-                <Text textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Farming')}</Text>
+              <Button onClick={() => history.push("/farms")} scale="sm" variant="text" padding="0px">
+                <UnderlineText textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Farming')}</UnderlineText>
               </Button>
             </Flex>
             <div />
@@ -650,9 +664,9 @@ const Dashboard: React.FC = () => {
               <StyledButtonNext><Flex justifyContent="center" alignItems="center" flexDirection="column" height="22px"><Text fontSize="20px" fontWeight="400" textAlign="center">{`>`}</Text></Flex></StyledButtonNext>
               <StyledSlider>
                 <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={1}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={2}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={3}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
               </StyledSlider>
             </StyledCarouselProvider>
             <BackgroundBuildingFlex>
@@ -664,8 +678,8 @@ const Dashboard: React.FC = () => {
           <SliderContainer>
             <Flex justifyContent="space-between" mt="35px" mb="15px">
               <Text fontSize="22px" fontWeight="700" >Vaults</Text>
-              <Button onClick={() => console.log("Documentation")} scale="sm" variant="text" padding="0px">
-                <Text textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Vaults')}</Text>
+              <Button onClick={() => history.push("/vault")} scale="sm" variant="text" padding="0px">
+                <UnderlineText textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Vaults')}</UnderlineText>
               </Button>
             </Flex>
             <div />
@@ -681,9 +695,9 @@ const Dashboard: React.FC = () => {
               <StyledButtonNext><Flex justifyContent="center" alignItems="center" flexDirection="column" height="22px"><Text fontSize="20px" fontWeight="400" textAlign="center">{`>`}</Text></Flex></StyledButtonNext>
               <StyledSlider>
                 <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={1}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={2}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={3}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
               </StyledSlider>
             </StyledCarouselProvider>
             <BackgroundCratorFlex>
@@ -695,8 +709,8 @@ const Dashboard: React.FC = () => {
           <SliderContainer>
             <Flex justifyContent="space-between" mt="35px" mb="15px">
               <Text fontSize="22px" fontWeight="700" >Tanks</Text>
-              <Button onClick={() => console.log("Documentation")} scale="sm" variant="text" padding="0px">
-                <Text textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Tanks')}</Text>
+              <Button onClick={() => history.push("/tanks")} scale="sm" variant="text" padding="0px">
+                <UnderlineText textAlign="center" fontSize="14px" fontWeight="400" color={theme.colors.primary}>{t('Go to Tanks')}</UnderlineText>
               </Button>
             </Flex>
             <div />
@@ -713,9 +727,9 @@ const Dashboard: React.FC = () => {
               <StyledButtonNext><Flex justifyContent="center" alignItems="center" flexDirection="column" height="22px"><Text fontSize="20px" fontWeight="400" textAlign="center">{`>`}</Text></Flex></StyledButtonNext>
               <StyledSlider>
                 <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
-                <Slide index={0}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={1}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={2}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
+                <Slide index={3}><SlideCardWrapper>{renderSlideCard()}</SlideCardWrapper></Slide>
               </StyledSlider>
             </StyledCarouselProvider>
             <BackgroundBuildingFlex>

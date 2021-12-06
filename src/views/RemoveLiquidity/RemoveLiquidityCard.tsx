@@ -172,7 +172,7 @@ export const RemoveLiquidityCard = ({
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
   const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
 
-  async function onAttemptToApprove() {
+  const onAttemptToApprove = async () => {
     if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies')
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) throw new Error('missing liquidity amount')
@@ -388,7 +388,7 @@ export const RemoveLiquidityCard = ({
   }
 
   // render Card content
-  function modalHeader() {
+  const  modalHeader = () =>{
     return (
       <AutoColumn gap="md">
         <RowBetween align="flex-end">
@@ -422,7 +422,7 @@ export const RemoveLiquidityCard = ({
     )
   }
 
-  function modalBottom() {
+  const modalBottom = () =>{
     return (
       <>
         <RowBetween style={{ marginBottom: '8px' }}>
@@ -451,7 +451,7 @@ export const RemoveLiquidityCard = ({
           </>
         )}
         <Flex justifyContent="center" alignItems="center">
-          <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
+          <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={()=>onRemove}>
             {t('Confirm')}
           </Button>
         </Flex>

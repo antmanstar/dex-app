@@ -239,7 +239,7 @@ export const AddLiquidityCard = ({
 
   const addTransaction = useTransactionAdder()
 
-  async function onAdd() {
+  const onAdd = async () => {
     if (!chainId || !library || !account) return
     const router = getRouterContract(chainId, library, account)
 

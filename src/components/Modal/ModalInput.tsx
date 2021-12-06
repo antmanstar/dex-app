@@ -73,6 +73,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   onChange,
   onSelectMax,
   value,
+  placeholder,
   addLiquidityUrl,
   inputTitle,
   decimals = 18,

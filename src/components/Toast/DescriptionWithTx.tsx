@@ -10,7 +10,7 @@ interface DescriptionWithTxProps {
   txHash?: string
 }
 
-const DescriptionWithTx: React.FC<DescriptionWithTxProps> = ({ txHash, children }) => {
+const DescriptionWithTx: React.FC<DescriptionWithTxProps> = ({ txHash, children, description }) => {
   const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
